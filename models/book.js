@@ -16,7 +16,6 @@ const bookSchema = new mongoose.Schema({
     length:{
         type:Number,
         required: true,
-        default: "Unknown length"
     },
     author:{
         type:String,
