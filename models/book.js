@@ -5,30 +5,22 @@ const bookSchema = new mongoose.Schema({
 
     id:{
         type: String,
-        required: true,
         default: uuidv1()
     },
     title:{
-        type: String,
-        required: true,
-        default: "Unknown title"
+        type: String
     },
     length:{
-        type:Number,
-        required: true,
+        type:Number
     },
     author:{
-        type:String,
-        required: true,
-        default: "Unknown author"
+        type:String
     },
     stock:{
-        type:Number,
-        required: true
+        type:Number
     },
     ISBN:{
-        type:String,
-        required: true
+        type:String
     }
 
 });
