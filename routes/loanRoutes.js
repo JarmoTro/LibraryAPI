@@ -61,10 +61,14 @@ router.put('/loans', (req, res) => {
     }) 
 })
 
-router.delete('/loans/delete/:id', (req, res) => {
+router.delete('/loans/:id', (req, res) => {
     loanSchema.findOneAndDelete({id: req.params.id}, function(err, response){
         if(response == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
         if(err) res.status(500).send('Looks like something went wrong :(')
+        bookSchema.findOne({id: response.book.id}, function(err, book){
+            book.stock++;
+            book.save();
+        })
         if(response != null) res.status(204).send()
     });
 })
