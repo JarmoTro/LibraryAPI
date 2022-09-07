@@ -5,7 +5,7 @@ const bookSchema = require('../models/book');
 router.get('/books', (req, res) => {
     bookSchema.find((error, books) => {
 
-        if (error) res.send(404);
+        if (error) res.status(500).send('Looks like something went wrong :(')
 
         if (!error) res.send(books);
 
@@ -14,13 +14,18 @@ router.get('/books', (req, res) => {
 
 
 router.get('/books/:id', (req, res) => {
-
+    bookSchema.findOne({id: req.params.id}, function(error, book){
+        if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
+        if(error) res.status(500).send('Looks like something went wrong :(')
+        if(book != null) res.send(book);
+    }) 
 })
 
 router.delete('/books/delete/:id', (req, res) => {
     bookSchema.findOneAndDelete({id: req.params.id}, function(err, response){
         if(response == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
         if(err) res.status(500).send('Looks like something went wrong :(')
+        if(response != null) res.status(204).send()
     });
 })
 
@@ -45,8 +50,12 @@ router.post('/books', (req, res) => {
     }
 })
 
-router.put('/books/:id', (req, res) => {
-
+router.put('/books', (req, res) => {
+    bookSchema.findOneAndUpdate({id: req.query.id}, req.query, function(error, book){
+        if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
+        if(error) res.status(500).send('Looks like something went wrong :(')
+        if(book != null) res.status(200).send('Book updated!')
+    }) 
 })
 
 module.exports = router;
