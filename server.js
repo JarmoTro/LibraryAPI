@@ -3,16 +3,29 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bookRoutes = require('./routes/bookRoutes');
 const loanRoutes = require('./routes/loanRoutes');
+const userRoutes = require('./routes/userRoutes');
+const passport = require('passport');
+const session = require('express-session');
 const app = express();
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_CONNECTION);
 
 app.use(cors());        
-app.use(express.json()) 
+app.use(express.json());
+
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(bookRoutes);
 app.use(loanRoutes);
+app.use(userRoutes);
 
 
 
