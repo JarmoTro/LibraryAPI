@@ -21,7 +21,7 @@ router.get('/books/:id', (req, res) => {
     }) 
 })
 
-router.delete('/books/delete/:id', (req, res) => {
+router.delete('/books/:id', (req, res) => {
     bookSchema.findOneAndDelete({id: req.params.id}, function(err, response){
         if(response == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
         if(err) res.status(500).send('Looks like something went wrong :(')
