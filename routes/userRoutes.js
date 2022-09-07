@@ -5,22 +5,30 @@ const passport = require('passport')
 
 
 router.post('/users', (req, res) => {
-    if (!req.query.username ||
-        !req.query.password) {
-        return res.status(400).send({ error: 'One or all params are missing. Required params: username, password, admin, loans.' })
+    if(!req.query.key){
+        return res.status(401).send('Missing API key');
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send('Invalid API key');
     }
     else{
-        userSchema.register({username: req.query.username}, req.query.password, (error, user) => {
-            if (error) {
-                console.log(req.body.username);
-                res.status(500).send('Looks like something went wrong :(');
-            } else {
-                passport.authenticate('local')(req, res, ()=> {
-                    return res.status(201).send('User created!')
-                });
-            }
-        });
-    }
+        if (!req.query.username ||
+            !req.query.password) {
+            return res.status(400).send({ error: 'One or all params are missing. Required params: username, password.' })
+        }
+        else{
+            userSchema.register({username: req.query.username}, req.query.password, (error, user) => {
+                if (error) {
+                    console.log(req.body.username);
+                    res.status(500).send('Looks like something went wrong :(');
+                } else {
+                    passport.authenticate('local')(req, res, ()=> {
+                        return res.status(201).send('User created!')
+                    });
+                }
+            });
+        }
+    } 
 });
 
 module.exports = router;
