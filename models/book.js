@@ -21,6 +21,9 @@ const bookSchema = new mongoose.Schema({
     },
     ISBN:{
         type:String
+    },
+    category:{
+        type:String
     }
 
 });

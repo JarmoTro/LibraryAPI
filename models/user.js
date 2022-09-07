@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     admin:{
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     loans:{
         type: [loan]

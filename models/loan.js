@@ -17,10 +17,10 @@ const loanSchema = new mongoose.Schema({
         type:Number
     },
     book:{
-        type: book
+        type:book
     },
     user:{
-        type: user
+        type:user
     }
 
 
