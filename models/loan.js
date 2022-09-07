@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const book = require('../models/book');
-const user = require('../models/user');
+const book = require('../models/book').schema;
+const user = require('../models/user').schema;
 const { v1: uuidv1 } = require('uuid');
 
 const loanSchema = new mongoose.Schema({
@@ -17,10 +17,10 @@ const loanSchema = new mongoose.Schema({
         type:Date
     },
     book:{
-        type: book
+        type:book
     },
     user:{
-        type: user
+        type:user
     }
 
 

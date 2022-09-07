@@ -29,6 +29,7 @@ router.post('/books', (req, res) => {
         !req.query.ISBN ||
         !req.query.length ||
         !req.query.author ||
+        !req.query.category ||
         !req.query.title) {
         return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title.' })
     }
@@ -38,6 +39,7 @@ router.post('/books', (req, res) => {
             ISBN: req.query.ISBN,
             length: req.query.length,
             author: req.query.author,
+            category: req.query.category,
             title: req.query.title
         });
         newBook.save();
