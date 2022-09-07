@@ -3,22 +3,31 @@ const router = express.Router();
 const bookSchema = require('../models/book');
 
 router.get('/books', (req, res) => {
-    bookSchema.find((error, books) => {
+    if(!req.query.key){
+        return res.status(401).send('Missing API key');
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send('Invalid API key');
+    }
+    else{
+        bookSchema.find((error, books) => {
 
-        if (error) res.status(500).send('Looks like something went wrong :(')
-
-        if (!error) res.send(books);
-
-    })
+            if (error) res.status(500).send('Looks like something went wrong :(')
+    
+            if (!error) res.send(books);
+    
+        })
+    }
 })
 
 
 router.get('/books/:id', (req, res) => {
-    bookSchema.findOne({id: req.params.id}, function(error, book){
-        if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
-        if(error) res.status(500).send('Looks like something went wrong :(')
-        if(book != null) res.send(book);
-    }) 
+        bookSchema.findOne({id: req.params.id}, function(error, book){
+            if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
+            if(error) res.status(500).send('Looks like something went wrong :(')
+            if(book != null) res.send(book);
+        }) 
+    
 })
 
 router.delete('/books/:id', (req, res) => {
@@ -36,7 +45,7 @@ router.post('/books', (req, res) => {
         !req.query.author ||
         !req.query.category ||
         !req.query.title) {
-        return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title.' })
+        return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, category.' })
     }
     else{
         let newBook = new bookSchema({
