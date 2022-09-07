@@ -44,6 +44,8 @@ router.post('/loans', (req, res) => {
                     book: book
                 });
                 newLoan.save();
+                book.stock--;
+                book.save();
                 return res.status(201).send('Loan added!')
             })
         })  
