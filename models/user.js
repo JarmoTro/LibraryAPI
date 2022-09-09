@@ -5,7 +5,6 @@ const loan = require('../models/loan').schema;
 const { v1: uuidv1 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
-
     id:{
         type: String,
         required: true,
@@ -20,9 +19,6 @@ const userSchema = new mongoose.Schema({
     admin:{
         type: Boolean,
         default: false
-    },
-    loans:{
-        type: [loan]
     }
 });
 
