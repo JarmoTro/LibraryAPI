@@ -52,12 +52,28 @@ router.post('/login' , (req, res) => {
                 return res.status(500).send({error:'Looks like something went wrong :('})
             } else {
                 passport.authenticate('local')(req, res, ()=> {
+                    console.log(req.isAuthenticated);
                     return res.status(200).send('Logged in');
                 });
             }
         });
     }
 });
+
+router.post('/logout', function(req, res, next){
+    if(!req.query.key){
+        return res.status(401).send({error: 'Missing API key'});
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send({error: 'Invalid API key'});
+    }
+    else {
+        req.logout(function(err) {
+            if (err) {return res.status(500).send({error:'Looks like something went wrong :('})}
+            return res.status(200).send('Logged out');
+          });
+    }
+  });
 
 router.get('/users', (req, res) => {
     if(!req.query.key){
