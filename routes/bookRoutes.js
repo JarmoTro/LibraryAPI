@@ -4,17 +4,17 @@ const bookSchema = require('../models/book');
 
 router.get('/books', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         bookSchema.find((error, books) => {
 
-            if (error) res.status(500).send('Looks like something went wrong :(')
+            if (error) return res.status(500).send({error: 'Looks like something went wrong :('})
     
-            if (!error) res.send(books);
+            if (!error) return res.send(books);
     
         })
     }
@@ -23,42 +23,42 @@ router.get('/books', (req, res) => {
 
 router.get('/books/:id', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         bookSchema.findOne({_id: req.params.id}, function(error, book){
-            if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
-            if(error) res.status(500).send('Looks like something went wrong :(')
-            if(book != null) res.send(book);
+            if(book == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+            if(error) return res.status(500).send({error: 'Looks like something went wrong :('})
+            if(book != null) return res.send(book);
         }) 
     }
 })
 
 router.delete('/books/:id', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         bookSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
-            if(response == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
-            if(err) res.status(500).send('Looks like something went wrong :(')
-            if(response != null) res.status(204).send()
+            if(response == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+            if(err) return res.status(500).send({error:'Looks like something went wrong :('})
+            if(response != null) return res.status(204).send()
         });
     }
 })
 
 router.post('/books', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         if (!req.query.stock ||
@@ -93,9 +93,9 @@ router.put('/books', (req, res) => {
     }
     else{
         bookSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, book){
-            if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
-            if(error) res.status(500).send('Looks like something went wrong :(')
-            if(book != null) res.status(200).send('Book updated!')
+            if(book == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+            if(book != null) return res.status(200).send('Book updated!')
         }) 
     }
 })

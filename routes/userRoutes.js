@@ -6,10 +6,10 @@ const passport = require('passport')
 
 router.post('/users', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         if (!req.query.username ||
@@ -20,12 +20,10 @@ router.post('/users', (req, res) => {
             userSchema.register({username: req.query.username}, req.query.password, (error, user) => {
                 if (error) {
                     if (error = "A user with the given username is already registered") {
-                        res.status(409).send('A user with the given username is already registered');
+                        return res.status(409).send({error: 'A user with the given username is already registered'});
                     }
                     else {
-                        console.log(error);
-                        console.log(req.query.username);
-                        res.status(500).send('Looks like something went wrong :(');
+                        return res.status(500).send({error:'Looks like something went wrong :('})
                     }
                 } else {
                     passport.authenticate('local')(req, res, ()=> {
@@ -39,10 +37,10 @@ router.post('/users', (req, res) => {
 
 router.post('/login' , (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else {
         const user = new userSchema({
@@ -51,8 +49,7 @@ router.post('/login' , (req, res) => {
         });
         req.logIn(user, (error) => {
             if (error) {
-                console.log(error);
-                res.status(500).send('Something went wrong');
+                return res.status(500).send({error:'Looks like something went wrong :('})
             } else {
                 passport.authenticate('local')(req, res, ()=> {
                     return res.status(200).send('Logged in');
@@ -64,17 +61,17 @@ router.post('/login' , (req, res) => {
 
 router.get('/users', (req, res) => {
     if(!req.query.key){
-        return res.status(401).send('Missing API key');
+        return res.status(401).send({error: 'Missing API key'});
     }
     else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send('Invalid API key');
+        return res.status(403).send({error: 'Invalid API key'});
     }
     else{
         userSchema.find((error, users) => {
 
-            if (error) res.status(500).send('Looks like something went wrong :(')
+            if (error) return res.status(500).send({error:'Looks like something went wrong :('})
     
-            if (!error) res.send(users);
+            if (!error) return res.send(users);
     
         })
     }

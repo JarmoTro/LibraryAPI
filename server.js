@@ -7,6 +7,8 @@ const userRoutes = require('./routes/userRoutes');
 const passport = require('passport');
 const session = require('express-session');
 const app = express();
+const swaggerUI = require('swagger-ui-express')
+const swaggerDocument = require('./docs/swagger.json')
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_CONNECTION);
@@ -23,6 +25,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);

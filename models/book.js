@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const { v1: uuidv1 } = require('uuid');
-
 const bookSchema = new mongoose.Schema({
 
     title:{
