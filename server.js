@@ -25,11 +25,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+
 app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);
-
+app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 
 app.listen(process.env.PORT || 3000 , () => {
