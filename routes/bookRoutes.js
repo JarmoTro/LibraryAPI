@@ -37,6 +37,22 @@ router.get('/books/:id', (req, res) => {
     }
 })
 
+router.get('/books/category/:category', (req, res) => {
+    if(!req.query.key){
+        return res.status(401).send({error: 'Missing API key'});
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send({error: 'Invalid API key'});
+    }
+    else{
+        bookSchema.find({category: req.params.category}, function(error, books){
+            if(books == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+            if(error) return res.status(500).send({error: 'Looks like something went wrong :('})
+            if(books != null) return res.send(books);
+        }) 
+    }
+})
+
 router.delete('/books/:id', (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});

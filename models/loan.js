@@ -15,8 +15,6 @@ const loanSchema = new mongoose.Schema({
     user:{
         type:user
     }
-
-
 });
 
 module.exports = mongoose.model('loan',loanSchema);
