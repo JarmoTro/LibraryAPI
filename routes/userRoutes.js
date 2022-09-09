@@ -43,6 +43,7 @@ router.post('/login' , (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else {
+        if(!req.query.username || !req.query.password) return res.status(400).send({ error: 'One or all params are missing. Required params: password, username' })
         const user = new userSchema({
             username: req.query.username,
             password: req.query.password
