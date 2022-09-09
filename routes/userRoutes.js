@@ -37,4 +37,47 @@ router.post('/users', (req, res) => {
     } 
 });
 
+router.post('/login' , (req, res) => {
+    if(!req.query.key){
+        return res.status(401).send('Missing API key');
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send('Invalid API key');
+    }
+    else {
+        const user = new userSchema({
+            username: req.query.username,
+            password: req.query.password
+        });
+        req.logIn(user, (error) => {
+            if (error) {
+                console.log(error);
+                res.status(500).send('Something went wrong');
+            } else {
+                passport.authenticate('local')(req, res, ()=> {
+                    return res.status(200).send('Logged in');
+                });
+            }
+        });
+    }
+});
+
+router.get('/users', (req, res) => {
+    if(!req.query.key){
+        return res.status(401).send('Missing API key');
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send('Invalid API key');
+    }
+    else{
+        userSchema.find((error, users) => {
+
+            if (error) res.status(500).send('Looks like something went wrong :(')
+    
+            if (!error) res.send(users);
+    
+        })
+    }
+})
+
 module.exports = router;

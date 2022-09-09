@@ -29,7 +29,7 @@ router.get('/books/:id', (req, res) => {
         return res.status(403).send('Invalid API key');
     }
     else{
-        bookSchema.findOne({id: req.params.id}, function(error, book){
+        bookSchema.findOne({_id: req.params.id}, function(error, book){
             if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
             if(error) res.status(500).send('Looks like something went wrong :(')
             if(book != null) res.send(book);
@@ -45,7 +45,7 @@ router.delete('/books/:id', (req, res) => {
         return res.status(403).send('Invalid API key');
     }
     else{
-        bookSchema.findOneAndDelete({id: req.params.id}, function(err, response){
+        bookSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
             if(response == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
             if(err) res.status(500).send('Looks like something went wrong :(')
             if(response != null) res.status(204).send()
@@ -92,7 +92,7 @@ router.put('/books', (req, res) => {
         return res.status(403).send('Invalid API key');
     }
     else{
-        bookSchema.findOneAndUpdate({id: req.query.id}, req.query, function(error, book){
+        bookSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, book){
             if(book == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
             if(error) res.status(500).send('Looks like something went wrong :(')
             if(book != null) res.status(200).send('Book updated!')
