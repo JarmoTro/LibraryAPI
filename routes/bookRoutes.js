@@ -69,7 +69,7 @@ router.get('/books/category/:category', (req, res) => {
     }
 })
 
-router.get('/books/search/:title', (req, res) => {
+router.get('/books/title/:title', (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
