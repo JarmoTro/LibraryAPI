@@ -22,6 +22,22 @@ router.get('/loans', (req, res) => {
     }
 })
 
+router.get('/loans/user/:id', (req, res) => {
+    if(!req.query.key){
+        return res.status(401).send('Missing API key');
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send('Invalid API key');
+    }
+    else{
+        loanSchema.find({"user.id": req.params.id}, function(error, loans){
+            if(loans == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
+            if(error) res.status(500).send('Looks like something went wrong :(')
+            if(loans != null) res.send(loans)
+        })
+    }
+})
+
 router.get('/loans/:id', (req, res) => {
     if(!req.query.key){
         return res.status(401).send('Missing API key');
@@ -33,7 +49,7 @@ router.get('/loans/:id', (req, res) => {
         loanSchema.findOne({id: req.params.id}, function(error, loan){
             if(loan == null) res.status(404).send("Looks like we couldn't find what you were looking for.")
             if(error) res.status(500).send('Looks like something went wrong :(')
-            if(loan != null) res.send(loan);
+            if(loan != null) res.send(loan)
         }) 
     }
 })
