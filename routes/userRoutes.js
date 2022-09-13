@@ -53,7 +53,6 @@ router.post('/login' , (req, res) => {
                 return res.status(500).send({error:'Looks like something went wrong :('})
             } else {
                 passport.authenticate('local')(req, res, ()=> {
-                    console.log(req.isAuthenticated);
                     return res.status(200).send('Logged in');
                 });
             }
