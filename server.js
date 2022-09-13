@@ -29,7 +29,28 @@ app.use(passport.session());
 app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);
-app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+
+const DisableTryItOutPlugin = function() {
+    return {
+      statePlugins: {
+        spec: {
+          wrapSelectors: {
+            allowTryItOutFor: () => () => false
+          }
+        }
+      }
+    }
+  }
+  
+  const options = {
+    swaggerOptions: {
+        plugins: [
+             DisableTryItOutPlugin
+        ]
+     }
+  };
+
+app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument, options))
 
 
 app.listen(process.env.PORT || 3000 , () => {
