@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bookRoutes = require('./routes/bookRoutes');
 const loanRoutes = require('./routes/loanRoutes');
 const userRoutes = require('./routes/userRoutes');
+const mockRoutes = require('./routes/mockBookRoutes');
 const passport = require('passport');
 const session = require('express-session');
 const app = express();
@@ -29,6 +30,7 @@ app.use(passport.session());
 app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);
+//app.use(mockRoutes);
 
 const DisableTryItOutPlugin = function() {
     return {
