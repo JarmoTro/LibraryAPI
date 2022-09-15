@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/webp') {
         cb(null, true);
     } else {
         cb(null, false);
@@ -149,7 +149,7 @@ router.post('/books', (req, res) => {
             !req.query.author ||
             !req.query.category ||
             !req.query.title) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png or .jpg).' })
+            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png, .webp or .jpg).' })
         }
         else {
             let upload = uploadBookCover.single('coverImg');
@@ -158,7 +158,7 @@ router.post('/books', (req, res) => {
                     return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
                 }
                 else {
-                    if (!req.file) return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png or .jpg' })
+                    if (!req.file) return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })
                     let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
                     let newBook = new bookSchema({
                         stock: req.query.stock,
@@ -194,7 +194,7 @@ router.put('/books', (req, res) => {
                         if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                         if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
                         if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png or .jpg).' })}
-                        if(!req.file){return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png or .jpg' })}
+                        if(!req.file){return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })}
                         if (req.file){
                             fs.unlink(book.localImgPath, (err => {
                                 if (err) {
