@@ -158,7 +158,7 @@ router.post('/books', (req, res) => {
                     return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
                 }
                 else {
-                    if (!req.file) return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })
+                    if (!req.file) return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
                     let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
                     let newBook = new bookSchema({
                         stock: req.query.stock,
