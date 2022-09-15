@@ -193,7 +193,7 @@ router.put('/books', (req, res) => {
                     bookSchema.findOneAndUpdate({ _id: req.query.id }, req.query, function (error, book) {
                         if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                         if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png or .jpg).' })}
+                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png, .webp or .jpg).' })}
                         if(!req.file){return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })}
                         if (req.file){
                             fs.unlink(book.localImgPath, (err => {
