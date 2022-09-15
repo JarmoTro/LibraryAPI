@@ -1,14 +1,39 @@
-const { parse } = require('dotenv');
 const express = require('express');
 const router = express.Router();
-const bookSchema = require('../models/book');
-
+const { faker } = require('@faker-js/faker');
+/*
 const books = [
     {id: 1, title: "All Quiet on the Western Front", length: 200, author: "Erich Maria Remarque", stock: 2, ISBN: "4356346457", category: "Historical Fiction"},
     {id: 2, title: "Blood Meridian", length: 337, author: "Cormac McCarthy", stock: 2, ISBN: "23124325", category: "Western"},
     {id: 3, title: "The Lord of the Rings", length: 479, author: "Cormac McCarthy", stock: 6, ISBN: "241254325", category: "Fantasy"}
-
 ]
+
+for (let i = 0; i < 20; i++) {
+    const randomName = faker.name.fullName();
+    const randomWord = faker.word.verb();
+    const randomLength = faker.random.numeric(3);
+    const randomStock = faker.random.numeric();
+    const randomISBN = faker.random.numeric(7);
+    const randomCategory = faker.music.genre();
+    console.log(randomName, randomWord, randomLength, randomStock, randomISBN, randomCategory);  
+}
+*/
+
+const books = []
+
+for (let i = 0; i < 20; i++) {
+    books.push(
+        {
+            id: i+1,
+            title: faker.word.verb(),
+            author: faker.name.fullName(),
+            length: faker.random.numeric(3),
+            stock: faker.random.numeric(),
+            ISBN: faker.random.numeric(7),
+            category: faker.music.genre()
+        }
+    )
+}
 
 router.get('/books', (req, res) => {
     res.send(books)
