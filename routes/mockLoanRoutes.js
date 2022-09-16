@@ -17,7 +17,7 @@ for (let i = 0; i < 20; i++) {
                 length: faker.random.numeric(3),
                 stock: faker.random.numeric(),
                 ISBN: faker.random.numeric(7),
-                category: faker.music.genre()
+                genre: faker.music.genre()
             },
             user: {
                 id: i+1,

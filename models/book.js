@@ -16,7 +16,7 @@ const bookSchema = new mongoose.Schema({
     ISBN:{
         type:String
     },
-    category:{
+    genre:{
         type:String
     },
     imgSource:{

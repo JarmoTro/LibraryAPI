@@ -80,7 +80,7 @@ router.get('/books/author/:author', (req, res) => {
     }
 })
 
-router.get('/books/category/:category', (req, res) => {
+router.get('/books/genre/:genre', (req, res) => {
     if (!req.query.key) {
         return res.status(401).send({ error: 'Missing API key' });
     }
@@ -88,7 +88,7 @@ router.get('/books/category/:category', (req, res) => {
         return res.status(403).send({ error: 'Invalid API key' });
     }
     else {
-        bookSchema.find({ category: req.params.category }, function (error, books) {
+        bookSchema.find({ genre: req.params.genre }, function (error, books) {
             if (books == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
             if (books != null) return res.send(books);
@@ -147,9 +147,9 @@ router.post('/books', (req, res) => {
             !req.query.ISBN ||
             !req.query.length ||
             !req.query.author ||
-            !req.query.category ||
+            !req.query.genre ||
             !req.query.title) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png, .webp or .jpg).' })
+            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, coverImg (must be .jpeg, .png, .webp or .jpg).' })
         }
         else {
             let upload = uploadBookCover.single('coverImg');
@@ -165,7 +165,7 @@ router.post('/books', (req, res) => {
                         ISBN: req.query.ISBN,
                         length: req.query.length,
                         author: req.query.author,
-                        category: req.query.category,
+                        genre: req.query.genre,
                         title: req.query.title,
                         imgSource: imgSourceString,
                         localImgPath: req.file.path
@@ -193,7 +193,7 @@ router.put('/books', (req, res) => {
                     bookSchema.findOneAndUpdate({ _id: req.query.id }, req.query, function (error, book) {
                         if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                         if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, category, coverImg (must be .jpeg, .png, .webp or .jpg).' })}
+                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, coverImg (must be .jpeg, .png, .webp or .jpg).' })}
                         if(!req.file){return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })}
                         if (req.file){
                             fs.unlink(book.localImgPath, (err => {

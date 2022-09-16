@@ -46,7 +46,7 @@
                                                 "author": "Erich Maria Remarque",
                                                 "stock": 2,
                                                 "ISBN": "224214",
-                                                "category": "Historical Fiction",
+                                                "genre": "Historical Fiction",
                                                 "__v": 0
                                             },
                                             {
@@ -56,7 +56,7 @@
                                                 "author": "Cormac McCarthy",
                                                 "stock": 1,
                                                 "ISBN": "241231",
-                                                "category": "Western",
+                                                "genre": "Western",
                                                 "__v": 0
                                             }
                                         ]
@@ -156,12 +156,12 @@
                     },
                     {
                         "examples": {
-                            "category": {
+                            "genre": {
                                 "value": "fantasy"
                             }
                         },
-                        "name": "category",
-                        "description": "The books category/genre",
+                        "name": "genre",
+                        "description": "The books genre",
                         "schema": {
                             "type": "string"
                         },
@@ -412,12 +412,12 @@
                     },
                     {
                         "examples": {
-                            "category": {
+                            "genre": {
                                 "value": "fantasy"
                             }
                         },
-                        "name": "category",
-                        "description": "The books category/genre",
+                        "name": "Genre",
+                        "description": "The books genre",
                         "schema": {
                             "type": "string"
                         },
@@ -467,7 +467,7 @@
                                 "examples": {
                                     "error": {
                                         "value": {
-                                            "error": "One or all params are missing. Required params: stock, ISBN, length, author, title, category."
+                                            "error": "One or all params are missing. Required params: stock, ISBN, length, author, title, genre."
                                         }
                                     }
                                 }
@@ -585,7 +585,7 @@
                                             "author": "Erich Maria Remarque",
                                             "stock": 2,
                                             "ISBN": "9780316739924",
-                                            "category": "Historical Fiction",
+                                            "genre": "Historical Fiction",
                                             "__v": 0
                                         }
                                     }
@@ -833,7 +833,7 @@
                                                 "author": "John Ronald Reuel Tolkien",
                                                 "stock": 6,
                                                 "ISBN": "241231",
-                                                "category": "fantasy",
+                                                "genre": "fantasy",
                                                 "__v": 0
                                             },
                                             {
@@ -843,7 +843,7 @@
                                                 "author": "John Ronald Reuel Tolkien",
                                                 "stock": 4,
                                                 "ISBN": "241231",
-                                                "category": "fantasy",
+                                                "genre": "fantasy",
                                                 "__v": 0
                                             }
                                         ]
@@ -925,7 +925,7 @@
                 "summary": "Get a list of books by 1 author"
             }
         },
-        "/books/category/:category": {
+        "/books/genre/:genre": {
             "summary": "Get all books by an author",
             "get": {
                 "tags": [
@@ -952,8 +952,8 @@
                                 "value": "fantasy"
                             }
                         },
-                        "name": "Category",
-                        "description": "Name of category to find books",
+                        "name": "Genre",
+                        "description": "Name of genre to find books",
                         "schema": {
                             "type": "string"
                         },
@@ -982,7 +982,7 @@
                                                 "author": "John Ronald Reuel Tolkien",
                                                 "stock": 6,
                                                 "ISBN": "241231",
-                                                "category": "fantasy",
+                                                "genre": "fantasy",
                                                 "__v": 0
                                             },
                                             {
@@ -992,7 +992,7 @@
                                                 "author": "John Ronald Reuel Tolkien",
                                                 "stock": 4,
                                                 "ISBN": "241231",
-                                                "category": "fantasy",
+                                                "genre": "fantasy",
                                                 "__v": 0
                                             }
                                         ]
@@ -1071,7 +1071,7 @@
                         "description": "Something went wrong during the query"
                     }
                 },
-                "summary": "Get a list of books by category"
+                "summary": "Get a list of books by genre"
             }
         },
         "/books/title/:title": {
@@ -1130,7 +1130,7 @@
                                                 "author": "John Ronald Reuel Tolkien",
                                                 "stock": 4,
                                                 "ISBN": "241231",
-                                                "category": "fantasy",
+                                                "genre": "fantasy",
                                                 "__v": 0
                                             }
                                         ]
