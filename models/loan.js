@@ -10,10 +10,10 @@ const loanSchema = new mongoose.Schema({
         type:Number
     },
     book:{
-        type:book
+        type:String
     },
     user:{
-        type:user
+        type:String
     }
 });
 

@@ -30,7 +30,7 @@ router.get('/loans/user/:id', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        loanSchema.find({"user._id": req.params.id}, function(error, loans){
+        loanSchema.find({user: req.params.id}, function(error, loans){
             if(loans == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
             if(loans != null) return res.send(loans)
@@ -79,8 +79,8 @@ router.post('/loans', (req, res) => {
                     let newLoan = new loanSchema({
                         loanStart: req.query.loanStart,
                         loanEnd: req.query.loanEnd,
-                        user: user,
-                        book: book
+                        user: req.query.userId,
+                        book: req.query.bookId
                     });
                     newLoan.save();
                     book.stock--;

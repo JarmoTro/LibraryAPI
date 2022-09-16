@@ -13,10 +13,10 @@ const reviewSchema = new mongoose.Schema({
         type:Number
     },
     book:{
-        type:book
+        type:String
     },
     author:{
-        type:user
+        type:String
     },
     createdAt:{
         type:Number,
