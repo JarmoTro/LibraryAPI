@@ -148,8 +148,10 @@ router.post('/books', (req, res) => {
             !req.query.length ||
             !req.query.author ||
             !req.query.genre ||
+            !req.query.description ||
+            !req.query.publicationDate ||
             !req.query.title) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, coverImg (must be .jpeg, .png, .webp or .jpg).' })
+            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })
         }
         else {
             let upload = uploadBookCover.single('coverImg');
@@ -168,7 +170,9 @@ router.post('/books', (req, res) => {
                         genre: req.query.genre,
                         title: req.query.title,
                         imgSource: imgSourceString,
-                        localImgPath: req.file.path
+                        localImgPath: req.file.path,
+                        description: req.query.description,
+                        publicationDate: req.query.publicationDate
                     });
                     newBook.save();
                     return res.status(201).send('Book added!')
@@ -193,7 +197,7 @@ router.put('/books', (req, res) => {
                     bookSchema.findOneAndUpdate({ _id: req.query.id }, req.query, function (error, book) {
                         if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                         if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, coverImg (must be .jpeg, .png, .webp or .jpg).' })}
+                        if(!req.file || !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })}
                         if(!req.file){return res.status(400).send({ error: 'Invalid file type. Must be .jpeg, .png, .webp or .jpg' })}
                         if (req.file){
                             fs.unlink(book.localImgPath, (err => {

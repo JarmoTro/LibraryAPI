@@ -24,6 +24,12 @@ const bookSchema = new mongoose.Schema({
     },
     localImgPath:{
         type:String
+    },
+    description:{
+        type:String
+    },
+    publicationDate:{
+        type:Number
     }
 
 });
