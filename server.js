@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bookRoutes = require('./routes/bookRoutes');
 const loanRoutes = require('./routes/loanRoutes');
 const userRoutes = require('./routes/userRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 const mockBookRoutes = require('./routes/mockBookRoutes');
 const mockLoanRoutes = require('./routes/mockLoanRoutes');
 const mockUserRoutes = require('./routes/mockUserRoutes');
@@ -33,6 +34,7 @@ app.use(passport.session());
 app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);
+app.use(reviewRoutes)
 //app.use(mockBookRoutes);
 //app.use(mockLoanRoutes);
 //app.use(mockUserRoutes);
