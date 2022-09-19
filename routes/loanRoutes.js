@@ -131,7 +131,7 @@ router.delete('/loans/:id', (req, res) => {
         loanSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
             if(response == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(err) res.status(500).send({error:'Looks like something went wrong :('})
-            bookSchema.findOne({_id: response.book.id}, function(err, book){
+            bookSchema.findOne({_id: response.id}, function(err, book){
                 if(err) return res.status(500).send({error:'Looks like something went wrong :('})
                 book.stock++;
                 book.save();
