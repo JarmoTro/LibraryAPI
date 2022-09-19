@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bookSchema = require('../models/book');
+const loanSchema = require('../models/loan');
+const reviewSchema = require('../models/review');
 const multer = require("multer");
 const fs = require("fs");
 
@@ -120,18 +122,25 @@ router.delete('/books/:id', (req, res) => {
         return res.status(403).send({ error: 'Invalid API key' });
     }
     else {
-        bookSchema.findOneAndDelete({ _id: req.params.id }, function (err, response) {
-            if (response == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-            if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (response != null) {
-                fs.unlink(response.localImgPath, (err => {
-                    if (err) {
-                        return res.status(500).send({ error: 'Looks like something went wrong :(' })
+        loanSchema.findOne({book: req.params.id}, function (err, loans){
+            if(loans != null) return res.status(400).send({ error: "Can't delete a book with active loans." });
+            else{
+                bookSchema.findOneAndDelete({ _id: req.params.id }, function (err, response) {
+                    if (response == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+                    if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                    if (response != null) {
+                        fs.unlink(response.localImgPath, (err => {
+                            if (err) {
+                                return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                            }
+                        }))
+                        reviewSchema.deleteMany({book: req.params.id}, function(err, deletedReviews){})
+                        return res.status(204).send()
                     }
-                }))
-                return res.status(204).send()
+                });
             }
-        });
+        })
+        
     }
 })
 

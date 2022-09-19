@@ -70,10 +70,10 @@ router.post('/loans', (req, res) => {
             return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, user, book' })
         }
         else{
-            userSchema.findOne({_id: req.query.userId}, function (error, user){
+            userSchema.findOne({_id: req.query.user}, function (error, user){
                 if(user == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                 if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                bookSchema.findOne({_id: req.query.bookId}, function(error, book){
+                bookSchema.findOne({_id: req.query.book}, function(error, book){
                     if(book == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
                     let newLoan = new loanSchema({
@@ -131,7 +131,7 @@ router.delete('/loans/:id', (req, res) => {
         loanSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
             if(response == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(err) res.status(500).send({error:'Looks like something went wrong :('})
-            bookSchema.findOne({_id: response.id}, function(err, book){
+            bookSchema.findOne({_id: response.book}, function(err, book){
                 if(err) return res.status(500).send({error:'Looks like something went wrong :('})
                 book.stock++;
                 book.save();

@@ -113,22 +113,10 @@ router.put('/reviews', (req, res) => {
     }
     else{
             reviewSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, reviews){
-                if(req.query.author){
-                    userSchema.findOne({_id: req.query.author}, function(error, user){
-                        if(user == null) return res.status(404).send({error:"The provided user id does not match an existing users id."})
-                    })
-                }
-                if(req.query.book){
-                    bookSchema.findOne({_id: req.query.book}, function(error, book){
-                        if(book == null) return res.status(404).send({error:"The provided book id does not match an existing books id."})
-                    })
-                }
-                else{
-
                     if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
                     if(reviews != null) return res.status(200).send('Review updated!')
-                }
+                
             }) 
         
     }
