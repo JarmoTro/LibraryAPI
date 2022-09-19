@@ -32,8 +32,8 @@ router.post('/reviews', (req, res) => {
         if(!req.query.title ||
             !req.query.body ||
             !req.query.rating ||
-            !req.query.bookId ||
-            !req.query.authorId){
+            !req.query.book ||
+            !req.query.author){
                 return res.status(400).send({ error: 'One or all params are missing. Required params: title, body, bookId, authorId, rating' })
             }
             else{
@@ -45,8 +45,8 @@ router.post('/reviews', (req, res) => {
                             title: req.query.title,
                             body: req.query.body,
                             rating: req.query.rating,
-                            book: req.query.bookId,
-                            author: req.query.authorId
+                            book: req.query.book,
+                            author: req.query.author
                         })
                         newReview.save()
                         return res.status(201).send('Review added!')
@@ -112,11 +112,25 @@ router.put('/reviews', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        reviewSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, reviews){
-            if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.status(200).send('Review updated!')
-        }) 
+            reviewSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, reviews){
+                if(req.query.author){
+                    userSchema.findOne({_id: req.query.author}, function(error, user){
+                        if(user == null) return res.status(404).send({error:"The provided user id does not match an existing users id."})
+                    })
+                }
+                if(req.query.book){
+                    bookSchema.findOne({_id: req.query.book}, function(error, book){
+                        if(book == null) return res.status(404).send({error:"The provided book id does not match an existing books id."})
+                    })
+                }
+                else{
+
+                    if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                    if(reviews != null) return res.status(200).send('Review updated!')
+                }
+            }) 
+        
     }
 })
 

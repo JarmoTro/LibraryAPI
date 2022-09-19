@@ -65,9 +65,9 @@ router.post('/loans', (req, res) => {
     else{
         if (!req.query.loanStart ||
             !req.query.loanEnd ||
-            !req.query.userId ||
-            !req.query.bookId ) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, userId, bookId' })
+            !req.query.user ||
+            !req.query.book ) {
+            return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, user, book' })
         }
         else{
             userSchema.findOne({_id: req.query.userId}, function (error, user){
@@ -79,8 +79,8 @@ router.post('/loans', (req, res) => {
                     let newLoan = new loanSchema({
                         loanStart: req.query.loanStart,
                         loanEnd: req.query.loanEnd,
-                        user: req.query.userId,
-                        book: req.query.bookId
+                        user: req.query.user,
+                        book: req.query.book
                     });
                     newLoan.save();
                     book.stock--;
@@ -102,6 +102,16 @@ router.put('/loans', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
+        if(req.query.user){
+            userSchema.findOne({_id: req.query.user}, function(error, user){
+                if(user == null) return res.status(404).send({error:"The provided user id does not match an existing users id."})
+            })
+        }
+        if(req.query.book){
+            bookSchema.findOne({_id: req.query.book}, function(error, book){
+                if(book == null) return res.status(404).send({error:"The provided book id does not match an existing books id."})
+            })
+        }
         loanSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})

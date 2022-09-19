@@ -68,28 +68,36 @@ router.put('/users', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else {
-        userSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(err, user){
-            if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-            if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if(req.query.oldPassword || req.query.newPassword){
-                if(!req.query.oldPassword || !req.query.newPassword) return res.status(400).send({ error: 'Both oldPassword and newPassword parameters must be provided.' })
-                else{
-                    user.changePassword(req.query.oldPassword, req.query.newPassword, function (err) {
-                        if (err) {
-                            return res.status(403).send({error: 'Invalid password.'});
-                        }
-                        if(!err){
-                            return res.status(200).send('User updated!')
-                        }
-                    })
-                }
+        userSchema.findOne({username: req.query.username}, function(err, user){
+            if(user!=null){
+                return res.status(409).send({ error: 'Username is already taken.' })
             } 
             else{
-                if (user != null) return res.status(200).send('User updated!')
+                userSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(err, user){
+                    if(!req.query.id) return res.status(400).send({ error: 'Missing id parameter.' })
+                    if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+                    if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                    if (req.query.oldPassword || req.query.newPassword){
+                        if(!req.query.oldPassword || !req.query.newPassword) return res.status(400).send({ error: 'Both oldPassword and newPassword parameters must be provided.' })
+                        else{
+                            user.changePassword(req.query.oldPassword, req.query.newPassword, function (err) {
+                                if (err) {
+                                    return res.status(403).send({error: 'Invalid password.'});
+                                }
+                                if(!err){
+                                    return res.status(200).send('User updated!')
+                                }
+                            })
+                        }
+                    } 
+                    else{
+                        if (user != null) return res.status(200).send('User updated!')
+                    }
+                    
+                })
             }
-            
-            
         })
+        
     }
 })
 
