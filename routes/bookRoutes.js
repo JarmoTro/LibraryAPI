@@ -5,6 +5,9 @@ const loanSchema = require('../models/loan');
 const reviewSchema = require('../models/review');
 const multer = require("multer");
 const fs = require("fs");
+const utlis = require('../utils')
+const bookDTO = require('../models/DTOs/bookDTO');
+const utils = require('../utils');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -43,7 +46,7 @@ router.get('/books', (req, res) => {
 
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
 
-            if (!error) return res.send(books);
+            if (!error) return res.send(utils.convertBook(books));
 
         })
     }
@@ -61,7 +64,7 @@ router.get('/books/:id', (req, res) => {
         bookSchema.findOne({ _id: req.params.id }, function (error, book) {
             if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (book != null) return res.send(book);
+            if (book != null) return res.send(bookDTO(book));
         })
     }
 })
@@ -77,7 +80,7 @@ router.get('/books/author/:author', (req, res) => {
         bookSchema.find({ author: req.params.author }, function (error, books) {
             if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (books != null) return res.send(books);
+            if (books != null) return res.send(utils.convertBook(books));
         })
     }
 })
@@ -93,7 +96,7 @@ router.get('/books/genre/:genre', (req, res) => {
         bookSchema.find({ genre: req.params.genre }, function (error, books) {
             if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (books != null) return res.send(books);
+            if (books != null) return res.send(utils.convertBook(books));
         })
     }
 })
@@ -113,7 +116,7 @@ router.get('/books/search/:keyword', (req, res) => {
                 { ISBN: req.params.keyword }
             ]
         }).then((books) => {
-            res.send(books)
+            res.send(utils.convertBook(books))
         });
     }
 })

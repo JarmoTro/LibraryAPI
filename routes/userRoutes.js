@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const userSchema = require('../models/user');
 const passport = require('passport')
-
+const utlis = require('../utils')
+const userDTO = require('../models/DTOs/userDTO')
 
 router.post('/users', (req, res) => {
     if(!req.query.key){
@@ -128,10 +129,27 @@ router.get('/users', (req, res) => {
 
             if (error) return res.status(500).send({error:'Looks like something went wrong :('})
     
-            if (!error) return res.send(users);
+            //if (!error) return res.send(userDTO(users[0]));
+            if (!error) return res.send(utlis.convertUser(users));
     
         })
     }
 })
 
+
+router.get('/users/:id', (req, res) => {
+    if (!req.query.key) {
+        return res.status(401).send({ error: 'Missing API key' });
+    }
+    else if (req.query.key != process.env.API_KEY) {
+        return res.status(403).send({ error: 'Invalid API key' });
+    }
+    else {
+        userSchema.findOne({ _id: req.params.id }, function (error, user) {
+            if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+            if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
+            if (user != null) return res.send(userDTO(user));
+        })
+    }
+})
 module.exports = router;
