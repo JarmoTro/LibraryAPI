@@ -75,7 +75,7 @@ router.get('/books/author/:author', (req, res) => {
     }
     else {
         bookSchema.find({ author: req.params.author }, function (error, books) {
-            if (books == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+            if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
             if (books != null) return res.send(books);
         })
@@ -91,14 +91,14 @@ router.get('/books/genre/:genre', (req, res) => {
     }
     else {
         bookSchema.find({ genre: req.params.genre }, function (error, books) {
-            if (books == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+            if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
             if (books != null) return res.send(books);
         })
     }
 })
 
-router.get('/books/title/:title', (req, res) => {
+router.get('/books/search/:keyword', (req, res) => {
     if (!req.query.key) {
         return res.status(401).send({ error: 'Missing API key' });
     }
@@ -106,11 +106,15 @@ router.get('/books/title/:title', (req, res) => {
         return res.status(403).send({ error: 'Invalid API key' });
     }
     else {
-        bookSchema.find({ title: req.params.title }, function (error, book) {
-            if (book == null || book == "") return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-            if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (book != null) return res.send(book);
-        })
+        bookSchema.find({
+            "$or": [
+                { title: { '$regex': req.params.keyword, '$options': 'i' } },
+                { author: { '$regex':req.params.keyword, '$options': 'i' } },
+                { ISBN: req.params.keyword }
+            ]
+        }).then((books) => {
+            res.send(books)
+        });
     }
 })
 
