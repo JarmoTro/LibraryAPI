@@ -195,7 +195,7 @@ router.post('/books', (req, res) => {
     }
 })
 
-router.put('/books', (req, res) => {
+router.put('/books/:id', (req, res) => {
     if (!req.query.key) {
         return res.status(401).send('Missing API key');
     }
@@ -203,11 +203,11 @@ router.put('/books', (req, res) => {
         return res.status(403).send('Invalid API key');
     }
     else {
-        if(!req.query.id) return res.status(400).send({ error: 'Missing id parameter.' })
+        if(!req.params.id) return res.status(400).send({ error: 'Missing id parameter.' })
         let upload = uploadBookCover.single('coverImg');
             upload(req, res, function (err) {
                 if(err) return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
-                    bookSchema.findOneAndUpdate({ _id: req.query.id }, req.query, function (error, book) {
+                    bookSchema.findOneAndUpdate({ _id: req.params.id }, req.query, function (error, book) {
                         if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                         if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
                         if(!req.file && !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })}  

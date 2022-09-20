@@ -94,7 +94,7 @@ router.post('/loans', (req, res) => {
 })
 
 
-router.put('/loans', (req, res) => {
+router.put('/loans/:id', (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -112,7 +112,7 @@ router.put('/loans', (req, res) => {
                 if(book == null) return res.status(404).send({error:"The provided book id does not match an existing books id."})
             })
         }
-        loanSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(error, loan){
+        loanSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
             if(loan != null) return res.status(200).send('Loan updated!')

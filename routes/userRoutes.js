@@ -60,7 +60,7 @@ router.post('/login' , (req, res) => {
     }
 });
 
-router.put('/users', (req, res) => {
+router.put('/users/:id', (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -73,8 +73,8 @@ router.put('/users', (req, res) => {
                 return res.status(409).send({ error: 'Username is already taken.' })
             } 
             else{
-                userSchema.findOneAndUpdate({_id: req.query.id}, req.query, function(err, user){
-                    if(!req.query.id) return res.status(400).send({ error: 'Missing id parameter.' })
+                userSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(err, user){
+                    if(!req.params.id) return res.status(400).send({ error: 'Missing id parameter.' })
                     if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                     if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
                     if (req.query.oldPassword || req.query.newPassword){
