@@ -4,8 +4,11 @@ const partialUserDTO = require('./models/DTOs/partialUserDTO');
 const bookSchema = require('./models/book');
 const loanSchema = require('./models/loan');
 const reviewSchema = require('./models/review');
+const userSchema = require('./models/user');
 const reviewDTO = require('./models/DTOs/reviewDTO');
 const loanDTO = require('./models/DTOs/loanDTO');
+const passport = require('passport');
+const user = require('./models/user');
 
 module.exports = {
     convertUser: function(users){
@@ -41,8 +44,10 @@ module.exports = {
           return DTOArray;
       },
       seedDB: function(){
-        bookSchema.countDocuments({}, (err, count) => {
-            if(count == 0){
+                const user = new userSchema({
+                    username: faker.name.firstName()
+                })
+                userSchema.register(user, "123");
                 for(let i = 0; i<5; i++){
                     const newBook = new bookSchema({
                         title: faker.word.verb(),
@@ -56,8 +61,29 @@ module.exports = {
                         publicationDate: faker.random.numeric(20)               
                     })
                     newBook.save();
+
+                    for(let j = 0; j<5; j++){
+                        const newLoan = new loanSchema({
+                            loanStart: faker.date.between(),
+                            loanEnd: faker.date.future(),
+                            user: user._id.toString(),
+                            book: newBook._id.toString()
+                        })
+                        newLoan.save();
+                    }
+
+                    
+                    for(let l = 0; l<5; l++){
+                        const newReview = new reviewSchema({
+                            title: faker.word.verb(),
+                            body: faker.lorem.paragraph(),
+                            rating: faker.random.numeric(1),
+                            author: user._id.toString(),
+                            book: newBook._id.toString()
+                        })
+                        newReview.save();
+                    }
+                    
                 }
-            }
-        })
       }
 }
