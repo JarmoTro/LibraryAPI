@@ -3,6 +3,8 @@ const router = express.Router();
 const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const reviewSchema = require('../models/review');
+const utils = require('../utils');
+const reviewDTO = require('../models/DTOs/reviewDTO')
 
 router.get('/reviews', (req, res) => {
     if(!req.query.key){
@@ -15,7 +17,7 @@ router.get('/reviews', (req, res) => {
         reviewSchema.find({}, function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(reviews)
+            if(reviews != null) return res.send(utils.convertReview(reviews))
         })
     }
 })
@@ -67,7 +69,7 @@ router.get('/reviews/book/:id', (req, res) => {
         reviewSchema.find({book: req.params.id}, function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(reviews)
+            if(reviews != null) return res.send(utils.convertReview(reviews))
         })
     }
 })
@@ -83,7 +85,7 @@ router.get('/reviews/:id', (req, res) => {
         reviewSchema.findOne({_id: req.params.id}, function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(reviews)
+            if(reviews != null) return res.send(reviewDTO(reviews))
         })
     }
 })
@@ -99,7 +101,7 @@ router.get('/reviews/author/:id', (req, res) => {
         reviewSchema.find({author: req.params.id}, function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(reviews)
+            if(reviews != null) return res.send(utils.convertReview(reviews))
         })
     }
 })

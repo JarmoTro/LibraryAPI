@@ -3,6 +3,8 @@ const router = express.Router();
 const loanSchema = require('../models/loan');
 const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
+const utils = require('../utils');
+const loanDTO = require('../models/DTOs/loanDTO')
 
 router.get('/loans', (req, res) => {
     if(!req.query.key){
@@ -16,7 +18,7 @@ router.get('/loans', (req, res) => {
 
             if (error) res.status(500).send('Looks like something went wrong :(')
     
-            if (!error) res.send(loans);
+            if (!error) res.send(utils.convertLoan(loans));
     
         })
     }
@@ -33,7 +35,7 @@ router.get('/loans/user/:id', (req, res) => {
         loanSchema.find({user: req.params.id}, function(error, loans){
             if(loans == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(loans != null) return res.send(loans)
+            if(loans != null) return res.send(utils.convertLoan(loans))
         })
     }
 })
@@ -49,7 +51,7 @@ router.get('/loans/:id', (req, res) => {
         loanSchema.findOne({_id: req.params.id}, function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(loan != null) return res.send(loan)
+            if(loan != null) return res.send(loanDTO(loan))
         }) 
     }
 })

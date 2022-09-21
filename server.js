@@ -13,6 +13,7 @@ const session = require('express-session');
 const app = express();
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json')
+const utils = require('./utils');
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_CONNECTION);
@@ -61,6 +62,8 @@ const DisableTryItOutPlugin = function() {
   };
 
 app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument, options))
+
+utils.seedDB();
 
 
 app.listen(process.env.PORT || 3000 , () => {

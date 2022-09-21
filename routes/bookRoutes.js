@@ -136,11 +136,13 @@ router.delete('/books/:id', (req, res) => {
                     if (response == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
                     if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
                     if (response != null) {
-                        fs.unlink(response.localImgPath, (err => {
-                            if (err) {
-                                return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                            }
-                        }))
+                        if(response.localImgPath != null){
+                            fs.unlink(response.localImgPath, (err => {
+                                if (err) {
+                                    return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                                }
+                            }))
+                        }
                         reviewSchema.deleteMany({book: req.params.id}, function(err, deletedReviews){})
                         return res.status(204).send()
                     }
