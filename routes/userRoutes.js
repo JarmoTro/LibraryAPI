@@ -129,7 +129,6 @@ router.get('/users', (req, res) => {
 
             if (error) return res.status(500).send({error:'Looks like something went wrong :('})
     
-            //if (!error) return res.send(userDTO(users[0]));
             if (!error) return res.send(utlis.convertUser(users));
     
         })
