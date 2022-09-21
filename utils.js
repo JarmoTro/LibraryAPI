@@ -5,7 +5,7 @@ const bookSchema = require('./models/book');
 const loanSchema = require('./models/loan');
 const reviewSchema = require('./models/review');
 const reviewDTO = require('./models/DTOs/reviewDTO');
-
+const loanDTO = require('./models/DTOs/loanDTO');
 
 module.exports = {
     convertUser: function(users){
