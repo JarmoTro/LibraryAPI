@@ -5,6 +5,7 @@ const bookRoutes = require('./routes/bookRoutes');
 const loanRoutes = require('./routes/loanRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const invalidRoute = require('./routes/404route');
 const mockBookRoutes = require('./routes/mockBookRoutes');
 const mockLoanRoutes = require('./routes/mockLoanRoutes');
 const mockUserRoutes = require('./routes/mockUserRoutes');
@@ -36,6 +37,7 @@ app.use(bookRoutes);
 app.use(loanRoutes);
 app.use(userRoutes);
 app.use(reviewRoutes)
+app.use(invalidRoute)
 //app.use(mockBookRoutes);
 //app.use(mockLoanRoutes);
 //app.use(mockUserRoutes);
@@ -63,7 +65,7 @@ const DisableTryItOutPlugin = function() {
 
 app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDocument, options))
 
-utils.seedDB();
+//utils.seedDB();
 
 
 app.listen(process.env.PORT || 3000 , () => {
