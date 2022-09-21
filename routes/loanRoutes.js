@@ -104,21 +104,33 @@ router.put('/loans/:id', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        if(req.query.user){
-            userSchema.findOne({_id: req.query.user}, function(error, user){
-                if(user == null) return res.status(404).send({error:"The provided user id does not match an existing users id."})
-            })
+        if (!req.query.loanStart &&
+            !req.query.loanEnd ) {
+            return res.status(400).send({ error: 'No params given. Valid params: loanStart, loanEnd' })
         }
-        if(req.query.book){
-            bookSchema.findOne({_id: req.query.book}, function(error, book){
-                if(book == null) return res.status(404).send({error:"The provided book id does not match an existing books id."})
-            })
+        else{
+            if(req.query.loanEnd && !req.query.loanStart){
+                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanEnd: req.query.loanEnd}, function(error, loan){
+                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                    if(loan != null) return res.status(200).send('Loan updated!')
+                }) 
+            }
+            if(req.query.loanStart && !req.query.loanEnd){
+                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanStart: req.query.loanStart}, function(error, loan){
+                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                    if(loan != null) return res.status(200).send('Loan updated!')
+                }) 
+            }
+            if(req.query.loanStart && req.query.loanEnd){
+                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanEnd: req.query.loanEnd, loanStart: req.query.loanStart}, function(error, loan){
+                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                    if(loan != null) return res.status(200).send('Loan updated!')
+                }) 
+            }
         }
-        loanSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(error, loan){
-            if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(loan != null) return res.status(200).send('Loan updated!')
-        }) 
     }
 })
 
