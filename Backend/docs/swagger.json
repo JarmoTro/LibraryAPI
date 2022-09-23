@@ -6,798 +6,6 @@
         "description": "### This is a Swagger UI for our Library API  \n\n### Error handling\nErrors are presented using the HTTP status codes 400-599. The response include a more detailed explanation about the error in the body.\n\n```\n{\n  \"error\": \"Cleartext explanation of the error that occurred\"\n}\n```\n\n### Generic API errors\nThese error responses can be returned by any of the described endpoints.\n\n| HTTP status  |  Description |\n|---|---|\n| 400| Bad input parameters or invalid request. More information can be found in the response body.\n| 401| The consumer does not have access to the requested resource or the provided token is not valid.\n| 404| The requested resource can not be found or the user does not have access to the resource.\n| 5XX| A server error has occurred while processing the request."
     },
     "paths": {
-        "/books/:id": {
-            "get": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "6318672b729fc51d18e86a90"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id used to find a specific book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Book": {
-                                        "value": {
-                                            "_id": "6318672b729fc51d18e86a90",
-                                            "title": "All Quiet on the Western Front",
-                                            "length": 200,
-                                            "author": "Erich Maria Remarque",
-                                            "stock": 2,
-                                            "ISBN": "224214",
-                                            "genre": "Historical Fiction",
-                                            "description": "All Quiet on the Western Front is a novel by Erich Maria Remarque, a German veteran of World War I. The book describes the German soldiers' extreme physical and mental stress during the war, and the detachment from civilian life felt by many of these soldiers upon returning home from the front.",
-                                            "publicationDate": 1928,
-                                            "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444all-quiet-on-the-western-front.jpg"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Unable to find book error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Book was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a specific book by its id",
-                "description": ""
-            },
-            "put": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "coverImg": {
-                                "value": "Image sent from a form"
-                            }
-                        },
-                        "name": "coverImg",
-                        "description": "Image of the books cover",
-                        "schema": {},
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "63186aac214030a84b0223e8"
-                            }
-                        },
-                        "name": "id",
-                        "description": "Id is required to update a specific book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "title": {
-                                "value": "The Lord of the Rings"
-                            }
-                        },
-                        "name": "title",
-                        "description": "Title for the book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "length": {
-                                "value": "479"
-                            }
-                        },
-                        "name": "length",
-                        "description": "How many pages the book has",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "publicationDate": {
-                                "value": "1663754795"
-                            }
-                        },
-                        "name": "publicationDate",
-                        "description": "Date when the book was published",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "stock": {
-                                "value": "6"
-                            }
-                        },
-                        "name": "stock",
-                        "description": "How many copies of the book are available",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "description": {
-                                "value": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore."
-                            }
-                        },
-                        "name": "description",
-                        "description": "A short description about the book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "ISBN": {
-                                "value": "241231"
-                            }
-                        },
-                        "name": "ISBN",
-                        "description": "International Standard Book Number",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "genre": {
-                                "value": "fantasy"
-                            }
-                        },
-                        "name": "genre",
-                        "description": "The books genre",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "author": {
-                                "value": "John Ronald Reuel Tolkien"
-                            }
-                        },
-                        "name": "author",
-                        "description": "Name of the books author",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book": {
-                                        "value": "Book updated!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing id parameter error": {
-                                        "value": {
-                                            "error": "Missing id parameter."
-                                        }
-                                    },
-                                    "Invalid parameter name for file upload error": {
-                                        "value": {
-                                            "error": "Invalid parameter name for file upload. Valid parameters for files: coverImg"
-                                        }
-                                    },
-                                    "No given params error": {
-                                        "value": {
-                                            "error": "No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg)."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something was missing or invalid from query"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book was not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Book was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Update a book"
-            },
-            "delete": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "6318672b729fc51d18e86a90"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id used to find a specific book and delete it",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Unable to find book": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Book was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Delete a book by its id"
-            }
-        },
-        "/books/author/:author": {
-            "get": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "author": {
-                                "value": "John Ronald Reuel Tolkien"
-                            }
-                        },
-                        "name": "author",
-                        "description": "Name of an author whos books to get",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Books": {
-                                        "value": [
-                                            {
-                                                "_id": "63186aac214030a84b0223e8",
-                                                "title": "The Lord of the Rings",
-                                                "author": "John Ronald Reuel Tolkien",
-                                                "stock": 6,
-                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444lord-of-the-rings.jpg"
-                                            },
-                                            {
-                                                "_id": "6320516964da52b099469bb0",
-                                                "title": "The Hobbit",
-                                                "author": "John Ronald Reuel Tolkien",
-                                                "stock": 4,
-                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444the-hobbit.jpg"
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is missing"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Author not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Author not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a list of books by an author"
-            }
-        },
-        "/books/genre/:genre": {
-            "get": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "genre": {
-                                "value": "fantasy"
-                            }
-                        },
-                        "name": "genre",
-                        "description": "genre to find a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Books": {
-                                        "value": [
-                                            {
-                                                "id": "43f7d8e0-2e93-11ed-9a62-ad6ce2fced68",
-                                                "title": "The Lord of the Rings",
-                                                "author": "John Ronald Reuel Tolkien",
-                                                "stock": 6,
-                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444lord-of-the-rings.jpg"
-                                            },
-                                            {
-                                                "_id": "6320516964da52b099469bb0",
-                                                "title": "The Hobbit",
-                                                "author": "John Ronald Reuel Tolkien",
-                                                "stock": 4,
-                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444the-hobbit.jpg"
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is missing"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Genre not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Category not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a list of books by genre"
-            }
-        },
         "/logout/": {
             "post": {
                 "tags": [
@@ -1595,439 +803,6 @@
                 "summary": "Add a new loan"
             }
         },
-        "/loans/:id/": {
-            "get": {
-                "tags": [
-                    "loans"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "63284a920e4f9ec5457bd08c"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A ID used to find a specific loan",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Book": {
-                                        "value": {
-                                            "_id": "63284a920e4f9ec5457bd08c",
-                                            "loanStart": 1669627070,
-                                            "loanEnd": 1670231870,
-                                            "book": "63283f9913c575a0084104ee",
-                                            "user": "632849e813c575a0084104fa"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Unable to find loan error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Loan was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a specific loan by its id",
-                "description": ""
-            },
-            "put": {
-                "tags": [
-                    "loans"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "book": {
-                                "value": "63283f9913c575a0084104ee"
-                            }
-                        },
-                        "name": "book",
-                        "description": "Id of a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "user": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "user",
-                        "description": "Id of an user",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "63284a920e4f9ec5457bd08c"
-                            }
-                        },
-                        "name": "id",
-                        "description": "Id of the loan to update",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "loanStart": {
-                                "value": "1669627070"
-                            }
-                        },
-                        "name": "loanStart",
-                        "description": "Start of a loan in Unix time",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "loanEnd": {
-                                "value": "1670231870"
-                            }
-                        },
-                        "name": "loanEnd",
-                        "description": "End of a loan in Unix time",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Loan": {
-                                        "value": "Loan updated!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing parameters error": {
-                                        "value": {
-                                            "error": "No params given. Valid params: loanStart, loanEnd"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Missing parameters"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Loan not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Loan not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong with query"
-                    }
-                },
-                "summary": "Update a specific lone"
-            },
-            "delete": {
-                "tags": [
-                    "loans"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "6318672b729fc51d18e86a90"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id used to find a specific loan delete it",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Unable to find loan error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Loan was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Delete a loan by its id"
-            }
-        },
         "/books/": {
             "get": {
                 "tags": [
@@ -2664,7 +1439,875 @@
                 "summary": "Add a review"
             }
         },
-        "/loans/user/:id/": {
+        "/books/{id}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Book": {
+                                        "value": {
+                                            "_id": "6318672b729fc51d18e86a90",
+                                            "title": "All Quiet on the Western Front",
+                                            "length": 200,
+                                            "author": "Erich Maria Remarque",
+                                            "stock": 2,
+                                            "ISBN": "224214",
+                                            "genre": "Historical Fiction",
+                                            "description": "All Quiet on the Western Front is a novel by Erich Maria Remarque, a German veteran of World War I. The book describes the German soldiers' extreme physical and mental stress during the war, and the detachment from civilian life felt by many of these soldiers upon returning home from the front.",
+                                            "publicationDate": 1928,
+                                            "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444all-quiet-on-the-western-front.jpg"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Unable to find book error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Book was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a specific book by its id",
+                "description": ""
+            },
+            "put": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "examples": {
+                            "coverImg": {
+                                "value": "Image sent from a form"
+                            }
+                        },
+                        "name": "coverImg",
+                        "description": "Image of the books cover",
+                        "schema": {},
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "title": {
+                                "value": "The Lord of the Rings"
+                            }
+                        },
+                        "name": "title",
+                        "description": "Title for the book",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "length": {
+                                "value": "479"
+                            }
+                        },
+                        "name": "length",
+                        "description": "How many pages the book has",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "publicationDate": {
+                                "value": "1663754795"
+                            }
+                        },
+                        "name": "publicationDate",
+                        "description": "Date when the book was published",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "stock": {
+                                "value": "6"
+                            }
+                        },
+                        "name": "stock",
+                        "description": "How many copies of the book are available",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "description": {
+                                "value": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore."
+                            }
+                        },
+                        "name": "description",
+                        "description": "A short description about the book",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "ISBN": {
+                                "value": "241231"
+                            }
+                        },
+                        "name": "ISBN",
+                        "description": "International Standard Book Number",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "genre": {
+                                "value": "fantasy"
+                            }
+                        },
+                        "name": "genre",
+                        "description": "The books genre",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "author": {
+                                "value": "John Ronald Reuel Tolkien"
+                            }
+                        },
+                        "name": "author",
+                        "description": "Name of the books author",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/xml": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Book": {
+                                        "value": "Book updated!"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing id parameter error": {
+                                        "value": {
+                                            "error": "Missing id parameter."
+                                        }
+                                    },
+                                    "Invalid parameter name for file upload error": {
+                                        "value": {
+                                            "error": "Invalid parameter name for file upload. Valid parameters for files: coverImg"
+                                        }
+                                    },
+                                    "No given params error": {
+                                        "value": {
+                                            "error": "No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg)."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something was missing or invalid from query"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Book was not found error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Book was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Update a book"
+            },
+            "delete": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Unable to find book": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Book was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Delete a book by its id"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Id": {
+                            "value": "a626f87c-9141-43a3-b831-542d49a158e5"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id used to find a specific book",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/books/author/{author}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Books": {
+                                        "value": [
+                                            {
+                                                "_id": "63186aac214030a84b0223e8",
+                                                "title": "The Lord of the Rings",
+                                                "author": "John Ronald Reuel Tolkien",
+                                                "stock": 6,
+                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444lord-of-the-rings.jpg"
+                                            },
+                                            {
+                                                "_id": "6320516964da52b099469bb0",
+                                                "title": "The Hobbit",
+                                                "author": "John Ronald Reuel Tolkien",
+                                                "stock": 4,
+                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444the-hobbit.jpg"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is missing"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Author not found error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Author not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a list of books by an author"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "author": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "author",
+                    "description": "Name of an author whos books to get",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/books/genre/{genre}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Books": {
+                                        "value": [
+                                            {
+                                                "id": "43f7d8e0-2e93-11ed-9a62-ad6ce2fced68",
+                                                "title": "The Lord of the Rings",
+                                                "author": "John Ronald Reuel Tolkien",
+                                                "stock": 6,
+                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444lord-of-the-rings.jpg"
+                                            },
+                                            {
+                                                "_id": "6320516964da52b099469bb0",
+                                                "title": "The Hobbit",
+                                                "author": "John Ronald Reuel Tolkien",
+                                                "stock": 4,
+                                                "imgSource": "http://localhost:3000/bookCovers/coverImg-1663582105444the-hobbit.jpg"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is missing"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Genre not found error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Category not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a list of books by genre"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "genre": {
+                            "value": "Fiction"
+                        }
+                    },
+                    "name": "genre",
+                    "description": "genre to find a book",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/books/search/{keyword}": {
+            "get": {
+                "tags": [
+                    "books"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Books": {
+                                        "value": [
+                                            {
+                                                "_id": "632adce8f5c742e1134b0d52",
+                                                "title": "seal",
+                                                "author": "Mrs. Terri Murray",
+                                                "imgSource": "https://loremflickr.com/640/480",
+                                                "stock": 7
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": "\t{\"error\":\"Missing API key\"}"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is missing"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    }
+                },
+                "summary": "Get books where the given keyword partially matches the title, author or where it completely matches the ISBN"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Keyword": {
+                            "value": "Hobbit"
+                        }
+                    },
+                    "name": "keyword",
+                    "description": "Keyword to search books by",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/loans/{id}": {
             "get": {
                 "tags": [
                     "loans"
@@ -2683,15 +2326,408 @@
                         },
                         "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Book": {
+                                        "value": {
+                                            "_id": "63284a920e4f9ec5457bd08c",
+                                            "loanStart": 1669627070,
+                                            "loanEnd": 1670231870,
+                                            "book": "63283f9913c575a0084104ee",
+                                            "user": "632849e813c575a0084104fa"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Unable to find loan error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Loan was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a specific loan by its id",
+                "description": ""
+            },
+            "put": {
+                "tags": [
+                    "loans"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "book": {
+                                "value": "63283f9913c575a0084104ee"
+                            }
+                        },
+                        "name": "book",
+                        "description": "Id of a book",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": false
                     },
                     {
                         "examples": {
-                            "userId": {
+                            "user": {
                                 "value": "632849e813c575a0084104fa"
                             }
                         },
-                        "name": "id",
-                        "description": "A id of a user",
+                        "name": "user",
+                        "description": "Id of an user",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "loanStart": {
+                                "value": "1669627070"
+                            }
+                        },
+                        "name": "loanStart",
+                        "description": "Start of a loan in Unix time",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "loanEnd": {
+                                "value": "1670231870"
+                            }
+                        },
+                        "name": "loanEnd",
+                        "description": "End of a loan in Unix time",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/xml": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Loan": {
+                                        "value": "Loan updated!"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing parameters error": {
+                                        "value": {
+                                            "error": "No params given. Valid params: loanStart, loanEnd"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Missing parameters"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Loan not found error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Loan not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong with query"
+                    }
+                },
+                "summary": "Update a specific lone"
+            },
+            "delete": {
+                "tags": [
+                    "loans"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Unable to find loan error": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Loan was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Delete a loan by its id"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A ID used to find a specific loan",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/loans/user/{id}": {
+            "get": {
+                "tags": [
+                    "loans"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
                         "schema": {
                             "type": "string"
                         },
@@ -2794,9 +2830,25 @@
                     }
                 },
                 "summary": "Get a list of loans by 1 user"
-            }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id of a user",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         },
-        "/reviews/:id/": {
+        "/reviews/{id}": {
             "get": {
                 "tags": [
                     "reviews"
@@ -2810,20 +2862,6 @@
                         },
                         "name": "key",
                         "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "6318672b729fc51d18e86a90"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A ID used to find a specific review",
                         "schema": {
                             "type": "string"
                         },
@@ -2978,20 +3016,6 @@
                     },
                     {
                         "examples": {
-                            "id": {
-                                "value": "632aefca70ddf0f3466351c8"
-                            }
-                        },
-                        "name": "id",
-                        "description": "review id",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
                             "rating": {
                                 "value": "1"
                             }
@@ -3136,20 +3160,6 @@
                         },
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "6318672b729fc51d18e86a90"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A ID used to find a specific review and delete it",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -3226,9 +3236,170 @@
                     }
                 },
                 "summary": "Delete a review by its id"
-            }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A ID used to find a specific review",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         },
-        "/reviews/book/:id": {
+        "/reviews/author/{id}": {
+            "get": {
+                "tags": [
+                    "reviews"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Reviews": {
+                                        "value": [
+                                            {
+                                                "_id": "6328614b761359e66be3f007",
+                                                "title": "test",
+                                                "body": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows: Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called \"air\"",
+                                                "rating": 1,
+                                                "book": "63283f9913c575a0084104ee",
+                                                "author": "63285d6a761359e66be3efe7",
+                                                "createdAt": 1663589144454
+                                            },
+                                            {
+                                                "_id": "632869769d0f2098cf6bd58b",
+                                                "title": "this book is the second coming of christ",
+                                                "body": "There was no ring on his finger. That was a good sign although far from proof that he was available. Still, it was much better than if he had been wearing a wedding ring on his hand. She glanced at his hand a bit more intently to see if there were any tan lines where a ring may have been, and he's simply taken it off. She couldn't detect any which was also a good sign and a relief. The next step would be to get access to his wallet to see if there were any family photos in it.",
+                                                "rating": 10,
+                                                "book": "63283f9913c575a0084104ee",
+                                                "author": "63285d6a761359e66be3efe7",
+                                                "createdAt": 1663591492087
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error\t": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Unable to find reviews": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find what you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Review was not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a specific authors reviews"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id of a author",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/reviews/book/{id}": {
             "get": {
                 "tags": [
                     "reviews"
@@ -3369,152 +3540,25 @@
                     }
                 },
                 "summary": "Get a specific books reviews"
-            }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id of a book",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         },
-        "/reviews/author/:id/": {
-            "get": {
-                "tags": [
-                    "reviews"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "63283f9913c575a0084104ee"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id of a author",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Reviews": {
-                                        "value": [
-                                            {
-                                                "_id": "6328614b761359e66be3f007",
-                                                "title": "test",
-                                                "body": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows: Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called \"air\"",
-                                                "rating": 1,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454
-                                            },
-                                            {
-                                                "_id": "632869769d0f2098cf6bd58b",
-                                                "title": "this book is the second coming of christ",
-                                                "body": "There was no ring on his finger. That was a good sign although far from proof that he was available. Still, it was much better than if he had been wearing a wedding ring on his hand. She glanced at his hand a bit more intently to see if there were any tan lines where a ring may have been, and he's simply taken it off. She couldn't detect any which was also a good sign and a relief. The next step would be to get access to his wallet to see if there were any family photos in it.",
-                                                "rating": 10,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663591492087
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error\t": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Unable to find reviews": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Review was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a specific authors reviews"
-            }
-        },
-        "/users/:id": {
+        "/users/{id}": {
             "get": {
                 "tags": [
                     "users"
@@ -3528,20 +3572,6 @@
                         },
                         "name": "key",
                         "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id of a user",
                         "schema": {
                             "type": "string"
                         },
@@ -3645,20 +3675,6 @@
                         },
                         "name": "key",
                         "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "id": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "id",
-                        "description": "A id of a user",
                         "schema": {
                             "type": "string"
                         },
@@ -3824,103 +3840,23 @@
                     }
                 },
                 "summary": "Update a user"
-            }
-        },
-        "/books/search/:keyword": {
-            "get": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
                     },
-                    {
-                        "examples": {
-                            "Keyword": {
-                                "value": "Murray"
-                            }
-                        },
-                        "name": "keyword",
-                        "description": "Keyword to search books by",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Books": {
-                                        "value": [
-                                            {
-                                                "_id": "632adce8f5c742e1134b0d52",
-                                                "title": "seal",
-                                                "author": "Mrs. Terri Murray",
-                                                "imgSource": "https://loremflickr.com/640/480",
-                                                "stock": 7
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
+                    "name": "id",
+                    "description": "A id of a user",
+                    "schema": {
+                        "type": "string"
                     },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": "\t{\"error\":\"Missing API key\"}"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is missing"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    }
-                },
-                "summary": "Get books where the given keyword partially matches the title, author or where it completely matches the ISBN"
-            }
+                    "in": "path",
+                    "required": true
+                }
+            ]
         }
     }
 }
