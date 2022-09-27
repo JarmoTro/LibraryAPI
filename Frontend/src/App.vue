@@ -1,0 +1,37 @@
+<script setup>
+
+</script>
+
+<template>
+  <navbar></navbar>
+
+  <main>
+
+    <card></card>
+    
+  </main>
+
+  <foot>
+
+  </foot>
+
+
+  
+</template>
+
+<script>
+import navbar from "../src/components/navbar.vue"
+import foot from "../src/components/footer.vue"
+import card from "../src/components/card.vue"
+
+
+export default {
+  name: "App",
+  components: {
+    navbar,
+    foot,
+    card
+  }
+};
+</script>
+
