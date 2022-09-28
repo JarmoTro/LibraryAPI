@@ -7,7 +7,7 @@
 
   <main>
 
-    <card></card>
+    <router-view></router-view>
     
   </main>
 

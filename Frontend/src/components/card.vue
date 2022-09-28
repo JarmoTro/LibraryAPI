@@ -2,10 +2,10 @@
     <div class="card-group m-3" v-for="row in formattedBooks" :key="row.id">
 
         <div class="card m-3" style="width: 19rem; max-width: 25%;" v-for="book in row" :key="book.id">
-        <a href="#"><img class="card-img-top" v-bind:src=book.imgSource alt="Card image cap"></a>
+        <router-link :to="{ name: 'book', params: {id: book._id}}" class="text-decoration-none text-dark"> <img class="card-img-top" v-bind:src=book.imgSource alt="Card image cap">  </router-link>
         <div class="card-body text-center">
-            <a href="#" class="text-decoration-none text-dark"><h1 class="card-title">{{book.title}}</h1></a>
-            <a style="cursor: pointer" v-on:click="getAuthorBooks(book.author)" class="text-decoration-none text-dark"><h4 class="card-text">{{book.author}}</h4></a>
+            <router-link :to="{ name: 'book', params: {id: book._id}}" class="text-decoration-none text-dark"> <h1 class="card-title hoverBlue">{{book.title}}</h1>  </router-link>
+            <router-link :to="{ name: 'author', params: {name: book.author}}" v-on:click="getAuthorBooks(book.author)" class="text-decoration-none text-dark"><h4 class="card-text hoverBlue">{{book.author}}</h4> </router-link>
           <h2 style="margin-top: 0.5rem;">Stock: {{book.stock}}</h2>
         </div>
     </div>
@@ -18,7 +18,12 @@ import axios from 'axios'
 export default {
   name: 'book',
   created() {
-    this.getBooks()
+    if (this.$route.params.name) {
+      this.getAuthorBooks(this.$route.params.name)
+    }
+    else {
+          this.getBooks()
+    }
   },
   data() {
     return {
@@ -38,6 +43,9 @@ export default {
           console.log(error)
           this.errorMsg = 'Error retrieving data'
         })
+    },
+    reloadPage() {
+      window.location.reload();
     },
     getAuthorBooks(author){
           axios
@@ -64,3 +72,9 @@ export default {
 }
 
 </script>
+
+<style>
+.hoverBlue:hover{
+color:  #0d6efd;
+}
+</style>
