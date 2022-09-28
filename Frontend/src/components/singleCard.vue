@@ -5,6 +5,14 @@
         <div class="row">
           <div class="col text-center">
             <img class="d-inline-block" style=" max-width: 50rem; max-height: 40rem; margin-bottom: 5; margin-left: 5; margin-right: 5;" v-bind:src=books.imgSource alt="">
+            <h1 class="m-3"> Reviews </h1>
+            <div v-for="review in reviews">
+            <h2 class="m-3">{{review.title}}</h2>
+            <h4 class="m-3">{{getUser(review.author)}}</h4>
+            <h5 class="m-3">{{review.rating}}</h5>
+            <h5 class="m-3">{{review.body}}</h5>
+            <hr>
+            </div>
           </div>
           <div class="col">
             <h2 class="m-3">{{books.title}}</h2>
@@ -23,6 +31,8 @@
 
 
             </div>
+          
+
           </div>
         </div>
       </div>
@@ -35,28 +45,48 @@ import axios from 'axios'
 export default {
   name: 'book',
   created() {
-    this.getBook()
+    this.getBook(),
+    this.getReviews()
   },
   data() {
     return {
       books: [],
+      reviews: [],
       errorMsg: '',
     }
   },
   methods: {
     getBook() {
       axios
-        .get('http://localhost:3000/books/'+ this.$route.params.id + '?key=93cfcb80-2db6-11ed-8d13-cdfedc6a1662')
+        .get('http://localhost:3000/books/'+ this.$route.params.id + '?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-          console.log(response)
           this.books = response.data
-          console.log(this.books);
         })
         .catch((error) => {
-          console.log(error)
           this.errorMsg = 'Error retrieving data'
         })
     },
+    getReviews() {
+      axios
+        .get('http://localhost:3000/reviews/book/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
+        .then((response) => {
+          this.reviews = response.data
+        })
+        .catch((error) => {
+          this.errorMsg = 'Error retrieving data'
+        })
+    },
+    getUser(id) {
+        axios
+        .get('http://localhost:3000/users/'+ id +'?key='+import.meta.env.VITE_API_KEY)
+        .then((response) => {
+          console.log(response.data.username)
+          return response.data.username
+        })
+        .catch((error) => {
+          this.errorMsg = 'Error retrieving data'
+        })
+    }
   },
   computed: {
   }

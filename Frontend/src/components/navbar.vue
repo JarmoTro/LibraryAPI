@@ -1,3 +1,14 @@
+<script>
+export default {
+  data() {
+    return {
+      keywordInput: ''
+    }
+  }
+}
+
+</script>
+
 <template>
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
@@ -12,8 +23,15 @@
                   <li><a class="dropdown-item" href="#">Another action</a></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
+              </div> 
+              <div style="width: 95%">
+              <input class="form-control me-2" v-model="keywordInput" type="search" placeholder="Search by ISBN, title, author" aria-label="Search" onkeydown="return event.key != 'Enter';">
               </div>
-            <input class="form-control me-2" type="search" placeholder="Search by ISBN, title, author" aria-label="Search">
+              <router-link v-if="keywordInput" :to="{name: 'keywordSearch', params: {keyword: keywordInput}}" class="text-decoration-none text-dark">
+              <button type="button" class="btn btn-secondary">
+              <i class="fas fa-search"></i>
+              </button>
+              </router-link>
           </form>
           <form class="d-flex">
             <button class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
@@ -21,4 +39,5 @@
         </div>
       </nav>
 </template>
+
 

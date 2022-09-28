@@ -19,6 +19,11 @@ const routes = [
   name: "book",
   component: singleBook,
 },
+{
+  path: "/book/search/:keyword",
+  name: "keywordSearch",
+  component: Home,
+},
 ];
 
 const router = createRouter({
