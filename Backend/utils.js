@@ -9,6 +9,7 @@ const reviewDTO = require('./models/DTOs/reviewDTO');
 const loanDTO = require('./models/DTOs/loanDTO');
 const passport = require('passport');
 const user = require('./models/user');
+var mongoose = require('mongoose');
 
 module.exports = {
     convertUser: function(users){
@@ -78,7 +79,7 @@ module.exports = {
                             title: faker.word.verb(),
                             body: faker.lorem.paragraph(),
                             rating: faker.random.numeric(1),
-                            author: user._id.toString(),
+                            author: mongoose.Types.ObjectId(user._id),
                             book: newBook._id.toString()
                         })
                         newReview.save();

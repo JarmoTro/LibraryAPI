@@ -1,3 +1,5 @@
+const partialUserDTO = require('../DTOs/partialUserDTO')
+
 module.exports = function reviewDTO(review){
     const reviewDTO = {
         _id: review._id,
@@ -7,6 +9,7 @@ module.exports = function reviewDTO(review){
         book: review.book,
         rating: review.rating,
         createdAt: review.createdAt,
+        user: partialUserDTO(review.user[0])
       }
       return reviewDTO;
   }

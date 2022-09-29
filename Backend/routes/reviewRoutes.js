@@ -66,7 +66,10 @@ router.get('/reviews/book/:id', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        reviewSchema.find({book: req.params.id}, function(error, reviews){
+        reviewSchema.aggregate([
+            {$match: {book: req.params.id}},
+            {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+        ]).exec(function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
             if(reviews != null) return res.send(utils.convertReview(reviews))

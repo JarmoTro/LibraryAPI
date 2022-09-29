@@ -8,7 +8,7 @@
             <h1 class="m-3"> Reviews </h1>
             <div v-for="review in reviews">
             <h2 class="m-3">{{review.title}}</h2>
-            <h4 class="m-3">{{getUser(review.author)}}</h4>
+            <h4 class="m-3">{{review.user.username}}</h4>
             <h5 class="m-3">{{review.rating}}</h5>
             <h5 class="m-3">{{review.body}}</h5>
             <hr>
@@ -71,17 +71,6 @@ export default {
         .get('http://localhost:3000/reviews/book/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
           this.reviews = response.data
-        })
-        .catch((error) => {
-          this.errorMsg = 'Error retrieving data'
-        })
-    },
-    getUser(id) {
-        axios
-        .get('http://localhost:3000/users/'+ id +'?key='+import.meta.env.VITE_API_KEY)
-        .then((response) => {
-          console.log(response.data.username)
-          return response.data.username
         })
         .catch((error) => {
           this.errorMsg = 'Error retrieving data'

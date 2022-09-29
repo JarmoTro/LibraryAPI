@@ -16,7 +16,7 @@ const reviewSchema = new mongoose.Schema({
         type:String
     },
     author:{
-        type:String
+        type:mongoose.Types.ObjectId
     },
     createdAt:{
         type:Number,
