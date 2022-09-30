@@ -34,7 +34,9 @@ export default {
               </router-link>
           </form>
           <form class="d-flex">
+            <router-link :to="{name: 'login'}">
             <button class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
+            </router-link>
           </form>
         </div>
       </nav>

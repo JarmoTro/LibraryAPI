@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "../components/card.vue";
 import singleBook from "../components/singleCard.vue";
+import auth from "../components/auth.vue"
 
 
 const routes = [
@@ -23,6 +24,16 @@ const routes = [
   path: "/book/search/:keyword",
   name: "keywordSearch",
   component: Home,
+},
+{
+  path: "/login",
+  name: "login",
+  component: auth,
+},
+{
+  path: "/register",
+  name: "register",
+  component: auth,
 },
 ];
 
