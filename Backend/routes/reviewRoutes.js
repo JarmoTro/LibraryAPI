@@ -4,9 +4,10 @@ const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const reviewSchema = require('../models/review');
 const utils = require('../utils');
-const reviewDTO = require('../models/DTOs/reviewDTO')
+const reviewDTO = require('../models/DTOs/reviewDTO');
+const { default: mongoose } = require('mongoose');
 
-router.get('/reviews', (req, res) => {
+/*router.get('/reviews', (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -20,7 +21,7 @@ router.get('/reviews', (req, res) => {
             if(reviews != null) return res.send(utils.convertReview(reviews))
         })
     }
-})
+})*/
 
 
 router.post('/reviews', (req, res) => {
@@ -66,14 +67,19 @@ router.get('/reviews/book/:id', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        reviewSchema.aggregate([
-            {$match: {book: req.params.id}},
-            {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
-        ]).exec(function(error, reviews){
-            if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(utils.convertReview(reviews))
-        })
+        if (req.params.id.length != 24) {
+            return res.status(400).send({error:'Invalid id format'})
+        }
+        else {
+            reviewSchema.aggregate([
+                {$match: {book: mongoose.Types.ObjectId(req.params.id)}},
+                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+            ]).exec(function(error, reviews){
+                if(reviews == null || reviews.length == 0) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                if(reviews != null) return res.send(utils.convertReview(reviews))
+            })
+        }
     }
 })
 
@@ -85,11 +91,19 @@ router.get('/reviews/:id', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        reviewSchema.findOne({_id: req.params.id}, function(error, reviews){
-            if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(reviewDTO(reviews))
-        })
+        if (req.params.id.length != 24) {
+            return res.status(400).send({error:'Invalid id format'})
+        }
+        else {
+            reviewSchema.aggregate([
+                {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+            ]).exec(function(error, reviews){
+                if(reviews == null || reviews.length == 0) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                if(reviews != null) return res.send(utils.convertReview(reviews))
+            })
+        }
     }
 })
 

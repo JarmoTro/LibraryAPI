@@ -13,7 +13,7 @@ const reviewSchema = new mongoose.Schema({
         type:Number
     },
     book:{
-        type:String
+        type:mongoose.Types.ObjectId
     },
     author:{
         type:mongoose.Types.ObjectId

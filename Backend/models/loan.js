@@ -10,10 +10,10 @@ const loanSchema = new mongoose.Schema({
         type:Number
     },
     book:{
-        type:String
+        type:mongoose.Types.ObjectId
     },
     user:{
-        type:String
+        type:mongoose.Types.ObjectId
     }
 });
 

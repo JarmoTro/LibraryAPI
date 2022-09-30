@@ -1153,292 +1153,6 @@
                 "summary": "Add a new book"
             }
         },
-        "/reviews/": {
-            "get": {
-                "tags": [
-                    "reviews"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Users": {
-                                        "value": [
-                                            {
-                                                "_id": "6328614b761359e66be3f007",
-                                                "title": "this book is terrible!",
-                                                "body": "The missile knows where it is at all times.",
-                                                "rating": 1,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a list of all reviews",
-                "description": ""
-            },
-            "post": {
-                "tags": [
-                    "reviews"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "title": {
-                                "value": "this book is terrible!"
-                            }
-                        },
-                        "name": "title",
-                        "description": "The reviews title",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "body": {
-                                "value": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called air"
-                            }
-                        },
-                        "name": "body",
-                        "description": "The reviews body",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "rating ": {
-                                "value": "1"
-                            }
-                        },
-                        "name": "rating",
-                        "description": "The reviews rating",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "bookId": {
-                                "value": "63283f9913c575a0084104ee"
-                            }
-                        },
-                        "name": "book",
-                        "description": "A id of a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "authorId": {
-                                "value": "63285d6a761359e66be3efe7"
-                            }
-                        },
-                        "name": "author",
-                        "description": "A id of a user",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Review": {
-                                        "value": "Review created!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "One or all params are missing error": {
-                                        "value": {
-                                            "error": "One or all params are missing. Required params: title, body, bookId, authorId, rating."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Missing parameters"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Couldn't find book error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find the book you were looking for."
-                                        }
-                                    },
-                                    "Couldn't find user error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find the user you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "book/user not found"
-                    }
-                },
-                "summary": "Add a review"
-            }
-        },
         "/books/{id}": {
             "get": {
                 "tags": [
@@ -2887,7 +2601,11 @@
                                                 "rating": 1,
                                                 "book": "63283f9913c575a0084104ee",
                                                 "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454
+                                                "createdAt": 1663589144454,
+                                                "user": {
+                                                    "_id": "6336be43ecf7712144bd55fa",
+                                                    "username": "Deven"
+                                                }
                                             }
                                         ]
                                     }
@@ -2895,6 +2613,23 @@
                             }
                         },
                         "description": "Request successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid id error": {
+                                        "value": {
+                                            "error": "Invalid id format"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid id"
                     },
                     "401": {
                         "content": {
@@ -3452,7 +3187,11 @@
                                                 "rating": 1,
                                                 "book": "63283f9913c575a0084104ee",
                                                 "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454
+                                                "createdAt": 1663589144454,
+                                                "user": {
+                                                    "_id": "6336be43ecf7712144bd55fa",
+                                                    "username": "Deven"
+                                                }
                                             },
                                             {
                                                 "_id": "632869769d0f2098cf6bd58b",
@@ -3461,7 +3200,11 @@
                                                 "rating": 10,
                                                 "book": "63283f9913c575a0084104ee",
                                                 "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663591492087
+                                                "createdAt": 1663591492087,
+                                                "user": {
+                                                    "_id": "6336be43ecf7712144bd55fa",
+                                                    "username": "Deven"
+                                                }
                                             }
                                         ]
                                     }
@@ -3469,6 +3212,23 @@
                             }
                         },
                         "description": "Request successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid id error": {
+                                        "value": {
+                                            "error": "Invalid id format"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid id"
                     },
                     "401": {
                         "content": {
