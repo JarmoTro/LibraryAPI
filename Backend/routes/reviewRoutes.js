@@ -3,7 +3,7 @@ const router = express.Router();
 const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const reviewSchema = require('../models/review');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const reviewDTO = require('../models/DTOs/reviewDTO');
 const { default: mongoose } = require('mongoose');
 

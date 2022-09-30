@@ -3,7 +3,7 @@ const router = express.Router();
 const loanSchema = require('../models/loan');
 const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
 
 router.get('/loans', (req, res) => {

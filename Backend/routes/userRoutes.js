@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userSchema = require('../models/user');
 const passport = require('passport')
-const utlis = require('../utils')
+const utlis = require('../utils/utils')
 const userDTO = require('../models/DTOs/userDTO')
 
 router.post('/users', (req, res) => {

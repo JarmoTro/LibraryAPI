@@ -1,4 +1,5 @@
 const partialUserDTO = require('../DTOs/partialUserDTO')
+const utils = require('../../utils/convertTime');
 
 module.exports = function reviewDTO(review){
     const reviewDTO = {
@@ -8,7 +9,7 @@ module.exports = function reviewDTO(review){
         body: review.body,
         book: review.book,
         rating: review.rating,
-        createdAt: review.createdAt,
+        createdAt: utils.convertTime(review.createdAt),
         user: partialUserDTO(review.user[0])
       }
       return reviewDTO;

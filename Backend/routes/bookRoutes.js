@@ -5,9 +5,9 @@ const loanSchema = require('../models/loan');
 const reviewSchema = require('../models/review');
 const multer = require("multer");
 const fs = require("fs");
-const utlis = require('../utils')
+const utlis = require('../utils/utils')
 const bookDTO = require('../models/DTOs/bookDTO');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

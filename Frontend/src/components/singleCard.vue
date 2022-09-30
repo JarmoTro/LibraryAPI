@@ -9,7 +9,10 @@
             <div v-for="review in reviews">
             <h2 class="m-3">{{review.title}}</h2>
             <h4 class="m-3">{{review.user.username}}</h4>
-            <h5 class="m-3">{{review.rating}}</h5>
+            <p class="m-3 text-muted">{{review.createdAt}}</p>
+            <div class="d-inline" v-for="star in review.rating">
+              <i class="fa-solid fa-star fa-2x" style="color:#D4AF37;"></i>
+            </div>
             <h5 class="m-3">{{review.body}}</h5>
             <hr>
             </div>
@@ -78,6 +81,7 @@ export default {
     }
   },
   computed: {
+
   }
 }
 

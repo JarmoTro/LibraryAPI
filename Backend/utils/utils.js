@@ -1,14 +1,14 @@
 const { faker } = require('@faker-js/faker');
-const partialBookDTO = require('./models/DTOs/partialBookDTO')
-const partialUserDTO = require('./models/DTOs/partialUserDTO');
-const bookSchema = require('./models/book');
-const loanSchema = require('./models/loan');
-const reviewSchema = require('./models/review');
-const userSchema = require('./models/user');
-const reviewDTO = require('./models/DTOs/reviewDTO');
-const loanDTO = require('./models/DTOs/loanDTO');
+const partialBookDTO = require('../models/DTOs/partialBookDTO')
+const partialUserDTO = require('../models/DTOs/partialUserDTO');
+const bookSchema = require('../models/book');
+const loanSchema = require('../models/loan');
+const reviewSchema = require('../models/review');
+const userSchema = require('../models/user');
+const reviewDTO = require('../models/DTOs/reviewDTO');
+const loanDTO = require('../models/DTOs/loanDTO');
 const passport = require('passport');
-const user = require('./models/user');
+const user = require('../models/user');
 var mongoose = require('mongoose');
 
 module.exports = {
@@ -59,7 +59,7 @@ module.exports = {
                         genre: faker.music.genre(),
                         imgSource: faker.image.imageUrl(),
                         description: faker.lorem.sentences(20),
-                        publicationDate: faker.random.numeric(20)               
+                        publicationDate: faker.date.future()              
                     })
                     newBook.save();
 

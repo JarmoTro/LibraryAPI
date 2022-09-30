@@ -14,7 +14,7 @@ const session = require('express-session');
 const app = express();
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json')
-const utils = require('./utils');
+const utils = require('./utils/utils');
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_CONNECTION);
@@ -69,7 +69,7 @@ app.use(invalidRoute)
 
 
 
-utils.seedDB();
+//utils.seedDB();
 
 
 app.listen(process.env.PORT || 3000 , () => {
