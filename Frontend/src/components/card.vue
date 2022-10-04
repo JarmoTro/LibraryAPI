@@ -46,11 +46,9 @@ export default {
       axios
         .get('http://localhost:3000/books/?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-          console.log(response)
           this.books = response.data
         })
         .catch((error) => {
-          console.log(error)
           this.errorMsg = 'Error retrieving data'
         })
     },
@@ -58,12 +56,10 @@ export default {
       axios
         .get('http://localhost:3000/books/search/'+keyword+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-          console.log(response)
           this.books = response.data
           if(this.books.length == 0){this.error404 = true}
         })
         .catch((error) => {
-          console.log(error)
           this.errorMsg = 'Error retrieving data'
         })
     },
@@ -71,12 +67,10 @@ export default {
           axios
         .get('http://localhost:3000/books/author/'+author+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-          console.log(response)
           this.books = response.data
           if(this.books.length == 0){this.error404 = true}
         })
         .catch((error) => {
-          console.log(error)
           this.errorMsg = 'Error retrieving data'
         })
         
