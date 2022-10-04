@@ -3,7 +3,9 @@ const router = express.Router();
 const userSchema = require('../models/user');
 const passport = require('passport')
 const utlis = require('../utils/utils')
-const userDTO = require('../models/DTOs/userDTO')
+const userDTO = require('../models/DTOs/userDTO');
+const { convertUser } = require('../utils/utils');
+const user = require('../models/user');
 
 router.post('/users', (req, res) => {
     if(!req.query.key){
@@ -132,6 +134,23 @@ router.get('/users', (req, res) => {
             if (!error) return res.send(utlis.convertUser(users));
     
         })
+    }
+})
+
+router.get('/users/currentuser', (req, res) => {
+    if(!req.query.key){
+        return res.status(401).send({error: 'Missing API key'});
+    }
+    else if(req.query.key != process.env.API_KEY){
+        return res.status(403).send({error: 'Invalid API key'});
+    }
+    else {
+        if (req.isAuthenticated()) {
+                return res.status(200).send(userDTO(req.user))
+        }
+        else {
+            return res.status(401).send({error: 'User is not logged in.'})
+        }
     }
 })
 

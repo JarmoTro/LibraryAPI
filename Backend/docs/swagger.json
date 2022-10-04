@@ -2,7 +2,7 @@
     "openapi": "3.0.2",
     "info": {
         "title": "Library-API",
-        "version": "1.0.0",
+        "version": "Pre-release",
         "description": "### This is a Swagger UI for our Library API  \n\n### Error handling\nErrors are presented using the HTTP status codes 400-599. The response include a more detailed explanation about the error in the body.\n\n```\n{\n  \"error\": \"Cleartext explanation of the error that occurred\"\n}\n```\n\n### Generic API errors\nThese error responses can be returned by any of the described endpoints.\n\n| HTTP status  |  Description |\n|---|---|\n| 400| Bad input parameters or invalid request. More information can be found in the response body.\n| 401| The consumer does not have access to the requested resource or the provided token is not valid.\n| 404| The requested resource can not be found or the user does not have access to the resource.\n| 5XX| A server error has occurred while processing the request."
     },
     "paths": {
@@ -3617,6 +3617,88 @@
                     "required": true
                 }
             ]
+        },
+        "/users/currentuser": {
+            "get": {
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "566cfe71-ca0f-4b0d-a40c-281ad95d5725"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is needed to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Users": {
+                                        "value": {
+                                            "_id": "633bd2296cc70dace2c27c99",
+                                            "username": "testcont",
+                                            "admin": false
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User is logged in"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    },
+                                    "User is not logged in error": {
+                                        "value": {
+                                            "error": "User is not logged in."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided or user is not logged in"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "API key is invalid error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    }
+                },
+                "summary": "Get current users data"
+            }
         }
     }
 }
