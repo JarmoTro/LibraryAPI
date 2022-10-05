@@ -9,8 +9,6 @@ const invalidRoute = require('./routes/404route');
 const mockBookRoutes = require('./routes/mockBookRoutes');
 const mockLoanRoutes = require('./routes/mockLoanRoutes');
 const mockUserRoutes = require('./routes/mockUserRoutes');
-const passport = require('passport');
-const session = require('express-session');
 const app = express();
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json')
@@ -23,14 +21,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('data'));
 
-app.use(session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true
-}));
 
-app.use(passport.initialize());
-app.use(passport.session());
+
+
 
 
 app.use(bookRoutes);
@@ -69,7 +62,7 @@ app.use(invalidRoute)
 
 
 
-//utils.seedDB();
+utils.seedDB();
 
 
 app.listen(process.env.PORT || 3000 , () => {

@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const userSchema = require('../models/user');
-const passport = require('passport')
 const utlis = require('../utils/utils')
 const userDTO = require('../models/DTOs/userDTO');
 const { convertUser } = require('../utils/utils');
 const user = require('../models/user');
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
-router.post('/users', (req, res) => {
+router.post('/users', async (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -15,30 +16,42 @@ router.post('/users', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        if (!req.query.username ||
-            !req.query.password) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: username, password.' })
+        const { username, password } = req.query;
+        if (!username || !password) {
+          return res.status(400).send('Missing parameters');
         }
-        else{
-            userSchema.register({username: req.query.username}, req.query.password, (error, user) => {
-                if (error) {
-                    if (error = "A user with the given username is already registered") {
-                        return res.status(409).send({error: 'A user with the given username is already registered'});
-                    }
-                    else {
-                        return res.status(500).send({error:'Looks like something went wrong :('})
-                    }
-                } else {
-                    passport.authenticate('local')(req, res, ()=> {
-                        return res.status(201).send('User created!')
-                    });
-                }
-            });
+        else {
+        const newUser = userSchema({
+            username,
+            password,
+        });
+        try {
+          await newUser.save();
+        } catch {
+          return res.status(400).send('Username is already in use');
         }
+        let token;
+        try {
+          token = jwt.sign(
+            { userId: newUser.id, username: newUser.username },
+            process.env.SECRET,
+            { expiresIn: "1h" }
+          );
+        } catch (err) {
+            return res.status(500).send({ error: 'Looks like something went wrong :(' })
+        }
+        res
+          .status(201)
+          .json({
+            success: true,
+            data: { userId: newUser.id,
+                username: newUser.username, token: token },
+          });
+    }
     } 
 });
 
-router.post('/login' , (req, res) => {
+router.post('/login' , async (req, res)  => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -46,21 +59,46 @@ router.post('/login' , (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else {
-        if(!req.query.username || !req.query.password) return res.status(400).send({ error: 'One or all params are missing. Required params: password, username' })
-        const user = new userSchema({
-            username: req.query.username,
-            password: req.query.password
-        });
-        req.logIn(user, (error) => {
-            if (error) {
-                return res.status(500).send({error:'Looks like something went wrong :('})
-            } else {
-                passport.authenticate('local')(req, res, ()=> {
-                    return res.status(200).send('Logged in');
-                });
-            }
-        });
-    }
+        let { username, password } = req.query;
+ 
+        let existingUser;
+      
+        try {
+          existingUser = await userSchema.findOne({ username: username });
+        } catch {
+          return res.status(500).send('Something went wrong');
+        }
+        if (!existingUser) {
+          return res.status(404).send('User not found');
+        }
+        const auth = await bcrypt.compare(password, existingUser.password);
+      
+        if (!auth) {
+          return res.status(401).send('Invalid credentials');
+        }
+        let token;
+        try {
+          //Creating jwt token
+          token = jwt.sign(
+            { userId: existingUser.id, username: existingUser.username },
+            process.env.SECRET,
+            { expiresIn: "1h" }
+          );
+        } catch (err) {
+            return res.status(500).send({ error: 'Looks like something went wrong :(' })
+        }
+       
+        res
+          .status(200)
+          .json({
+            success: true,
+            data: {
+              userId: existingUser.id,
+              username: existingUser.username,
+              token: token,
+            },
+          });
+}
 });
 
 router.put('/users/:id', (req, res) => {

@@ -114,29 +114,15 @@ export default {
         axios
         .post('http://localhost:3000/login?key='+import.meta.env.VITE_API_KEY+'&username='+username+"&password="+password)
         .then((response) => {
-          console.log(response);
-          this.getCurrentUser()
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token;localStorage.setItem( 'token', response.data.data.token );
+          this.$router.push('/') 
         })
         .catch((error) => {
-          if(error.response.status == 401){
-            this.errorClass = 'alert alert-danger'
-          }
+          this.errorClass ='alert alert-danger'
         })
       }
       
     },
-    getCurrentUser() {
-      axios
-      .get('http://localhost:3000/users/currentuser?key='+import.meta.env.VITE_API_KEY)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          if(error.response.status == 401){
-            console.log(error);
-          }
-        })
-    }
 
   },
   computed: {

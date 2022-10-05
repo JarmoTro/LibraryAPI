@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <navbar></navbar>
+  <navbar :key="$route.fullPath"></navbar>
 
   <main>
 

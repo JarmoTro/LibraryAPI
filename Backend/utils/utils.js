@@ -7,7 +7,6 @@ const reviewSchema = require('../models/review');
 const userSchema = require('../models/user');
 const reviewDTO = require('../models/DTOs/reviewDTO');
 const loanDTO = require('../models/DTOs/loanDTO');
-const passport = require('passport');
 const user = require('../models/user');
 var mongoose = require('mongoose');
 
@@ -46,9 +45,10 @@ module.exports = {
       },
       seedDB: function(){
                 const user = new userSchema({
-                    username: faker.name.firstName()
+                    username: faker.name.firstName(),
+                    password: faker.word.verb()
                 })
-                userSchema.register(user, "123");
+                user.save();
                 for(let i = 0; i<5; i++){
                     const newBook = new bookSchema({
                         title: faker.word.verb(),

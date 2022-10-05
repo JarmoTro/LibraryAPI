@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const passport = require('passport');
-const passportLocalMongoose = require('passport-local-mongoose');
-const loan = require('../models/loan').schema;
+const bcrypt = require('bcrypt');
+
 
 const userSchema = new mongoose.Schema({
     username:{
-        type: String
+        type: String,
+        required: "Username is required",
+        unique: true
     },
     password:{
         type: String
@@ -16,12 +17,10 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.plugin(passportLocalMongoose);
-
-const User = new mongoose.model('User', userSchema);
-passport.use(User.createStrategy());
-
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+userSchema.pre('save', async function(next) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  });
 
 module.exports = mongoose.model('user',userSchema);
