@@ -3,11 +3,14 @@
       <div class="text-center">
       <div class="d-inline-block m-5 text-start">
         <div class="row">
-          <div class="col text-center">
+          <div class="col text-center ">
             <img class="d-inline-block" style=" max-width: 50rem; max-height: 40rem; margin-bottom: 5; margin-left: 5; margin-right: 5;" v-bind:src=books.imgSource alt="">
             <h1 class="m-3"> Reviews </h1>
             <div v-for="review in reviews">
-            <h2 class="m-3">{{review.title}}</h2>
+            <h2 v-if="userId == review.user._id" class="d-inline" style="margin-left:4rem" >{{review.title}}</h2>
+            <h2 v-if="userId != review.user._id" class="d-inline" >{{review.title}}</h2>
+            <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{name: 'login'}"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
+            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
             <h4 class="m-3">{{review.user.username}}</h4>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
@@ -27,12 +30,14 @@
             <div class="m-3">Publication date: {{books.publicationDate}}</div>
             <div class="m-3">Length: {{books.length}} pages</div>
             <h3 class="m-3">Stock: {{books.stock}}</h3>
-            <div>
-              <button class="m-3 btn btn-success">Loan now</button>
+
+            <div v-if="isLoggedIn">
+              <button class="m-3 btn btn-success">Add review</button>
+              <div v-if="isAdmin" class="d-inline">
+              <button class="m-3 btn btn-warning">Loan now</button>
               <button class="m-3 btn btn-primary">Edit book</button>
               <button class="m-3 btn btn-danger">Delete book</button>
-
-
+              </div>
             </div>
           
 
@@ -49,13 +54,17 @@ export default {
   name: 'book',
   created() {
     this.getBook(),
-    this.getReviews()
+    this.getReviews(),
+    this.getCurrentUser()
   },
   data() {
     return {
       books: [],
       reviews: [],
       errorMsg: '',
+      userId: '',
+      isLoggedIn: false,
+      isAdmin: false,
     }
   },
   methods: {
@@ -78,7 +87,28 @@ export default {
         .catch((error) => {
           this.errorMsg = 'Error retrieving data'
         })
-    }
+    },
+    getCurrentUser(){
+        let token = localStorage.getItem("token");
+         axios
+        .get('http://localhost:3000/users/currentuser/?key='+import.meta.env.VITE_API_KEY,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            token: token
+          }
+        })
+        .then((response) => {
+          this.isLoggedIn = true
+          this.userId = response.data._id
+          if (response.data.admin) {
+            this.isAdmin = true
+          }
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      },
   },
   computed: {
 
