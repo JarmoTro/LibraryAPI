@@ -9,4 +9,5 @@ const app = createApp(App)
 app.use(Vuelidate)
 app.use(VueCookies)
 
+
 app.use(router).mount('#app')

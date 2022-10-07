@@ -62,7 +62,7 @@ app.use(invalidRoute)
 
 
 
-utils.seedDB();
+//utils.seedDB();
 
 
 app.listen(process.env.PORT || 3000 , () => {

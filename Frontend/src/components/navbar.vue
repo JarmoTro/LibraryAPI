@@ -24,7 +24,7 @@
           </form>
           <form class="d-flex">
             <button  :class="userClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-user fa-2x"></i></button>
-            <button  :class="logoutClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-from-bracket fa-2x"></i></button>
+            <button @click="logout()"  :class="logoutClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-from-bracket fa-2x"></i></button>
             <router-link :to="{name: 'login'}">
             <button  :class="loginClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
             </router-link>
@@ -54,6 +54,10 @@ export default {
       this.userClass = 'btn btn-outline-dark'
       this.loginClass = 'btn btn-outline-dark d-none'
     }
+    },
+    logout(){
+      localStorage.removeItem('token');
+      this.$router.push('/') 
     }
   }
 }

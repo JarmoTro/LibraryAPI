@@ -11,10 +11,10 @@
             </div>
 
     <div :class="errorClass" role="alert" >
-    Invalid credentials
+    {{errorMsg}}
     </div>
 
-    <form v-if=" this.$route.name == 'register'" v-on:submit.prevent="login" class="m-3">
+    <form v-if=" this.$route.name == 'register'" v-on:submit.prevent="register" class="m-3">
         <div class="form-group mb-3">
           <label for="exampleInputEmail1"><h4>Username</h4></label>
           <input type="text" v-model="username" name="username" class="form-control" id="exampleInputEmail1" placeholder="Username">
@@ -25,7 +25,7 @@
                 </p>
         <div class="form-group">
           <label for="exampleInputPassword1"><h4>Password</h4></label>
-          <input type="password" name = "password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" ref="password" v-model="password" name = "password" class="form-control" id="exampleInputPassword1" placeholder="Password">
         </div>
         <p v-for="error of v$.$errors"
                 :key="error.$uid">
@@ -34,8 +34,13 @@
         <div>
         <div class="form-group mt-3">
           <label for="exampleInputPassword1"><h4>Confirm password</h4></label>
-          <input type="password" name = "confirmPassword" class="form-control" id="exampleInputPassword1" placeholder="Confirm password">
+          <input type="password" v-model="passwordConfirm" name = "confirmPassword" class="form-control" id="exampleInputPassword1" placeholder="Confirm password">
         </div>
+        <p v-for="error of v$.$errors"
+                :key="error.$uid">
+                  <strong class="text-danger" v-if="error.$property == 'passwordConfirm'">{{ error.$message }}</strong>
+                </p>
+                <strong class="text-danger">{{passwordConfirmError}}</strong>
         </div>
         <div>
          <button class="btn btn-primary mt-3 w-100" type="submit">SIGN UP</button>
@@ -80,7 +85,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, between } from '@vuelidate/validators'
+import { required, minLength, between, sameAs} from '@vuelidate/validators'
 import axios from 'axios'
 export default {
   name: 'auth',
@@ -94,7 +99,9 @@ export default {
       errorMsg: '',
       username: '',
       password: '',
+      passwordConfirmError: '',
       errorClass: 'alert alert-danger d-none',
+
     }
   },
   validations: {
@@ -106,6 +113,30 @@ export default {
     }
   },
   methods: {
+    async register(submitEvent){
+      const result = await this.v$.$validate()
+      if(result){
+        const username = submitEvent.target.elements.username.value;
+        const password = submitEvent.target.elements.password.value;
+        const passwordConfirm = submitEvent.target.elements.confirmPassword.value;
+        if(passwordConfirm == password){
+          axios
+        .post('http://localhost:3000/register?key='+import.meta.env.VITE_API_KEY+'&username='+username+"&password="+password)
+        .then((response) => {
+          this.$router.push('/welcome') 
+        })
+        .catch((error) => {
+          this.errorMsg='Username is already taken'
+          this.errorClass='alert alert-danger'
+        })
+        }
+        else{
+          this.passwordConfirmError = 'Passwords must match'
+        }
+        
+      }
+    },
+
     async login(submitEvent){
       const result = await this.v$.$validate()
       if(result){
@@ -114,11 +145,12 @@ export default {
         axios
         .post('http://localhost:3000/login?key='+import.meta.env.VITE_API_KEY+'&username='+username+"&password="+password)
         .then((response) => {
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token;localStorage.setItem( 'token', response.data.data.token );
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;localStorage.setItem( 'token', response.data.token );
           this.$router.push('/') 
         })
         .catch((error) => {
-          this.errorClass ='alert alert-danger'
+          this.errorMsg='Invalid credentials'
+          this.errorClass='alert alert-danger'
         })
       }
       

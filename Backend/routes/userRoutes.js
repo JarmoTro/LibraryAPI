@@ -3,12 +3,10 @@ const router = express.Router();
 const userSchema = require('../models/user');
 const utlis = require('../utils/utils')
 const userDTO = require('../models/DTOs/userDTO');
-const { convertUser } = require('../utils/utils');
-const user = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
-router.post('/users', async (req, res) => {
+router.post('/register', async (req, res) => {
     if(!req.query.key){
         return res.status(401).send({error: 'Missing API key'});
     }
@@ -18,7 +16,7 @@ router.post('/users', async (req, res) => {
     else{
         const { username, password } = req.query;
         if (!username || !password) {
-          return res.status(400).send('Missing parameters');
+          return res.status(400).send({error:'Missing parameters'});
         }
         else {
         const newUser = userSchema({
@@ -28,25 +26,20 @@ router.post('/users', async (req, res) => {
         try {
           await newUser.save();
         } catch {
-          return res.status(400).send('Username is already in use');
+          return res.status(400).send({error: 'Username is already in use'});
         }
         let token;
         try {
           token = jwt.sign(
-            { userId: newUser.id, username: newUser.username },
+            { userId: newUser.id, username: newUser.username, admin: newUser.admin },
             process.env.SECRET,
             { expiresIn: "1h" }
           );
         } catch (err) {
             return res.status(500).send({ error: 'Looks like something went wrong :(' })
         }
-        res
-          .status(201)
-          .json({
-            success: true,
-            data: { userId: newUser.id,
-                username: newUser.username, token: token },
-          });
+        return res.status(201).send("User created!")
+
     }
     } 
 });
@@ -66,96 +59,34 @@ router.post('/login' , async (req, res)  => {
         try {
           existingUser = await userSchema.findOne({ username: username });
         } catch {
-          return res.status(500).send('Something went wrong');
+          return res.status(500).send({ error:'Something went wrong'});
         }
         if (!existingUser) {
-          return res.status(404).send('User not found');
+          return res.status(404).send({ error:'User not found'});
         }
         const auth = await bcrypt.compare(password, existingUser.password);
       
         if (!auth) {
-          return res.status(401).send('Invalid credentials');
+          return res.status(401).send({ error:'Invalid credentials'});
         }
         let token;
         try {
-          //Creating jwt token
           token = jwt.sign(
-            { userId: existingUser.id, username: existingUser.username },
+            { userId: existingUser.id, username: existingUser.username, admin: existingUser.admin },
             process.env.SECRET,
             { expiresIn: "1h" }
           );
+          console.log(token);
         } catch (err) {
             return res.status(500).send({ error: 'Looks like something went wrong :(' })
         }
-       
-        res
-          .status(200)
-          .json({
-            success: true,
-            data: {
-              userId: existingUser.id,
-              username: existingUser.username,
-              token: token,
-            },
-          });
+
+        return res.status(200).json({token:token});
+
 }
 });
 
-router.put('/users/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else {
-        userSchema.findOne({username: req.query.username}, function(err, user){
-            if(user!=null){
-                return res.status(409).send({ error: 'Username is already taken.' })
-            } 
-            else{
-                userSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(err, user){
-                    if(!req.params.id) return res.status(400).send({ error: 'Missing id parameter.' })
-                    if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-                    if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                    if (req.query.oldPassword || req.query.newPassword){
-                        if(!req.query.oldPassword || !req.query.newPassword) return res.status(400).send({ error: 'Both oldPassword and newPassword parameters must be provided.' })
-                        else{
-                            user.changePassword(req.query.oldPassword, req.query.newPassword, function (err) {
-                                if (err) {
-                                    return res.status(403).send({error: 'Invalid password.'});
-                                }
-                                if(!err){
-                                    return res.status(200).send('User updated!')
-                                }
-                            })
-                        }
-                    } 
-                    else{
-                        if (user != null) return res.status(200).send('User updated!')
-                    }
-                    
-                })
-            }
-        })
-        
-    }
-})
 
-router.post('/logout', function(req, res, next){
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else {
-        req.logout(function(err) {
-            if (err) {return res.status(500).send({error:'Looks like something went wrong :('})}
-            return res.status(200).send('Logged out');
-          });
-    }
-  });
 
 router.get('/users', (req, res) => {
     if(!req.query.key){
@@ -183,12 +114,22 @@ router.get('/users/currentuser', (req, res) => {
         return res.status(403).send({error: 'Invalid API key'});
     }
     else {
-        if (req.isAuthenticated()) {
-                return res.status(200).send(userDTO(req.user))
-        }
-        else {
-            return res.status(401).send({error: 'User is not logged in.'})
-        }
+            if (!req.headers.authorization) {
+                return res.status(400).send({error:'Token was not provided'});
+            }
+            const token = req.headers.authorization.split(' ')[1]; 
+                try {
+                    const decodedToken = jwt.verify(token,process.env.SECRET );
+                    const user = userSchema({
+                        _id: decodedToken.userId,
+                        username: decodedToken.username,
+                        admin: decodedToken.admin
+                    });
+                    
+                   return res.status(200).send(userDTO(user))
+                } catch (error) {
+                    return res.status(400).send({error:'Failed to verify token'});
+                }
     }
 })
 
@@ -208,4 +149,6 @@ router.get('/users/:id', (req, res) => {
         })
     }
 })
+
+
 module.exports = router;

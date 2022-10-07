@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "../components/card.vue";
 import singleBook from "../components/singleCard.vue";
 import auth from "../components/auth.vue"
-
+import welcome from "../components/welcome.vue"
 
 const routes = [
   {
@@ -34,6 +34,11 @@ const routes = [
   path: "/register",
   name: "register",
   component: auth,
+},
+{
+  path: "/welcome",
+  name: "welcome",
+  component: welcome,
 },
 ];
 

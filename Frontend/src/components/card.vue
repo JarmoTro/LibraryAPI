@@ -24,6 +24,7 @@ import axios from 'axios'
 export default {
   name: 'book',
   created() {
+    this.getCurrentUser()
     if (this.$route.params.name) {
       this.getAuthorBooks(this.$route.params.name)
     }
@@ -74,6 +75,22 @@ export default {
           this.errorMsg = 'Error retrieving data'
         })
         
+      },
+      getCurrentUser(){
+        let token = localStorage.getItem("token");
+         axios
+        .get('http://localhost:3000/users/currentuser/?key='+import.meta.env.VITE_API_KEY,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            token: token
+          }
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       }
   },
   computed: {
