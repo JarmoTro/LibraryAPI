@@ -1,4 +1,24 @@
 <template>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top: 15%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the book?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="deleteBook()">Delete book</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <div v-if="error" class="alert alert-danger text-center" role="alert">
+        Can not delete a book with active loans! Please dismiss the active loans and try again.
+    </div>
     <div v-for="book in 1" :key="book.id">
       <div class="text-center">
       <div class="d-inline-block m-5 text-start">
@@ -11,8 +31,10 @@
             <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline" >{{review.title}}</h2>
             <h2 v-if="userId == review.user._id && isAdmin" class="d-inline" style="margin-left:4rem">{{review.title}}</h2>
             <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
-            <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{name: 'login'}"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
-            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
+            <!--<router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{name: 'login'}"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
+            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link> -->
+            <i v-if="userId == review.user._id || isAdmin" class="fa-solid fa-trash d-inline fa-xl text-danger float-end" style="margin-left:1rem"></i>
+            <i v-if="userId == review.user._id" class="fa-solid fa-pen-to-square d-inline fa-xl text-primary float-end"></i>
             <h4 class="m-3">{{review.user.username}}</h4>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
@@ -38,7 +60,7 @@
               <div v-if="isAdmin" class="d-inline">
               <button class="m-3 btn btn-warning">Loan now</button>
               <button class="m-3 btn btn-primary">Edit book</button>
-              <button class="m-3 btn btn-danger">Delete book</button>
+              <button class="m-3 btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >Delete book</button>
               </div>
             </div>
           
@@ -67,6 +89,7 @@ export default {
       userId: '',
       isLoggedIn: false,
       isAdmin: false,
+      error: false,
     }
   },
   methods: {
@@ -110,7 +133,18 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      },
+    },
+    deleteBook(){
+      axios
+      .delete('http://localhost:3000/books/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
+      .then((response) => {
+        this.$router.push('/') 
+      })
+      .catch((error) => {
+        console.log(error);
+        this.error = true
+      })
+    }
   },
   computed: {
 
