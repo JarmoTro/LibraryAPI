@@ -7,49 +7,35 @@ const utils = require('../utils/utils');
 const reviewDTO = require('../models/DTOs/reviewDTO');
 const { default: mongoose } = require('mongoose');
 
-/*router.get('/reviews', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
-        reviewSchema.find({}, function(error, reviews){
-            if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-            if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(reviews != null) return res.send(utils.convertReview(reviews))
-        })
-    }
-})*/
+
 
 
 router.post('/reviews', (req, res) => {
-    if(!req.query.key){
+    if(!req.body.key){
         return res.status(401).send({error: 'Missing API key'});
     }
-    else if(req.query.key != process.env.API_KEY){
+    else if(req.body.key != process.env.API_KEY){
         return res.status(403).send({error: 'Invalid API key'});
     }
     else{
-        if(!req.query.title ||
-            !req.query.body ||
-            !req.query.rating ||
-            !req.query.book ||
-            !req.query.author){
+        if(!req.body.title ||
+            !req.body.body ||
+            !req.body.rating ||
+            !req.body.book ||
+            !req.body.author){
                 return res.status(400).send({ error: 'One or all params are missing. Required params: title, body, bookId, authorId, rating' })
             }
             else{
-                bookSchema.findOne({_id: req.query.book}, function(err, book){
+                bookSchema.findOne({_id: req.body.book}, function(err, book){
                     if(book == null) return res.status(404).send({error:"Looks like we couldn't find the book you were looking for."})
-                    userSchema.findOne({_id: req.query.author}, function(err, user) {
+                    userSchema.findOne({_id: req.body.author}, function(err, user) {
                         if(user == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
                         let newReview = new reviewSchema({
-                            title: req.query.title,
-                            body: req.query.body,
-                            rating: req.query.rating,
-                            book: req.query.book,
-                            author: req.query.author
+                            title: req.body.title,
+                            body: req.body.body,
+                            rating: req.body.rating,
+                            book: req.body.book,
+                            author: req.body.author
                         })
                         newReview.save()
                         return res.status(201).send('Review added!')
@@ -60,13 +46,7 @@ router.post('/reviews', (req, res) => {
 })
 
 router.get('/reviews/book/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         if (req.params.id.length != 24) {
             return res.status(400).send({error:'Invalid id format'})
         }
@@ -84,13 +64,7 @@ router.get('/reviews/book/:id', (req, res) => {
 })
 
 router.get('/reviews/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         if (req.params.id.length != 24) {
             return res.status(400).send({error:'Invalid id format'})
         }
@@ -108,13 +82,7 @@ router.get('/reviews/:id', (req, res) => {
 })
 
 router.get('/reviews/author/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         reviewSchema.find({author: req.params.id}, function(error, reviews){
             if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -124,13 +92,7 @@ router.get('/reviews/author/:id', (req, res) => {
 })
 
 router.put('/reviews/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
             reviewSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(error, reviews){
                     if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -142,13 +104,7 @@ router.put('/reviews/:id', (req, res) => {
 })
 
 router.delete('/reviews/:id', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         reviewSchema.findOneAndDelete({ _id: req.params.id }, function (err, response) {
             if (response == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (err) return res.status(500).send({ error: 'Looks like something went wrong :(' })

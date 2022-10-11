@@ -86,5 +86,17 @@ module.exports = {
                     }
                     
                 }
+      },
+
+      checkAPIKey: function(key,res){
+        if (!key) {
+            res.status(401).send({ error: 'Missing API key' });
+            return false
+        }
+        else if (key != process.env.API_KEY) {
+            res.status(403).send({ error: 'Invalid API key' });
+            return false
+        }
+        return true
       }
 }

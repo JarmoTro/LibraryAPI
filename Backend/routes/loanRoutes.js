@@ -7,13 +7,7 @@ const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
 
 router.get('/loans', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.find((error, loans) => {
 
             if (error) res.status(500).send('Looks like something went wrong :(')
@@ -25,13 +19,7 @@ router.get('/loans', (req, res) => {
 })
 
 router.get('/loans/user/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.find({user: req.params.id}, function(error, loans){
             if(loans == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -41,13 +29,7 @@ router.get('/loans/user/:id', (req, res) => {
 })
 
 router.get('/loans/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.findOne({_id: req.params.id}, function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -58,31 +40,25 @@ router.get('/loans/:id', (req, res) => {
 
 
 router.post('/loans', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
-        if (!req.query.loanStart ||
-            !req.query.loanEnd ||
-            !req.query.user ||
-            !req.query.book ) {
+    if (utils.checkAPIKey(req.body.key,res)) {
+        if (!req.body.loanStart ||
+            !req.body.loanEnd ||
+            !req.body.user ||
+            !req.body.book ) {
             return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, user, book' })
         }
         else{
-            userSchema.findOne({_id: req.query.user}, function (error, user){
+            userSchema.findOne({_id: req.body.user}, function (error, user){
                 if(user == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                 if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                bookSchema.findOne({_id: req.query.book}, function(error, book){
+                bookSchema.findOne({_id: req.body.book}, function(error, book){
                     if(book == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
                     let newLoan = new loanSchema({
-                        loanStart: req.query.loanStart,
-                        loanEnd: req.query.loanEnd,
-                        user: req.query.user,
-                        book: req.query.book
+                        loanStart: req.body.loanStart,
+                        loanEnd: req.body.loanEnd,
+                        user: req.body.user,
+                        book: req.body.book
                     });
                     newLoan.save();
                     book.stock--;
@@ -97,13 +73,7 @@ router.post('/loans', (req, res) => {
 
 
 router.put('/loans/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         if (!req.query.loanStart &&
             !req.query.loanEnd ) {
             return res.status(400).send({ error: 'No params given. Valid params: loanStart, loanEnd' })
@@ -135,13 +105,7 @@ router.put('/loans/:id', (req, res) => {
 })
 
 router.delete('/loans/:id', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
             if(response == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(err) res.status(500).send({error:'Looks like something went wrong :('})

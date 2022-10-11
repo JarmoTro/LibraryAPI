@@ -116,16 +116,20 @@ export default {
     async register(submitEvent){
       const result = await this.v$.$validate()
       if(result){
-        const username = submitEvent.target.elements.username.value;
         const password = submitEvent.target.elements.password.value;
         const passwordConfirm = submitEvent.target.elements.confirmPassword.value;
         if(passwordConfirm == password){
           axios
-        .post('http://localhost:3000/register?key='+import.meta.env.VITE_API_KEY+'&username='+username+"&password="+password)
+        .post('http://localhost:3000/register',{
+          "key":import.meta.env.VITE_API_KEY,
+          "username":submitEvent.target.elements.username.value,
+          "password":password
+        })
         .then((response) => {
           this.$router.push('/welcome') 
         })
         .catch((error) => {
+          console.log(error);
           this.errorMsg='Username is already taken'
           this.errorClass='alert alert-danger'
         })
@@ -140,10 +144,13 @@ export default {
     async login(submitEvent){
       const result = await this.v$.$validate()
       if(result){
-        const username = submitEvent.target.elements.username.value;
-        const password = submitEvent.target.elements.password.value;
+
         axios
-        .post('http://localhost:3000/login?key='+import.meta.env.VITE_API_KEY+'&username='+username+"&password="+password)
+        .post('http://localhost:3000/login',{
+          "key":import.meta.env.VITE_API_KEY,
+          "username":submitEvent.target.elements.username.value,
+          "password":submitEvent.target.elements.password.value
+        })
         .then((response) => {
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;localStorage.setItem( 'token', response.data.token );
           this.$router.push('/') 

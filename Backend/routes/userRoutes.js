@@ -1,20 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const userSchema = require('../models/user');
-const utlis = require('../utils/utils')
+const utils = require('../utils/utils')
 const userDTO = require('../models/DTOs/userDTO');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 router.post('/register', async (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
-        const { username, password } = req.query;
+    if (utils.checkAPIKey(req.body.key,res)) {
+        const { username, password } = req.body;
         if (!username || !password) {
           return res.status(400).send({error:'Missing parameters'});
         }
@@ -45,14 +39,8 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login' , async (req, res)  => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else {
-        let { username, password } = req.query;
+    if (utils.checkAPIKey(req.body.key,res)) {
+        let { username, password } = req.body;
  
         let existingUser;
       
@@ -89,31 +77,19 @@ router.post('/login' , async (req, res)  => {
 
 
 router.get('/users', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
+    if (utils.checkAPIKey(req.query.key,res)) {
         userSchema.find((error, users) => {
 
             if (error) return res.status(500).send({error:'Looks like something went wrong :('})
     
-            if (!error) return res.send(utlis.convertUser(users));
+            if (!error) return res.send(utils.convertUser(users));
     
         })
     }
 })
 
 router.get('/users/currentuser', (req, res) => {
-    if(!req.query.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.query.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
             if (!req.headers.authorization) {
                 return res.status(400).send({error:'Token was not provided'});
             }
@@ -135,13 +111,7 @@ router.get('/users/currentuser', (req, res) => {
 
 
 router.get('/users/:id', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         userSchema.findOne({ _id: req.params.id }, function (error, user) {
             if (user == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })

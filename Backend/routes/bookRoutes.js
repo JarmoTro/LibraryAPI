@@ -5,7 +5,6 @@ const loanSchema = require('../models/loan');
 const reviewSchema = require('../models/review');
 const multer = require("multer");
 const fs = require("fs");
-const utlis = require('../utils/utils')
 const bookDTO = require('../models/DTOs/bookDTO');
 const utils = require('../utils/utils');
 
@@ -35,13 +34,7 @@ const uploadBookCover = multer({
 });
 
 router.get('/books', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.find((error, books) => {
 
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
@@ -54,13 +47,7 @@ router.get('/books', (req, res) => {
 
 
 router.get('/books/:id', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.findOne({ _id: req.params.id }, function (error, book) {
             if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
@@ -70,13 +57,8 @@ router.get('/books/:id', (req, res) => {
 })
 
 router.get('/books/author/:author', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    
+    if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.find({ author: req.params.author }, function (error, books) {
             if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
@@ -86,13 +68,7 @@ router.get('/books/author/:author', (req, res) => {
 })
 
 router.get('/books/genre/:genre', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.find({ genre: req.params.genre }, function (error, books) {
             if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
             if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
@@ -102,13 +78,7 @@ router.get('/books/genre/:genre', (req, res) => {
 })
 
 router.get('/books/search/:keyword', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.find({
             "$or": [
                 { title: { '$regex': req.params.keyword, '$options': 'i' } },
@@ -122,13 +92,7 @@ router.get('/books/search/:keyword', (req, res) => {
 })
 
 router.delete('/books/:id', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.findOne({book: req.params.id}, function (err, loans){
             if(loans != null) return res.status(400).send({ error: "Can't delete a book with active loans." });
             else{
@@ -154,21 +118,15 @@ router.delete('/books/:id', (req, res) => {
 })
 
 router.post('/books', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send({ error: 'Missing API key' });
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send({ error: 'Invalid API key' });
-    }
-    else {
-        if (!req.query.stock ||
-            !req.query.ISBN ||
-            !req.query.length ||
-            !req.query.author ||
-            !req.query.genre ||
-            !req.query.description ||
-            !req.query.publicationDate ||
-            !req.query.title) {
+    if (utils.checkAPIKey(req.body.key,res)) {
+        if (!req.body.stock ||
+            !req.body.ISBN ||
+            !req.body.length ||
+            !req.body.author ||
+            !req.body.genre ||
+            !req.body.description ||
+            !req.body.publicationDate ||
+            !req.body.title) {
             return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })
         }
         else {
@@ -181,16 +139,16 @@ router.post('/books', (req, res) => {
                     if (!req.file) return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
                     let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
                     let newBook = new bookSchema({
-                        stock: req.query.stock,
-                        ISBN: req.query.ISBN,
-                        length: req.query.length,
-                        author: req.query.author,
-                        genre: req.query.genre,
-                        title: req.query.title,
+                        stock: req.body.stock,
+                        ISBN: req.body.ISBN,
+                        length: req.body.length,
+                        author: req.body.author,
+                        genre: req.body.genre,
+                        title: req.body.title,
                         imgSource: imgSourceString,
                         localImgPath: req.file.path,
-                        description: req.query.description,
-                        publicationDate: req.query.publicationDate
+                        description: req.body.description,
+                        publicationDate: req.body.publicationDate
                     });
                     newBook.save();
                     return res.status(201).send('Book added!')
@@ -201,13 +159,7 @@ router.post('/books', (req, res) => {
 })
 
 router.put('/books/:id', (req, res) => {
-    if (!req.query.key) {
-        return res.status(401).send('Missing API key');
-    }
-    else if (req.query.key != process.env.API_KEY) {
-        return res.status(403).send('Invalid API key');
-    }
-    else {
+    if (utils.checkAPIKey(req.query.key,res)) {
         if(!req.params.id) return res.status(400).send({ error: 'Missing id parameter.' })
         let upload = uploadBookCover.single('coverImg');
             upload(req, res, function (err) {

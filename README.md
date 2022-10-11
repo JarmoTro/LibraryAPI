@@ -8,6 +8,8 @@
 
 [Configuring the application to run in your environment](#configuring-the-application-to-run-in-your-environment)
 
+[Documentation](#documentation)
+
 
 ## Description
 
@@ -75,7 +77,7 @@ cd Frontend
 npm i
 ```
 
-4. Change the DB connection string, API key and the secret in .env of the backend folder. Don't forget to not check the .env into version control!
+4. Change the DB connection string, API key and the secret in .env of the backend folder. **Don't commit .env!**
 
 ```
 DB_CONNECTION="mongodb://localhost:27017/library"
@@ -83,7 +85,7 @@ API_KEY="1ef0d86f-abe7-4350-b3a9-bf95a04ca0ea"
 SECRET="WALLMART"
 ```
 
-5. Change the API key in .env of the frontend folder. Don't forget to not check the .env into version control!
+5. Change the API key in .env of the frontend folder. **Don't commit .env!**
 
 ```
 VITE_API_KEY="1ef0d86f-abe7-4350-b3a9-bf95a04ca0ea"
@@ -101,3 +103,7 @@ npm start
 cd Frontend
 npm run dev
 ```
+
+## Documentation
+
+After launching the API ([See how to launch the application](#configuring-the-application-to-run-in-your-environment)) you can find the documentation at the /docs route
