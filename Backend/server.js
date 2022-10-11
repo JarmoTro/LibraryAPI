@@ -13,6 +13,7 @@ const app = express();
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json')
 const utils = require('./utils/utils');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 
 require('dotenv').config()
@@ -23,7 +24,40 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('data'));
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, './data/bookCovers');
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + file.originalname);
+  }
+});
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/webp') {
+      cb(null, true);
+  } else {
+      cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+      fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
+
+app.post('/stats',  function (req, res) {
+  console.log(req.file)
+  console.log(req.body)
+  let uploadCover = upload.single('coverImg')
+  uploadCover(req, res, function(err){
+  })
+
+});
 
 
 app.use(bookRoutes);

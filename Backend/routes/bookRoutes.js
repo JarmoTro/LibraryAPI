@@ -7,6 +7,7 @@ const multer = require("multer");
 const fs = require("fs");
 const bookDTO = require('../models/DTOs/bookDTO');
 const utils = require('../utils/utils');
+const { checkAPIKey } = require('../utils/utils');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -15,23 +16,25 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + file.originalname);
     }
-});
-
-const fileFilter = (req, file, cb) => {
+  });
+  
+  const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/webp') {
         cb(null, true);
     } else {
         cb(null, false);
     }
-};
-
-const uploadBookCover = multer({
+  };
+  
+  const upload = multer({
     storage: storage,
     limits: {
         fileSize: 1024 * 1024 * 5
     },
     fileFilter: fileFilter
-});
+  });
+
+
 
 router.get('/books', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
@@ -118,44 +121,50 @@ router.delete('/books/:id', (req, res) => {
 })
 
 router.post('/books', (req, res) => {
-    if (utils.checkAPIKey(req.query.key,res)) {
-        if (!req.query.stock ||
-            !req.query.ISBN ||
-            !req.query.length ||
-            !req.query.author ||
-            !req.query.genre ||
-            !req.query.description ||
-            !req.query.publicationDate ||
-            !req.query.title) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })
-        }
-        else {
-            let upload = uploadBookCover.single('coverImg');
-            upload(req, res, function (err) {
-                if (err) {
-                    return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
-                }
-                else {
-                    if (!req.file) return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
-                    let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
-                    let newBook = new bookSchema({
-                        stock: req.query.stock,
-                        ISBN: req.query.ISBN,
-                        length: req.query.length,
-                        author: req.query.author,
-                        genre: req.query.genre,
-                        title: req.query.title,
-                        imgSource: imgSourceString,
-                        localImgPath: req.file.path,
-                        description: req.query.description,
-                        publicationDate: req.query.publicationDate
-                    });
-                    newBook.save();
-                    return res.status(201).send('Book added!')
+
+    let uploadCover = upload.single('coverImg');
+            uploadCover(req, res, function (err) {
+                if(checkAPIKey(req.body.key, res)){
+                    if (err) {
+                        utils.deleteBookCover(req.file.path);
+                        return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
+                    }
+                    else {
+                        if (!req.file){
+                            return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
+                        } 
+                        if (req.body.stock ||
+                            req.body.ISBN ||
+                            req.body.length ||
+                            req.body.author ||
+                            req.body.genre ||
+                            req.body.description ||
+                            req.body.publicationDate ||
+                            req.body.title){
+                                let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
+                                let newBook = new bookSchema({
+                                    stock: req.body.stock,
+                                    ISBN: req.body.ISBN,
+                                    length: req.body.length,
+                                    author: req.body.author,
+                                    genre: req.body.genre,
+                                    title: req.body.title,
+                                    imgSource: imgSourceString,
+                                    localImgPath: req.file.path,
+                                    description: req.body.description,
+                                    publicationDate: req.body.publicationDate
+                                });
+                                newBook.save();
+                                return res.status(201).send('Book added!')
+                            }
+                            else{
+                                utils.deleteBookCover(req.file.path);
+                                return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })
+                            }
+                    }
                 }
             })
-        }
-    }
+
 })
 
 router.put('/books/:id', (req, res) => {

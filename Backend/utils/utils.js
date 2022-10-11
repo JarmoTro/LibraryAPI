@@ -9,6 +9,7 @@ const reviewDTO = require('../models/DTOs/reviewDTO');
 const loanDTO = require('../models/DTOs/loanDTO');
 const user = require('../models/user');
 var mongoose = require('mongoose');
+const fs = require("fs");
 
 module.exports = {
     convertUser: function(users){
@@ -98,5 +99,12 @@ module.exports = {
             return false
         }
         return true
+      },
+      deleteBookCover: function(path){
+        fs.unlink(path, (err => {
+            if (err) {
+                return res.status(500).send({ error: 'Looks like something went wrong :(' })
+            }
+        }))
       }
 }
