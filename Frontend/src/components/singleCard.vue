@@ -7,8 +7,10 @@
             <img class="d-inline-block" style=" max-width: 50rem; max-height: 40rem; margin-bottom: 5; margin-left: 5; margin-right: 5;" v-bind:src=books.imgSource alt="">
             <h1 class="m-3"> Reviews </h1>
             <div v-for="review in reviews">
-            <h2 v-if="userId == review.user._id" class="d-inline" style="margin-left:4rem" >{{review.title}}</h2>
-            <h2 v-if="userId != review.user._id" class="d-inline" >{{review.title}}</h2>
+            <h2 v-if="userId == review.user._id && !isAdmin" class="d-inline" style="margin-left:4rem" >{{review.title}}</h2>
+            <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline" >{{review.title}}</h2>
+            <h2 v-if="userId == review.user._id && isAdmin" class="d-inline" style="margin-left:4rem">{{review.title}}</h2>
+            <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
             <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{name: 'login'}"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
             <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
             <h4 class="m-3">{{review.user.username}}</h4>

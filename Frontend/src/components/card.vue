@@ -2,7 +2,7 @@
     <div class="card-group m-3" v-for="row in formattedBooks" :key="row.id">
 
         <div class="card m-3" style="width: 19rem; max-width: 25%;" v-for="book in row" :key="book.id">
-        <router-link :to="{ name: 'book', params: {id: book._id}}" class="text-decoration-none text-dark"> <img class="card-img-top" v-bind:src=book.imgSource alt="Card image cap">  </router-link>
+        <router-link :to="{ name: 'book', params: {id: book._id}}" class="text-decoration-none text-dark"> <img style="max-height: 30rem" class="card-img-top" v-bind:src=book.imgSource alt="Card image cap">  </router-link>
         <div class="card-body text-center">
             <router-link :to="{ name: 'book', params: {id: book._id}}" class="text-decoration-none text-dark"> <h1 class="card-title hoverBlue">{{book.title}}</h1>  </router-link>
             <router-link :to="{ name: 'author', params: {name: book.author}}"  class="text-decoration-none text-dark"><h4 class="card-text hoverBlue">{{book.author}}</h4> </router-link>

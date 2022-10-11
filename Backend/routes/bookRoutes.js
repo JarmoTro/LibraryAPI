@@ -118,15 +118,15 @@ router.delete('/books/:id', (req, res) => {
 })
 
 router.post('/books', (req, res) => {
-    if (utils.checkAPIKey(req.body.key,res)) {
-        if (!req.body.stock ||
-            !req.body.ISBN ||
-            !req.body.length ||
-            !req.body.author ||
-            !req.body.genre ||
-            !req.body.description ||
-            !req.body.publicationDate ||
-            !req.body.title) {
+    if (utils.checkAPIKey(req.query.key,res)) {
+        if (!req.query.stock ||
+            !req.query.ISBN ||
+            !req.query.length ||
+            !req.query.author ||
+            !req.query.genre ||
+            !req.query.description ||
+            !req.query.publicationDate ||
+            !req.query.title) {
             return res.status(400).send({ error: 'One or all params are missing. Required params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })
         }
         else {
@@ -139,16 +139,16 @@ router.post('/books', (req, res) => {
                     if (!req.file) return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
                     let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
                     let newBook = new bookSchema({
-                        stock: req.body.stock,
-                        ISBN: req.body.ISBN,
-                        length: req.body.length,
-                        author: req.body.author,
-                        genre: req.body.genre,
-                        title: req.body.title,
+                        stock: req.query.stock,
+                        ISBN: req.query.ISBN,
+                        length: req.query.length,
+                        author: req.query.author,
+                        genre: req.query.genre,
+                        title: req.query.title,
                         imgSource: imgSourceString,
                         localImgPath: req.file.path,
-                        description: req.body.description,
-                        publicationDate: req.body.publicationDate
+                        description: req.query.description,
+                        publicationDate: req.query.publicationDate
                     });
                     newBook.save();
                     return res.status(201).send('Book added!')

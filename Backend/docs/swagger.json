@@ -2,189 +2,47 @@
     "openapi": "3.0.2",
     "info": {
         "title": "Library-API",
-        "version": "Pre-release",
+        "version": "1.0.0",
         "description": "### This is a Swagger UI for our Library API  \n\n### Error handling\nErrors are presented using the HTTP status codes 400-599. The response include a more detailed explanation about the error in the body.\n\n```\n{\n  \"error\": \"Cleartext explanation of the error that occurred\"\n}\n```\n\n### Generic API errors\nThese error responses can be returned by any of the described endpoints.\n\n| HTTP status  |  Description |\n|---|---|\n| 400| Bad input parameters or invalid request. More information can be found in the response body.\n| 401| The consumer does not have access to the requested resource or the provided token is not valid.\n| 404| The requested resource can not be found or the user does not have access to the resource.\n| 5XX| A server error has occurred while processing the request."
     },
     "paths": {
-        "/logout/": {
-            "post": {
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "username": {
-                                "value": "probookreader123"
-                            }
-                        },
-                        "name": "username",
-                        "description": "A users name",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "password": {
-                                "value": "qwerty123456"
-                            }
-                        },
-                        "name": "password",
-                        "description": "A password for the users account",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Logout": {
-                                        "value": "Logged out"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error\t": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Log a user out"
-            }
-        },
         "/login/": {
             "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {}
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "key": "apiKey",
+                                        "username": "username",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "tags": [
                     "users"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "username": {
-                                "value": "probookreader123"
-                            }
-                        },
-                        "name": "username",
-                        "description": "A users name",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "password": {
-                                "value": "qwerty123456"
-                            }
-                        },
-                        "name": "password",
-                        "description": "A password for the users account",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
                         "content": {
-                            "text/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "Login": {
-                                        "value": "Logged in"
+                                    "Logged in!": {
+                                        "value": {
+                                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzNmZjFmMTIyN2IyY2MwMmRhZGQzMTgiLCJ1c2VybmFtZSI6InRlc3QzIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2NjUxMzk0NjUsImV4cCI6MTY2NTE0MzA2NX0.dnZsLWIDsjnS9NDcsSwYL4VYwxJyDi1jb4FLaoZF2VM"
+                                        }
                                     }
                                 }
                             }
@@ -219,11 +77,16 @@
                                         "value": {
                                             "error": "Missing API key"
                                         }
+                                    },
+                                    "Invalid credentials error": {
+                                        "value": {
+                                            "error": "Invalid credentials"
+                                        }
                                     }
                                 }
                             }
                         },
-                        "description": "API key is not provided"
+                        "description": "API key is not provided or invalid credentials"
                     },
                     "403": {
                         "content": {
@@ -241,6 +104,23 @@
                             }
                         },
                         "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "User not found error": {
+                                        "value": {
+                                            "error": "User not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User not found"
                     },
                     "500": {
                         "content": {
@@ -364,171 +244,6 @@
                 },
                 "summary": "Get a list of all users",
                 "description": ""
-            },
-            "post": {
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "admin": {
-                                "value": "false"
-                            }
-                        },
-                        "name": "admin",
-                        "description": "A bool that allows you to create/edit/delete books/loans/users/reviews",
-                        "schema": {
-                            "type": "boolean"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "username": {
-                                "value": "probookreader123"
-                            }
-                        },
-                        "name": "username",
-                        "description": "A users name",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "password": {
-                                "value": "qwerty123456"
-                            }
-                        },
-                        "name": "password",
-                        "description": "A password for the users account",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "User": {
-                                        "value": "User created!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "One or all params are missing error": {
-                                        "value": {
-                                            "error": "One or all params are missing. Required params: username, password."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Missing parameters"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "409": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Username already is in use error": {
-                                        "value": {
-                                            "error": "A user with the given username is already registered"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Username is already taken"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Add a new user"
             }
         },
         "/loans/": {
@@ -640,80 +355,30 @@
                 "description": ""
             },
             "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {}
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "user": "userId",
+                                        "book": "bookId",
+                                        "loanStart": "unixTime",
+                                        "loanEnd": "unixTime",
+                                        "key": "apiKey"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "tags": [
                     "loans"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6\t\r\n"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "userId": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "user",
-                        "description": "A id of a user",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "bookId": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "book",
-                        "description": "A id of a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "loanStart": {
-                                "value": "1669627070"
-                            }
-                        },
-                        "name": "loanStart",
-                        "description": "The start date of the loan",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "loanEnd": {
-                                "value": "1670231870"
-                            }
-                        },
-                        "name": "loanEnd",
-                        "description": "The end date of the loan",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "201": {
@@ -1058,13 +723,13 @@
                 "responses": {
                     "201": {
                         "content": {
-                            "text/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "Book": {
-                                        "value": "Book added!"
+                                    "Book created!": {
+                                        "value": "Book created!"
                                     }
                                 }
                             }
@@ -1424,6 +1089,16 @@
                                 },
                                 "examples": {
                                     "Book": {
+                                        "value": "Book updated!"
+                                    }
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Book updated!": {
                                         "value": "Book updated!"
                                     }
                                 }
@@ -2215,12 +1890,12 @@
                 "responses": {
                     "200": {
                         "content": {
-                            "text/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "Loan": {
+                                    "Loan updated!": {
                                         "value": "Loan updated!"
                                     }
                                 }
@@ -2793,12 +2468,12 @@
                 "responses": {
                     "200": {
                         "content": {
-                            "text/xml": {
+                            "application/json": {
                                 "schema": {
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "Review": {
+                                    "Review updated!": {
                                         "value": "Review updated!"
                                     }
                                 }
@@ -3422,7 +3097,25 @@
                 "summary": "Get a list of all users",
                 "description": ""
             },
-            "put": {
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id of a user",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/users/currentuser": {
+            "get": {
                 "tags": [
                     "users"
                 ],
@@ -3430,79 +3123,133 @@
                     {
                         "examples": {
                             "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                                "value": "566cfe71-ca0f-4b0d-a40c-281ad95d5725"
                             }
                         },
                         "name": "key",
-                        "description": "API key is required to access the API",
+                        "description": "API key is needed to access the API",
                         "schema": {
                             "type": "string"
                         },
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "examples": {
-                            "username": {
-                                "value": "probookreader123"
-                            }
-                        },
-                        "name": "username",
-                        "description": "A users name",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "newPassword": {
-                                "value": "SuperSecuePassword123!!!"
-                            }
-                        },
-                        "name": "newPassword",
-                        "description": "Password that does not match the previous password",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "oldPassword": {
-                                "value": "qwerty123456"
-                            }
-                        },
-                        "name": "oldPassword",
-                        "description": "previous password that the user wants to replace",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "admin": {
-                                "value": "true"
-                            }
-                        },
-                        "name": "admin",
-                        "description": "A bool that allows you to create/edit/delete books/loans/users/reviews",
-                        "schema": {
-                            "type": "boolean"
-                        },
-                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "content": {
-                            "text/xml": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Users": {
+                                        "value": {
+                                            "_id": "633bd2296cc70dace2c27c99",
+                                            "admin": false,
+                                            "username": "testcont"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User is logged in"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "User": {
+                                    "Missing header error": {
+                                        "value": {
+                                            "error": "Token was not provided"
+                                        }
+                                    },
+                                    "Failed to veify token error": {
+                                        "value": {
+                                            "error": "Failed to verify token"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Errors related to tokens"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided or user is not logged in"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "API key is invalid error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    }
+                },
+                "summary": "Get current users data"
+            }
+        },
+        "/register": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {}
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "key": "apiKey",
+                                        "username": "username",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "users"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Account created": {
                                         "value": "User created!"
                                     }
                                 }
@@ -3517,13 +3264,20 @@
                                     "type": "string"
                                 },
                                 "examples": {
-                                    "Passwords match error": {
-                                        "value": "{ \n    \"error\": \"Both oldPassword and newPassword parameters must be provided.\"' \n}"
+                                    "Missing parameters error": {
+                                        "value": {
+                                            "error": "Missing parameters"
+                                        }
+                                    },
+                                    "Username is already in use error": {
+                                        "value": {
+                                            "error": "Username is already in use"
+                                        }
                                     }
                                 }
                             }
                         },
-                        "description": "Something was missing or invalid from query"
+                        "description": "Missing parameters or username already taken"
                     },
                     "401": {
                         "content": {
@@ -3553,33 +3307,11 @@
                                         "value": {
                                             "error": "Invalid API key"
                                         }
-                                    },
-                                    "Invalid password error": {
-                                        "value": {
-                                            "error": "Invalid password."
-                                        }
                                     }
                                 }
                             }
                         },
                         "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "User was not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "User was not found"
                     },
                     "500": {
                         "content": {
@@ -3596,108 +3328,10 @@
                                 }
                             }
                         },
-                        "description": "Something went wrong during the query"
+                        "description": "Something went wrong"
                     }
                 },
-                "summary": "Update a user"
-            },
-            "parameters": [
-                {
-                    "examples": {
-                        "id": {
-                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
-                        }
-                    },
-                    "name": "id",
-                    "description": "A id of a user",
-                    "schema": {
-                        "type": "string"
-                    },
-                    "in": "path",
-                    "required": true
-                }
-            ]
-        },
-        "/users/currentuser": {
-            "get": {
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "566cfe71-ca0f-4b0d-a40c-281ad95d5725"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is needed to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Users": {
-                                        "value": {
-                                            "_id": "633bd2296cc70dace2c27c99",
-                                            "username": "testcont",
-                                            "admin": false
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "User is logged in"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    },
-                                    "User is not logged in error": {
-                                        "value": {
-                                            "error": "User is not logged in."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided or user is not logged in"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "API key is invalid error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    }
-                },
-                "summary": "Get current users data"
+                "summary": "Register a user"
             }
         }
     }

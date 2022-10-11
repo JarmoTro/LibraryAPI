@@ -13,15 +13,15 @@ const app = express();
 const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json')
 const utils = require('./utils/utils');
+const bodyParser = require('body-parser');
+
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_CONNECTION);
 
-app.use(cors());        
+app.use(cors());
 app.use(express.json());
 app.use(express.static('data'));
-
-
 
 
 
