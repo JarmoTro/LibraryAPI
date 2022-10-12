@@ -3,6 +3,7 @@ import Home from "../components/card.vue";
 import singleBook from "../components/singleCard.vue";
 import auth from "../components/auth.vue"
 import welcome from "../components/welcome.vue"
+import createBook from "../components/createBook.vue"
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
   path: "/welcome",
   name: "welcome",
   component: welcome,
+},
+{
+  path: "/createBook",
+  name: "createBook",
+  component: createBook,
 },
 ];
 
