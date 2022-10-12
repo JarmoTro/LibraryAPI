@@ -11,7 +11,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="deleteBook()">Delete book</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteBook()">Delete book</button>
       </div>
     </div>
   </div>
@@ -27,14 +27,31 @@
             <img class="d-inline-block" style=" max-width: 50rem; max-height: 40rem; margin-bottom: 5; margin-left: 5; margin-right: 5;" v-bind:src=books.imgSource alt="">
             <h1 class="m-3"> Reviews </h1>
             <div v-for="review in reviews">
+
+  <div class="modal fade" v-bind:id="'_'+review._id" tabindex="-1">
+  <div class="modal-dialog" style="padding-top: 15%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete review</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the review with the title "{{review.title}}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteReview(review._id)">Delete review</button>
+      </div>
+    </div>
+  </div>
+</div>
+
             <h2 v-if="userId == review.user._id && !isAdmin" class="d-inline" style="margin-left:4rem" >{{review.title}}</h2>
             <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline" >{{review.title}}</h2>
             <h2 v-if="userId == review.user._id && isAdmin" class="d-inline" style="margin-left:4rem">{{review.title}}</h2>
             <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
-            <!--<router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{name: 'login'}"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
-            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link> -->
-            <i v-if="userId == review.user._id || isAdmin" class="fa-solid fa-trash d-inline fa-xl text-danger float-end" style="margin-left:1rem"></i>
-            <i v-if="userId == review.user._id" class="fa-solid fa-pen-to-square d-inline fa-xl text-primary float-end"></i>
+            <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{}" data-bs-toggle="modal" v-bind:data-bs-target="'#_'+review._id"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
+            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
             <h4 class="m-3">{{review.user.username}}</h4>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
@@ -90,6 +107,7 @@ export default {
       isLoggedIn: false,
       isAdmin: false,
       error: false,
+      modalText: '',
     }
   },
   methods: {
@@ -144,7 +162,18 @@ export default {
         console.log(error);
         this.error = true
       })
-    }
+    },
+        deleteReview(id){
+      axios
+      .delete('http://localhost:3000/reviews/'+id+'?key='+import.meta.env.VITE_API_KEY)
+      .then((response) => {
+        this.$router.push('/') 
+      })
+      .catch((error) => {
+        console.log(error);
+        this.error = true
+      })
+    },
   },
   computed: {
 
