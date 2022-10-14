@@ -93,6 +93,7 @@ export default {
     return { v$: useVuelidate() }
   },
   created() {
+    this.getCurrentUser()
   },
     data() {
     return {
@@ -113,6 +114,24 @@ export default {
     }
   },
   methods: {
+        getCurrentUser(){
+        let token = localStorage.getItem("token");
+         axios
+        .get('http://localhost:3000/users/currentuser/?key='+import.meta.env.VITE_API_KEY,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            token: token
+          }
+        })
+        .then((response) => {
+              this.$router.push('/user/'+response.data._id) 
+          console.log(response);
+        })
+        .catch((error) => {
+          this.$router.push('/login') 
+          console.log(error)
+        })
+    },
     async register(submitEvent){
       const result = await this.v$.$validate()
       if(result){

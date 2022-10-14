@@ -52,7 +52,9 @@
             <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
             <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{}" data-bs-toggle="modal" v-bind:data-bs-target="'#_'+review._id"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
             <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
+            <router-link :to="{ name: 'user', params: {id: review.user._id}}" class="text-dark text-decoration-none" >
             <h4 class="m-3">{{review.user.username}}</h4>
+            </router-link>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
               <i class="fa-solid fa-star fa-2x" style="color:#D4AF37;"></i>

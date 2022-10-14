@@ -5,10 +5,14 @@ const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
+const { default: mongoose } = require('mongoose');
+
 
 router.get('/loans', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
-        loanSchema.find((error, loans) => {
+        loanSchema.aggregate([
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
+        ]).exec(function(error, loans){
 
             if (error) res.status(500).send('Looks like something went wrong :(')
     
@@ -20,7 +24,10 @@ router.get('/loans', (req, res) => {
 
 router.get('/loans/user/:id', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
-        loanSchema.find({user: req.params.id}, function(error, loans){
+        loanSchema.aggregate([
+            {$match: {user: mongoose.Types.ObjectId(req.params.id)}},
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
+        ]).exec(function(error, loans){
             if(loans == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
             if(loans != null) return res.send(utils.convertLoan(loans))
@@ -30,10 +37,13 @@ router.get('/loans/user/:id', (req, res) => {
 
 router.get('/loans/:id', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
-        loanSchema.findOne({_id: req.params.id}, function(error, loan){
+        loanSchema.aggregate([
+            {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
+        ]).exec(function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-            if(loan != null) return res.send(loanDTO(loan))
+            if(loan != null) return res.send(utils.convertLoan(loan))
         }) 
     }
 })

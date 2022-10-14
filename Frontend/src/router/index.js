@@ -4,6 +4,7 @@ import singleBook from "../components/singleCard.vue";
 import auth from "../components/auth.vue"
 import welcome from "../components/welcome.vue"
 import createBook from "../components/createBook.vue"
+import userPage from "../components/userPage.vue"
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
   name: "createBook",
   component: createBook,
 },
+{
+  path: "/user/:id",
+  name: "user",
+  component: userPage,
+}
 ];
 
 const router = createRouter({

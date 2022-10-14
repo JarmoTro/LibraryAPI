@@ -53,8 +53,25 @@ router.get('/reviews/book/:id', (req, res) => {
         else {
             reviewSchema.aggregate([
                 {$match: {book: mongoose.Types.ObjectId(req.params.id)}},
-                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}
+                
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "book",
+                    foreignField: "_id",
+                    as: "book"
+                }
+            },
+            {
+                $unwind: "$book"
+            }
             ]).exec(function(error, reviews){
+                console.log(reviews);
                 if(reviews == null || reviews.length == 0) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                 if(error) return res.status(500).send({error:'Looks like something went wrong :('})
                 if(reviews != null) return res.send(utils.convertReview(reviews))
@@ -83,8 +100,11 @@ router.get('/reviews/:id', (req, res) => {
 
 router.get('/reviews/author/:id', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
-        reviewSchema.find({author: req.params.id}, function(error, reviews){
-            if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
+        reviewSchema.aggregate([
+            {$match: {author: mongoose.Types.ObjectId(req.params.id)}},
+            {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+        ]).exec(function(error, reviews){
+            if(reviews == null || reviews.length == 0) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
             if(reviews != null) return res.send(utils.convertReview(reviews))
         })
