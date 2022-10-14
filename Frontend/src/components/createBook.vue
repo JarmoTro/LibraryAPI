@@ -46,12 +46,12 @@
 
 <div class="input-group m-3">
   <span class="input-group-text" id="basic-addon1">Length</span>
-  <input type="number" v-model="length" name="length" class="form-control" placeholder="Length" aria-label="Username" aria-describedby="basic-addon1">
+  <input type="number" v-model="booklength" name="booklength" class="form-control" placeholder="Length" aria-label="Username" aria-describedby="basic-addon1">
 </div>
 
 <p v-for="error of v$.$errors"
                 :key="error.$uid">
-                  <strong class="text-danger" v-if="error.$property == 'length'">{{ error.$message }}</strong>
+                  <strong class="text-danger" v-if="error.$property == 'booklength'">{{ error.$message }}</strong>
                 </p>
 
 <div class="input-group m-3">
@@ -123,7 +123,7 @@ export default {
       title: '',
       author: '',
       isbn: '',
-      length: '',
+      booklength: '',
       description: '',
       stock: '',
       date: '',
@@ -141,7 +141,7 @@ export default {
     isbn:{
         required
     },
-    length:{
+    booklength:{
         required,
         minValue: minValue(1),
     },
@@ -157,6 +157,20 @@ export default {
     },
   },
   methods: {
+    isValidFileExtension(extension) {
+    switch (extension) {
+        case 'jpg':
+            return true;
+        case 'jpeg':
+            return true;
+        case 'png':
+            return true;
+        case 'webp':
+            return true;
+        default:
+            return false;
+    }
+},
     getCurrentUser(){
         let token = localStorage.getItem("token");
          axios
@@ -181,28 +195,35 @@ export default {
         const result = await this.v$.$validate()
         if(result){
             const coverImg = submitEvent.target.elements.coverImg.value
-            const fileExtension = coverImg.split('.').pop();
+            const fileExtension = coverImg.split('.').pop();      
             if(!coverImg){
                 this.errorMsg = "Cover image is required."
                 this.errorClass = "alert alert-danger"
             }
-            else if(fileExtension != 'jpeg' || fileExtension != 'jpg' || fileExtension != 'webp' || fileExtension != 'png'){
+            else if(!this.isValidFileExtension(fileExtension)){
                 this.errorMsg = "Invalid file type '"+fileExtension+"'. Valid file types: jpeg, jpg, webp, png"
                 this.errorClass = "alert alert-danger"
             }
-            console.log(submitEvent.target.elements.coverImg.value);
+            let data = new FormData();
+            let coverImgFile = submitEvent.target.elements.coverImg.files[0];
+            data.append('coverImg', coverImgFile);
+            data.append('key',import.meta.env.VITE_API_KEY)
+            data.append("title",submitEvent.target.elements.title.value)
+            data.append("author",submitEvent.target.elements.author.value)
+            data.append("isbn",submitEvent.target.elements.isbn.value)
+            data.append("length",submitEvent.target.elements.booklength.value)
+            data.append("stock",submitEvent.target.elements.stock.value)
+            data.append("publicationDate",Math.floor(new Date(submitEvent.target.elements.date.value).getTime()))
+            data.append("description",submitEvent.target.elements.description.value)
+
+    
             axios
-            .post('http://localhost:3000/books/',{
-                "key":import.meta.env.VITE_API_KEY,
-                "title":submitEvent.target.elements.title.value,
-                "author":submitEvent.target.elements.author.value,
-                "isbn":submitEvent.target.elements.isbn.value,
-                "length":submitEvent.target.elements.length.value,
-                "stock":submitEvent.target.elements.stock.value,
-                "publicationDate":Math.floor(new Date(submitEvent.target.elements.date.value).getTime() / 1000),
-                "description":submitEvent.target.elements.description.value,
-                "coverImg":submitEvent.target.elements.coverImg.value
-        })
+            .post('http://localhost:3000/books/',data)
+            this.$router.push('/')
+            .catch((error) => {
+            this.errorMsg = 'Something went wrong'
+            this.errorClass = 'alert alert-danger'
+            }) 
         }
 
     }

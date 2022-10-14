@@ -122,8 +122,10 @@ router.delete('/books/:id', (req, res) => {
 
 router.post('/books', (req, res) => {
 
+
     let uploadCover = upload.single('coverImg');
             uploadCover(req, res, function (err) {
+                console.log(req);
                 if(checkAPIKey(req.body.key, res)){
                     if (err) {
                         utils.deleteBookCover(req.file.path);
