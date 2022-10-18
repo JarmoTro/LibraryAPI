@@ -126,9 +126,11 @@ router.get('/reviews/author/:id', (req, res) => {
     }
 })
 
-router.put('/reviews/:id', (req, res) => {
-    if (utils.checkAPIKey(req.query.key,res)) {
-            reviewSchema.findOneAndUpdate({_id: req.params.id}, req.query, function(error, reviews){
+router.put('/reviews/', (req, res) => {
+    let getBody = upload.any();
+    getBody(req, res, function() {
+    if (utils.checkAPIKey(req.body.key,res)) {
+            reviewSchema.findOneAndUpdate({_id: req.body.id}, req.body, function(error, reviews){
                     if(reviews == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
                     if(reviews != null) return res.status(200).send('Review updated!')
@@ -137,8 +139,11 @@ router.put('/reviews/:id', (req, res) => {
         
     }
 })
+})
 
 router.delete('/reviews/:id', (req, res) => {
+    let getBody = upload.any();
+    getBody(req, res, function() {
     if (utils.checkAPIKey(req.query.key,res)) {
         reviewSchema.findOneAndDelete({ _id: req.params.id }, function (err, response) {
             if (response == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
@@ -148,6 +153,7 @@ router.delete('/reviews/:id', (req, res) => {
             }
         });
     }
+})
 })
 
 module.exports = router;

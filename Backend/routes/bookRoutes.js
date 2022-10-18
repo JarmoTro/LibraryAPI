@@ -70,22 +70,13 @@ router.get('/books/author/:author', (req, res) => {
     }
 })
 
-router.get('/books/genre/:genre', (req, res) => {
-    if (utils.checkAPIKey(req.query.key,res)) {
-        bookSchema.find({ genre: req.params.genre }, function (error, books) {
-            if (books.length == 0) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-            if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-            if (books != null) return res.send(utils.convertBook(books));
-        })
-    }
-})
-
 router.get('/books/search/:keyword', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
         bookSchema.find({
             "$or": [
                 { title: { '$regex': req.params.keyword, '$options': 'i' } },
                 { author: { '$regex':req.params.keyword, '$options': 'i' } },
+                { genre: { '$regex':req.params.keyword, '$options': 'i' } },
                 { ISBN: req.params.keyword }
             ]
         }).then((books) => {
@@ -125,7 +116,7 @@ router.post('/books', (req, res) => {
 
     let uploadCover = upload.single('coverImg');
             uploadCover(req, res, function (err) {
-                console.log(req);
+                console.log(req.body);
                 if(checkAPIKey(req.body.key, res)){
                     if (err) {
                         utils.deleteBookCover(req.file.path);
@@ -135,14 +126,14 @@ router.post('/books', (req, res) => {
                         if (!req.file){
                             return res.status(400).send({ error: 'Invalid file type or missing coverImg parameter. File must be .jpeg, .png, .webp or .jpg' })
                         } 
-                        if (req.body.stock ||
-                            req.body.ISBN ||
-                            req.body.length ||
-                            req.body.author ||
-                            req.body.genre ||
-                            req.body.description ||
-                            req.body.publicationDate ||
-                            req.body.title){
+                        if (req.body.stock != null &&
+                            req.body.ISBN != null &&
+                            req.body.length != null &&
+                            req.body.author != null &&
+                            req.body.genre != null &&
+                            req.body.description != null &&
+                            req.body.publicationDate != null &&
+                            req.body.title != null){
                                 let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
                                 let newBook = new bookSchema({
                                     stock: req.body.stock,

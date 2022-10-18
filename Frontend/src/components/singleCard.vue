@@ -20,7 +20,7 @@
   <div class="modal fade" id="add_review_model" tabindex="-1">
   <div class="modal-dialog" style="padding-top: 15%">
     <div class="modal-content">
-      <form v-on:submit.prevent="createReview" id="view_type_sorting">
+      <form v-on:submit.prevent="createReview">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add a review</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -40,8 +40,8 @@
   <option value="1">Hated it!</option>
   <option value="2">Didn't like it.</option>
   <option selected value="3">It was alright.</option>
-    <option value="4">It was good!</option>
-      <option value="5">It was perfect!</option>
+  <option value="4">It was good!</option>
+  <option value="5">It was perfect!</option>
 </select>
       </div>
       <div class="modal-footer">
@@ -86,20 +86,41 @@
   <div class="modal fade" v-bind:id="'edit_'+review._id" tabindex="-1">
   <div class="modal-dialog" style="padding-top: 15%">
     <div class="modal-content">
+      <form v-on:submit.prevent="updateReview">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Edit a review</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <input placeholder="Review title" type="text"/>
-          <input placeholder="Review body" type="text"/>
-        </form>
+        <input name="editId" v-model="editId" type="hidden"/>
+        <input name="editTitle" v-model="editTitle" class="d-block mb-3 w-100" placeholder="Review title"  type="text"/>
+          <p v-for="error of v$.$errors"
+                :key="error.$uid">
+                <strong class="text-danger" v-if="error.$property == 'editTitle'">{{ error.$message }}</strong>
+          </p>
+          <textarea name="editBody" v-model="editBody" placeholder="Review body" class="w-100" type="text"></textarea>  
+          <p v-for="error of v$.$errors"
+                :key="error.$uid">
+                <strong class="text-danger" v-if="error.$property == 'editBody'">{{ error.$message }}</strong>
+          </p>
+<select class="form-select mt-3" name="editRating" aria-label="Default select example">
+  <option v-if="editRating == 1" selected value="1">Hated it!</option>
+  <option v-if="editRating != 1" value="1">Hated it!</option>
+  <option v-if="editRating == 2" selected value="2">Didn't like it.</option>
+  <option v-if="editRating != 2" value="2">Didn't like it.</option>
+  <option v-if="editRating == 3" selected value="3">It was alright.</option>
+  <option v-if="editRating != 3" value="3">It was alright.</option>
+  <option v-if="editRating == 4" selected value="4">It was good!</option>
+  <option v-if="editRating != 4" value="4">It was good!</option>
+  <option v-if="editRating == 5" selected value="5">It was perfect!</option>
+  <option v-if="editRating != 5" value="5">It was perfect!</option>
+</select>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteReview(review._id)">Delete review</button>
+        <button type="submit" class="btn btn-primary">Edit review</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -109,7 +130,7 @@
             <h2 v-if="userId == review.user._id && isAdmin" class="d-inline" style="margin-left:4rem">{{review.title}}</h2>
             <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
             <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{}" data-bs-toggle="modal" v-bind:data-bs-target="'#_'+review._id"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
-            <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
+            <router-link @click="getReviewDetails(review.title,review.body,review.rating,review._id)" data-bs-toggle="modal"  v-bind:data-bs-target="'#edit_'+review._id" v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
             <router-link :to="{ name: 'user', params: {id: review.user._id}}" class="text-dark text-decoration-none hoveBlue" ><h4 class="m-3 hoverBlue">{{review.user.username}}</h4></router-link>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
@@ -171,7 +192,11 @@ export default {
       isAdmin: false,
       error: false,
       title: '',
-      body: ''
+      body: '',
+      editTitle: '',
+      editBody: '',
+      editRating: '',
+      editId: ''
     }
   },
   validations: {
@@ -180,9 +205,21 @@ export default {
     },
     body:{
       required
-    }
+    },
+    editTitle:{
+      required
+    },
+    editBody:{
+      required
+    },
   },
   methods: {
+    getReviewDetails(title,body,rating,id) {
+      this.editTitle = title,
+      this.editBody = body,
+      this.editRating = rating
+      this.editId = id
+    },
     getBook() {
       axios
         .get('http://localhost:3000/books/'+ this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
@@ -235,11 +272,11 @@ export default {
         this.error = true
       })
     },
-        deleteReview(id){
+      deleteReview(id){
       axios
       .delete('http://localhost:3000/reviews/'+id+'?key='+import.meta.env.VITE_API_KEY)
       .then((response) => {
-        this.$router.push('/') 
+        this.$router.go() 
       })
       .catch((error) => {
         console.log(error);
@@ -247,8 +284,9 @@ export default {
       })
     },
     async createReview(submitEvent){
-      const formIsValid = await this.v$.$validate()
-      if(formIsValid){
+      const titleIsValid = await this.v$.title.$validate()
+      const bodyIsValid = await this.v$.body.$validate()
+      if(titleIsValid && bodyIsValid){
         let data = new FormData();
           data.append("title", submitEvent.target.elements.title.value)
           data.append("body", submitEvent.target.elements.body.value)
@@ -260,6 +298,26 @@ export default {
         .post('http://localhost:3000/reviews/', data)
         .then((response) => {
             this.$router.go()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+    },
+    async updateReview(submitEvent){
+      const editTitleIsValid = await this.v$.editTitle.$validate()
+      const editBodyIsValid = await this.v$.editBody.$validate()
+      if (editTitleIsValid && editBodyIsValid) {
+          let data = new FormData();
+          data.append("title", submitEvent.target.elements.editTitle.value)
+          data.append("body", submitEvent.target.elements.editBody.value)
+          data.append("rating", submitEvent.target.elements.editRating.value)
+          data.append("key", import.meta.env.VITE_API_KEY)
+          data.append("id",submitEvent.target.elements.editId.value)
+        axios
+        .put('http://localhost:3000/reviews/', data)
+        .then((response) => {
+          this.$router.go()
         })
         .catch((error) => {
           console.log(error)
