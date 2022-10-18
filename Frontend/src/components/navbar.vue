@@ -23,12 +23,15 @@
               </router-link>
           </form>
           <form class="d-flex">
-            <router-link :to="{name: 'user',params: {id: userId}}">
-            <button :class="userClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-user fa-2x"></i></button>
+            <router-link v-if="isLoggedIn == true && isAdmin == true" :to="{name: 'createBook'}">
+            <button  class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-plus fa-2x"></i></button>
             </router-link>
-            <button @click="logout()"  :class="logoutClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-from-bracket fa-2x"></i></button>
-            <router-link :to="{name: 'login'}">
-            <button  :class="loginClass" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
+            <router-link v-if="isLoggedIn == true" :to="{name: 'user',params: {id: userId}}">
+            <button class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-user fa-2x"></i></button>
+            </router-link>
+            <button v-if="isLoggedIn == true" @click="logout()"  class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-from-bracket fa-2x"></i></button>
+            <router-link v-if="isLoggedIn == false" :to="{name: 'login'}">
+            <button  class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
             </router-link>
           </form>
         </div>
@@ -44,10 +47,9 @@ export default {
   data() {
     return {
       keywordInput: '',
-      loginClass: 'btn btn-outline-dark',
-      logoutClass: 'btn btn-outline-dark d-none',
-      userClass: 'btn btn-outline-dark d-none',
       userId: 'placeholder',
+      isLoggedIn: false,
+      isAdmin: false,
     }
   },
   methods: {
@@ -63,10 +65,11 @@ export default {
           }
         })
         .then((response) => {
+          this.isLoggedIn = true
           this.userId = response.data._id
-          this.logoutClass = 'btn btn-outline-dark'
-          this.userClass = 'btn btn-outline-dark'
-        this.loginClass = 'btn btn-outline-dark d-none'  
+          if (response.data.admin) {
+            this.isAdmin = true
+          }
         })
         .catch((error) => {
 

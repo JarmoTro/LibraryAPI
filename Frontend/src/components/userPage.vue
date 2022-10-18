@@ -1,6 +1,7 @@
 <template> 
 <div class="text-center">
 <h1>{{username}}</h1>
+<h2 v-if="reviews.length == 0"> Looks like this user doesn't have any reviews :(</h2>
 <div class="row" style="margin-top:3rem">
 <div class="col">
 <h1 style="margin-bottom:2rem" v-if="reviews.length > 0"> Reviews </h1>
@@ -22,14 +23,14 @@
     </div>
   </div>
 </div>
-            <h2 v-if="userId == review.user._id && !isAdmin" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
-            <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline" >{{review.title}}</h2>
-            <h2 v-if="userId == review.user._id && isAdmin" class="d-inline" style="margin-left:4rem">{{review.title}}</h2>
-            <h2 v-if="isAdmin && userId != review.user._id" class="d-inline" style="margin-left:2rem" >{{review.title}}</h2>
+            <h2 v-if="userId == review.user._id && !isAdmin" class="d-inline fw-bold" style="margin-left:2rem" > "{{review.title}}"</h2>
+            <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline fw-bold" >{{review.title}}</h2>
+            <h2 v-if="userId == review.user._id && isAdmin" class="d-inline fw-bold" style="margin-left:4rem">"{{review.title}}"</h2>
+            <h2 v-if="isAdmin && userId != review.user._id" class="d-inline fw-bold" style="margin-left:2rem" >"{{review.title}}"</h2>
             <router-link v-if="userId == review.user._id || isAdmin" class="text-dark text-decoration-none float-end" style="margin-left:1rem" :to="{}" data-bs-toggle="modal" v-bind:data-bs-target="'#_'+review._id"><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i> </router-link>
             <router-link v-if="userId == review.user._id" class="text-dark text-decoration-none float-end"  :to="{name: 'login'}"><i class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"></i> </router-link>
-            <h4 class="m-3">{{review.user.username}}</h4>
-            <h4 class="m-3"> {{review.book[0].title}} </h4>
+            <router-link class="text-dark text-decoration-none" :to="{ name: 'book', params: {id: review.book._id}}"><h4 class="m-3 hoverBlue"> {{review.book.title}}</h4></router-link>
+            <h4 class="m-3">By {{review.user.username}}</h4>
             <p class="m-3 text-muted">{{review.createdAt}}</p>
             <div class="d-inline" v-for="star in review.rating">
               <i class="fa-solid fa-star fa-2x" style="color:#D4AF37;"></i>
@@ -38,20 +39,15 @@
             <hr>
             </div>
             </div>
-        <div class="col"> 
+        <div v-if="isAdmin == true || userId == this.$route.params.id" class="col"> 
         <h1 style="margin-bottom:2rem" v-if="loans.length > 0"> My loans </h1> 
         <div v-for="loan in loans">
-        <router-link :to="{ name: 'book', params: {id: loan.book[0]._id}}" class="text-dark">
-        <h2>{{loan.book[0].title}}</h2>
-        </router-link>
-        <h2> {{loan.loanStart}} </h2>
-        <h2> {{loan.loanEnd}} </h2>
+        <router-link :to="{ name: 'book', params: {id: loan.book[0]._id}}" class="text-dark text-decoration-none"><h2 class="hoverBlue">{{loan.book[0].title}}</h2></router-link>
+        <h2> {{loan.loanStart}}-{{loan.loanEnd}} </h2>
         <hr>
         </div>
         </div>
 </div>
-
-<button class=" btn btn-primary"> Create a new book </button>
 </div>
 </template>
 

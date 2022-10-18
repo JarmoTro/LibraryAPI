@@ -89,8 +89,3 @@ export default {
 
 </script>
 
-<style>
-.hoverBlue:hover{
-color:  #0d6efd;
-}
-</style>
