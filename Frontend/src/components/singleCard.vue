@@ -16,6 +16,43 @@
     </div>
   </div>
 </div>
+
+  <div class="modal fade" id="add_review_model" tabindex="-1">
+  <div class="modal-dialog" style="padding-top: 15%">
+    <div class="modal-content">
+      <form v-on:submit.prevent="createReview" id="view_type_sorting">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add a review</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <input name="title" v-model="title" class="d-block mb-3 w-100" placeholder="Review title" type="text"/>
+          <p v-for="error of v$.$errors"
+                :key="error.$uid">
+                  <strong class="text-danger" v-if="error.$property == 'title'">{{ error.$message }}</strong>
+                </p>
+          <textarea name="body" v-model="body" placeholder="Review body" class="w-100" type="text"></textarea>  
+          <p v-for="error of v$.$errors"
+                :key="error.$uid">
+                  <strong class="text-danger" v-if="error.$property == 'body'">{{ error.$message }}</strong>
+                </p>
+          <select class="form-select mt-3" name="rating" aria-label="Default select example">
+  <option value="1">Hated it!</option>
+  <option value="2">Didn't like it.</option>
+  <option selected value="3">It was alright.</option>
+    <option value="4">It was good!</option>
+      <option value="5">It was perfect!</option>
+</select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">Add review</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
     <div v-if="error" class="alert alert-danger text-center" role="alert">
         Can not delete a book with active loans! Please dismiss the active loans and try again.
     </div>
@@ -37,6 +74,27 @@
       </div>
       <div class="modal-body">
         Are you sure you want to delete the review with the title "{{review.title}}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteReview(review._id)">Delete review</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" v-bind:id="'edit_'+review._id" tabindex="-1">
+  <div class="modal-dialog" style="padding-top: 15%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit a review</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input placeholder="Review title" type="text"/>
+          <input placeholder="Review body" type="text"/>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -73,7 +131,7 @@
             <h3 class="m-3">Stock: {{books.stock}}</h3>
 
             <div v-if="isLoggedIn">
-              <button class="m-3 btn btn-success">Add review</button>
+              <button class="m-3 btn btn-success" data-bs-toggle="modal" data-bs-target="#add_review_model">Add review</button>
               <div v-if="isAdmin" class="d-inline">
               <button class="m-3 btn btn-warning">Create a loan</button>
               <button class="m-3 btn btn-primary">Edit book</button>
@@ -91,8 +149,13 @@
 
 <script>
 import axios from 'axios'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minValue} from '@vuelidate/validators'
 export default {
   name: 'book',
+      setup () {
+    return { v$: useVuelidate() }
+  },
   created() {
     this.getBook(),
     this.getReviews(),
@@ -107,13 +170,22 @@ export default {
       isLoggedIn: false,
       isAdmin: false,
       error: false,
-      modalText: '',
+      title: '',
+      body: ''
+    }
+  },
+  validations: {
+    title:{
+        required
+    },
+    body:{
+      required
     }
   },
   methods: {
     getBook() {
       axios
-        .get('http://localhost:3000/books/'+ this.$route.params.id + '?key='+import.meta.env.VITE_API_KEY)
+        .get('http://localhost:3000/books/'+ this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
           this.books = response.data
         })
@@ -174,6 +246,26 @@ export default {
         this.error = true
       })
     },
+    async createReview(submitEvent){
+      const formIsValid = await this.v$.$validate()
+      if(formIsValid){
+        let data = new FormData();
+          data.append("title", submitEvent.target.elements.title.value)
+          data.append("body", submitEvent.target.elements.body.value)
+          data.append("rating", submitEvent.target.elements.rating.value)
+          data.append("key", import.meta.env.VITE_API_KEY)
+          data.append("author", this.userId)
+          data.append("book", this.$route.params.id)
+        axios
+        .post('http://localhost:3000/reviews/', data)
+        .then((response) => {
+            this.$router.go()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+    }
   },
   computed: {
 

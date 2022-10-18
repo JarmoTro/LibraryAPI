@@ -6,43 +6,43 @@ const reviewSchema = require('../models/review');
 const utils = require('../utils/utils');
 const reviewDTO = require('../models/DTOs/reviewDTO');
 const { default: mongoose } = require('mongoose');
+const { checkAPIKey } = require('../utils/utils');
+const multer = require('multer')
 
-
+const upload = multer();
 
 
 router.post('/reviews', (req, res) => {
-    if(!req.body.key){
-        return res.status(401).send({error: 'Missing API key'});
-    }
-    else if(req.body.key != process.env.API_KEY){
-        return res.status(403).send({error: 'Invalid API key'});
-    }
-    else{
-        if(!req.body.title ||
-            !req.body.body ||
-            !req.body.rating ||
-            !req.body.book ||
-            !req.body.author){
-                return res.status(400).send({ error: 'One or all params are missing. Required params: title, body, bookId, authorId, rating' })
-            }
-            else{
-                bookSchema.findOne({_id: req.body.book}, function(err, book){
-                    if(book == null) return res.status(404).send({error:"Looks like we couldn't find the book you were looking for."})
-                    userSchema.findOne({_id: req.body.author}, function(err, user) {
-                        if(user == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
-                        let newReview = new reviewSchema({
-                            title: req.body.title,
-                            body: req.body.body,
-                            rating: req.body.rating,
-                            book: req.body.book,
-                            author: req.body.author
+    let getBody = upload.any();
+        getBody(req, res, function() {
+            if(checkAPIKey(req.body.key, res)){
+        
+                if(!req.body.title ||
+                    !req.body.body ||
+                    !req.body.rating ||
+                    !req.body.book ||
+                    !req.body.author){
+                        return res.status(400).send({ error: 'One or all params are missing. Required params: title, body, book, author, rating' })
+                    }
+                    else{
+                        bookSchema.findOne({_id: req.body.book}, function(err, book){
+                            if(book == null) return res.status(404).send({error:"Looks like we couldn't find the book you were looking for."})
+                            userSchema.findOne({_id: req.body.author}, function(err, user) {
+                                if(user == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
+                                let newReview = new reviewSchema({
+                                    title: req.body.title,
+                                    body: req.body.body,
+                                    rating: req.body.rating,
+                                    book: req.body.book,
+                                    author: req.body.author
+                                })
+                                newReview.save()
+                                return res.status(201).send('Review added!')
+                            })
                         })
-                        newReview.save()
-                        return res.status(201).send('Review added!')
-                    })
-                })
+                    }
             }
-    }
+        })
 })
 
 router.get('/reviews/book/:id', (req, res) => {
