@@ -8,6 +8,7 @@ const fs = require("fs");
 const bookDTO = require('../models/DTOs/bookDTO');
 const utils = require('../utils/utils');
 const { checkAPIKey } = require('../utils/utils');
+const { default: mongoose } = require('mongoose');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -160,31 +161,38 @@ router.post('/books', (req, res) => {
 
 })
 
-router.put('/books/:id', (req, res) => {
-    if (utils.checkAPIKey(req.query.key,res)) {
-        if(!req.params.id) return res.status(400).send({ error: 'Missing id parameter.' })
-        let upload = uploadBookCover.single('coverImg');
-            upload(req, res, function (err) {
-                if(err) return res.status(400).send({ error: 'Invalid parameter name for file upload. Valid parameters for files: coverImg' })
-                    bookSchema.findOneAndUpdate({ _id: req.params.id }, req.query, function (error, book) {
-                        if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
-                        if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                        if(!req.file && !req.query) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })}  
-                        if (req.file){
-                            fs.unlink(book.localImgPath, (err => {
-                                if (err) {
-                                    return res.status(500).send({ error: 'Looks like something went wrong :(' })
-                                }
-                            }))
-                            let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
-                            book.imgSource = imgSourceString
-                            book.localImgPath = req.file.path
-                            book.save();
-                        }
-                        if (book != null) return res.status(200).send('Book updated!')
-                    })                   
-            })
-    }
+router.put('/books', (req, res) => {
+    let uploadCover = upload.single('coverImg');
+    uploadCover(req, res, function(){
+        if (utils.checkAPIKey(req.body.key,res)) {
+            
+            if(!req.body.id) return res.status(400).send({ error: 'Missing id parameter.' })
+            console.log(typeof(req.body.id));
+            console.log(req.body.id);
+                        bookSchema.findOneAndUpdate({ _id: req.body.id}, req.body, function (error, book) {
+                            if (error){
+                                console.log(error);
+                                return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                            } 
+                            if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })
+                            
+                            if(!req.file && !req.body) {return res.status(400).send({ error: 'No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg).' })}  
+                            if (req.file){
+                                fs.unlink(book.localImgPath, (err => {
+                                    if (err) {
+                                        return res.status(500).send({ error: 'Looks like something went wrong :(' })
+                                    }
+                                }))
+                                let imgSourceString = (req.protocol + '://' + req.get('host') + '/' + req.file.path).replaceAll("\\", "/").replace('/data', "");
+                                book.imgSource = imgSourceString
+                                book.localImgPath = req.file.path
+                                book.save();
+                            }
+                            if (book != null) return res.status(200).send('Book updated!')
+                        })                   
+        }
+    })
+    
 })
 
 

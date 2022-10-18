@@ -62,7 +62,8 @@
         <div class="row">
           <div class="col text-center ">
             <img class="d-inline-block" style=" max-width: 50rem; max-height: 40rem; margin-bottom: 5; margin-left: 5; margin-right: 5;" v-bind:src=books.imgSource alt="">
-            <h1 class="m-3"> Reviews </h1>
+            <h1 v-if="reviews.length == 0" class="m-3"> This book has no reviews. </h1>
+            <h1 v-if="reviews.length > 0" class="m-3"> Reviews </h1>
             <div v-for="review in reviews">
 
   <div class="modal fade" v-bind:id="'_'+review._id" tabindex="-1">
@@ -155,7 +156,7 @@
               <button class="m-3 btn btn-success" data-bs-toggle="modal" data-bs-target="#add_review_model">Add review</button>
               <div v-if="isAdmin" class="d-inline">
               <button class="m-3 btn btn-warning">Create a loan</button>
-              <button class="m-3 btn btn-primary">Edit book</button>
+              <router-link :to="{ name: 'editBook', params: {id: books._id}}" ><button class="m-3 btn btn-primary">Edit book</button></router-link>
               <button class="m-3 btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >Delete book</button>
               </div>
             </div>

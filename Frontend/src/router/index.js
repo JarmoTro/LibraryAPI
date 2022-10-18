@@ -5,6 +5,7 @@ import auth from "../components/auth.vue"
 import welcome from "../components/welcome.vue"
 import createBook from "../components/createBook.vue"
 import userPage from "../components/userPage.vue"
+import editBook from "../components/editBook.vue"
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
   path: "/user/:id",
   name: "user",
   component: userPage,
+},
+{
+  path: "/editBook/:id",
+  name: "editBook",
+  component: editBook,
 }
 ];
 
