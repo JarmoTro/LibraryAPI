@@ -234,7 +234,7 @@ export default {
       axios
         .get('http://localhost:3000/reviews/book/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-          this.reviews = response.data
+          this.reviews = response.data.reverse()
         })
         .catch((error) => {
           this.errorMsg = 'Error retrieving data'
