@@ -6,6 +6,8 @@ const userSchema = require('../models/user');
 const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
 const { default: mongoose } = require('mongoose');
+const multer = require("multer");
+const upload = multer();
 
 
 router.get('/loans', (req, res) => {
@@ -50,35 +52,37 @@ router.get('/loans/:id', (req, res) => {
 
 
 router.post('/loans', (req, res) => {
-    if (utils.checkAPIKey(req.body.key,res)) {
-        if (!req.body.loanStart ||
-            !req.body.loanEnd ||
-            !req.body.user ||
-            !req.body.book ) {
-            return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, user, book' })
-        }
-        else{
-            userSchema.findOne({_id: req.body.user}, function (error, user){
-                if(user == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-                if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                bookSchema.findOne({_id: req.body.book}, function(error, book){
-                    if(book == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+    const getBody = upload.any();
+    getBody(req, res, function(){
+        if (utils.checkAPIKey(req.body.key,res)) {
+            if (!req.body.loanStart ||
+                !req.body.loanEnd ||
+                !req.body.user ||
+                !req.body.book ) {
+                return res.status(400).send({ error: 'One or all params are missing. Required params: loanStart, loanEnd, user, book' })
+            }
+            else{
+                userSchema.findOne({username: req.body.user}, function (error, user){
+                    if(user == null) return res.status(404).send({error:"Looks like we couldn't find the user you were looking for."})
                     if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                    let newLoan = new loanSchema({
-                        loanStart: req.body.loanStart,
-                        loanEnd: req.body.loanEnd,
-                        user: req.body.user,
-                        book: req.body.book
-                    });
-                    newLoan.save();
-                    book.stock--;
-                    book.save();
-                    return res.status(201).send('Loan added!')
-                })
-            })  
+                    bookSchema.findOne({_id: req.body.book}, function(error, book){
+                        if(book == null) return res.status(404).send({error:"Looks like we couldn't find the book you were looking for."})
+                        if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                        let newLoan = new loanSchema({
+                            loanStart: req.body.loanStart,
+                            loanEnd: req.body.loanEnd,
+                            user: user._id,
+                            book: req.body.book
+                        });
+                        newLoan.save();
+                        book.stock--;
+                        book.save();
+                        return res.status(201).send('Loan added!')
+                    })
+                })  
+            }
         }
-    }
-    
+    })
 })
 
 

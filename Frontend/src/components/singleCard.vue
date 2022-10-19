@@ -155,7 +155,9 @@
             <div v-if="isLoggedIn">
               <button class="m-3 btn btn-success" data-bs-toggle="modal" data-bs-target="#add_review_model">Add review</button>
               <div v-if="isAdmin" class="d-inline">
-              <button class="m-3 btn btn-warning">Create a loan</button>
+              <router-link v-if="books.stock>0" :to="{ name: 'createLoan', query: {id: books._id, title: books.title}}">
+                <button class="m-3 btn btn-warning">Create a loan</button>
+              </router-link>
               <router-link :to="{ name: 'editBook', params: {id: books._id}}" ><button class="m-3 btn btn-primary">Edit book</button></router-link>
               <button class="m-3 btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >Delete book</button>
               </div>

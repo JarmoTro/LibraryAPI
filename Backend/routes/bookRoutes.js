@@ -8,7 +8,7 @@ const fs = require("fs");
 const bookDTO = require('../models/DTOs/bookDTO');
 const utils = require('../utils/utils');
 const { checkAPIKey } = require('../utils/utils');
-const { default: mongoose } = require('mongoose');
+const mongoose  = require('mongoose');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

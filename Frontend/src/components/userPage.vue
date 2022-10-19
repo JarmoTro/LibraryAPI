@@ -89,7 +89,7 @@
         <h1 style="margin-bottom:2rem" v-if="loans.length == 0 && isAdmin == true"> This user has no loans </h1>  
         <div v-for="loan in loans">
         <router-link :to="{ name: 'book', params: {id: loan.book[0]._id}}" class="text-dark text-decoration-none"><h2 class="hoverBlue">{{loan.book[0].title}}</h2></router-link>
-        <h2> {{loan.loanStart}}-{{loan.loanEnd}} </h2>
+        <h2> {{loan.loanStart}} - {{loan.loanEnd}} </h2>
         <hr>
         </div>
         </div>
