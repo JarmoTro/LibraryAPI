@@ -3,7 +3,7 @@
 
 <div class="m-3 text-center row">
 
-<h1>Create a new loan for {{this.$route.query.title}}</h1>
+<h3>{{title}}</h3>
 
     <div :class="errorClass" role="alert" >
     {{errorMsg}}
@@ -13,7 +13,7 @@
 </div>
 
 <div class="col-7">
-    <form v-on:submit.prevent="createLoan">
+    <form v-on:submit.prevent="editLoan">
             <div class="input-group m-3">
   <span class="input-group-text" id="basic-addon1">Loan Start</span>
   <input type="date" name="loanStart" v-model="loanStart" class="form-control" placeholder="Loan Start">
@@ -36,19 +36,7 @@
                 </p>
 
 
-
-<div class="input-group m-3">
-  <span class="input-group-text" id="basic-addon1">User</span>
-  <input type="text" name="user" v-model="user" class="form-control" placeholder="User" aria-label="Username" aria-describedby="basic-addon1">
-</div>
-
-<p v-for="error of v$.$errors"
-                :key="error.$uid">
-                  <strong class="text-danger" v-if="error.$property == 'user'">{{ error.$message }}</strong>
-                </p>
-
-
-<button type="submit" class="btn btn-primary">CREATE</button>
+<button type="submit" class="btn btn-primary">UPDATE</button>
 
     </form>
 </div>
@@ -69,13 +57,14 @@ export default {
     return { v$: useVuelidate() }
   },
   created() {
-    this.getCurrentUser()
+    this.getCurrentUser(),
+    this.getLoan()
   },
   data() {
     return {
       loanStart: '',
       loanEnd: '',
-      user: '',
+      title: '',
       errorMsg: '',
       errorClass: 'alert alert-danger d-none'
     }
@@ -85,9 +74,6 @@ export default {
         required
     },
     loanEnd:{
-        required
-    },
-    user:{
         required
     },
   },
@@ -111,29 +97,42 @@ export default {
           console.log(error)
         })
     },
-    async createLoan(submitEvent){
+    getLoan(){
+        axios
+        .get('http://localhost:3000/loans/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY,{
+        })
+        .then((response) => {
+            this.loanStart = response.data[0].loanStart;
+            this.loanEnd = response.data[0].loanEnd;
+            this.title = "Editing the loan belonging to "+response.data[0].aggregatedUser.username+' who is loaning the book "'+response.data[0].aggregatedBook.title+'" ';
+        })
+        .catch((error) => { 
+            console.log(error);
+          this.errorMsg = error.response.data.error
+          this.errorClass = 'alert alert-danger'
+        })
+    },
+    async editLoan(submitEvent){
         const result = await this.v$.$validate()
         if(result){
             let data = new FormData();
-            data.append('book', this.$route.query.id);
-            data.append('user',submitEvent.target.elements.user.value)
+            data.append('id', this.$route.params.id)
             data.append('key', import.meta.env.VITE_API_KEY)
             data.append("loanEnd",Math.floor(new Date(submitEvent.target.elements.loanEnd.value).getTime()))
             data.append("loanStart",Math.floor(new Date(submitEvent.target.elements.loanStart.value).getTime()))
 
-    
             axios
-            .post('http://localhost:3000/loans/',data)
+            .put('http://localhost:3000/loans/',data)
             .then((response) => {
-              this.$router.push('/')
+              this.$router.push('/adminpanel')
             })
             .catch((error) => {
-            this.errorMsg = error.response.data.error
-            this.errorClass = 'alert alert-danger'
+                this.errorMsg = error.response.data.error
+                this.errorClass = 'alert alert-danger'
             }) 
         }
 
-    }
+    },
   },
   computed: {
 

@@ -13,8 +13,22 @@ const upload = multer();
 router.get('/loans', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.aggregate([
-            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
-        ]).exec(function(error, loans){
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"aggregatedBook"}},
+            {
+                $unwind: "$aggregatedBook"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "aggregatedUser"
+                }
+            },
+            {
+                $unwind: "$aggregatedUser"
+            }
+        ]).sort({loanEnd: 1}).exec(function(error, loans){
 
             if (error) res.status(500).send('Looks like something went wrong :(')
     
@@ -28,7 +42,21 @@ router.get('/loans/user/:id', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.aggregate([
             {$match: {user: mongoose.Types.ObjectId(req.params.id)}},
-            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"aggregatedBook"}},
+            {
+                $unwind: "$aggregatedBook"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "aggregatedUser"
+                }
+            },
+            {
+                $unwind: "$aggregatedUser"
+            }
         ]).exec(function(error, loans){
             if(loans == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -41,7 +69,21 @@ router.get('/loans/:id', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
         loanSchema.aggregate([
             {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
-            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"book"}}
+            {$lookup: {from: "books", localField: "book", foreignField:"_id", as:"aggregatedBook"}},
+            {
+                $unwind: "$aggregatedBook"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "aggregatedUser"
+                }
+            },
+            {
+                $unwind: "$aggregatedUser"
+            }
         ]).exec(function(error, loan){
             if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(error) return res.status(500).send({error:'Looks like something went wrong :('})
@@ -86,41 +128,32 @@ router.post('/loans', (req, res) => {
 })
 
 
-router.put('/loans/:id', (req, res) => {
-    if (utils.checkAPIKey(req.query.key,res)) {
-        if (!req.query.loanStart &&
-            !req.query.loanEnd ) {
-            return res.status(400).send({ error: 'No params given. Valid params: loanStart, loanEnd' })
-        }
-        else{
-            if(req.query.loanEnd && !req.query.loanStart){
-                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanEnd: req.query.loanEnd}, function(error, loan){
-                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                    if(loan != null) return res.status(200).send('Loan updated!')
-                }) 
+router.put('/loans/', (req, res) => {
+    const getBody = upload.any();
+    getBody(req, res, function(){
+        if (utils.checkAPIKey(req.body.key,res)) {
+            if (!req.body.loanStart &&
+                !req.body.loanEnd ) {
+                return res.status(400).send({ error: 'No params given. Valid params: loanStart, loanEnd' })
             }
-            if(req.query.loanStart && !req.query.loanEnd){
-                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanStart: req.query.loanStart}, function(error, loan){
-                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                    if(loan != null) return res.status(200).send('Loan updated!')
-                }) 
-            }
-            if(req.query.loanStart && req.query.loanEnd){
-                loanSchema.findOneAndUpdate({_id: req.params.id}, {loanEnd: req.query.loanEnd, loanStart: req.query.loanStart}, function(error, loan){
-                    if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
-                    if(error) return res.status(500).send({error:'Looks like something went wrong :('})
-                    if(loan != null) return res.status(200).send('Loan updated!')
-                }) 
+            else{
+
+                // TODO: check id parseability
+                    loanSchema.findOneAndUpdate({_id: req.body.id}, req.body, function(error, loan){
+                        if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
+                        if(error) return res.status(500).send({error:'Looks like something went wrong :('})
+                        if(loan != null) return res.status(200).send('Loan updated!')
+                    }) 
             }
         }
-    }
+
+    })
+
 })
 
-router.delete('/loans/:id', (req, res) => {
+router.delete('/loans/', (req, res) => {
     if (utils.checkAPIKey(req.query.key,res)) {
-        loanSchema.findOneAndDelete({_id: req.params.id}, function(err, response){
+        loanSchema.findOneAndDelete({_id: req.query.id}, function(err, response){
             if(response == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
             if(err) res.status(500).send({error:'Looks like something went wrong :('})
             bookSchema.findOne({_id: response.book}, function(err, book){

@@ -199,7 +199,6 @@ export default {
           if (!response.data.admin) {
               this.$router.push('/login') 
           }
-          console.log(response);
         })
         .catch((error) => {
           this.$router.push('/login') 
@@ -230,7 +229,7 @@ export default {
             data.append("stock",submitEvent.target.elements.stock.value)
             data.append("publicationDate",Math.floor(new Date(submitEvent.target.elements.date.value).getTime()))
             data.append("description",submitEvent.target.elements.description.value)
-            data.append("genre",submitEvent.target.elements.description.value)
+            data.append("genre",submitEvent.target.elements.genre.value)
 
     
             axios

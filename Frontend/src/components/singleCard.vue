@@ -258,7 +258,6 @@ export default {
           if (response.data.admin) {
             this.isAdmin = true
           }
-          console.log(response);
         })
         .catch((error) => {
           console.log(error)

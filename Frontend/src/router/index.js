@@ -7,6 +7,8 @@ import createBook from "../components/createBook.vue"
 import userPage from "../components/userPage.vue"
 import editBook from "../components/editBook.vue"
 import createLoan from "../components/createLoan.vue"
+import adminpanel from "../components/adminPanel.vue"
+import editLoan from "../components/editLoan.vue"
 
 const routes = [
   {
@@ -63,6 +65,16 @@ const routes = [
   path: "/createLoan/",
   name: "createLoan",
   component: createLoan,
+},
+{
+  path: "/adminpanel/",
+  name: "adminpanel",
+  component: adminpanel,
+},
+{
+  path: "/editLoan/:id",
+  name: "editLoan",
+  component: editLoan,
 }
 ];
 

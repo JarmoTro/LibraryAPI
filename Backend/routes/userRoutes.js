@@ -5,6 +5,10 @@ const utils = require('../utils/utils')
 const userDTO = require('../models/DTOs/userDTO');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const res = require('express/lib/response');
+const multer = require('multer')
+
+const upload = multer();
 
 router.post('/register', async (req, res) => {
     if (utils.checkAPIKey(req.body.key,res)) {
@@ -118,6 +122,19 @@ router.get('/users/:id', (req, res) => {
             if (user != null) return res.send(userDTO(user));
         })
     }
+})
+
+router.put('/users/',(req,res) => {
+  let getBody = upload.any();
+  getBody(req, res, function() {
+  if (utils.checkAPIKey(req.body.key,res)) {
+    userSchema.findOneAndUpdate({ username: req.body.username }, req.body, function (error, user) {
+        if (user == null) return res.status(404).send({ error: "Looks like we couldn't the user you were looking for." })
+        if (error) return res.status(500).send({ error: 'Looks like something went wrong :(' })
+        if (user != null) return res.status(200).send('User updated!')
+    })
+}
+})
 })
 
 

@@ -13,9 +13,20 @@
               </router-link>
           </form>
           <form class="d-flex">
-            <router-link v-if="isLoggedIn == true && isAdmin == true" :to="{name: 'createBook'}">
+        <div v-if="isAdmin == true" class="dropdown me-3">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Admin
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><router-link class="dropdown-item" :to="{name: 'createBook'}">Create book</router-link></li>
+            <li><router-link class="dropdown-item" :to="{name: 'adminpanel'}">Admin panel</router-link></li>
+          </ul>
+        </div>
+
+            <!--<router-link v-if="isLoggedIn == true && isAdmin == true" :to="{name: 'createBook'}">
             <button  class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-plus fa-2x"></i></button>
-            </router-link>
+            </router-link>-->
             <router-link v-if="isLoggedIn == true" :to="{name: 'user',params: {id: userId}}">
             <button class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-user fa-2x"></i></button>
             </router-link>

@@ -88,7 +88,7 @@
         <h1 style="margin-bottom:2rem" v-if="loans.length > 0"> Loans </h1>
         <h1 style="margin-bottom:2rem" v-if="loans.length == 0 && isAdmin == true"> This user has no loans </h1>  
         <div v-for="loan in loans">
-        <router-link :to="{ name: 'book', params: {id: loan.book[0]._id}}" class="text-dark text-decoration-none"><h2 class="hoverBlue">{{loan.book[0].title}}</h2></router-link>
+        <router-link :to="{ name: 'book', params: {id: loan.aggregatedBook._id}}" class="text-dark text-decoration-none"><h2 class="hoverBlue">{{loan.aggregatedBook.title}}</h2></router-link>
         <h2> {{loan.loanStart}} - {{loan.loanEnd}} </h2>
         <hr>
         </div>
@@ -148,7 +148,6 @@ export default {
       axios
         .get('http://localhost:3000/reviews/author/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-        console.log(response);
           this.reviews = response.data
         })
         .catch((error) => {
@@ -159,7 +158,6 @@ export default {
       axios
         .get('http://localhost:3000/loans/user/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-        console.log(response);
           this.loans = response.data
         })
         .catch((error) => {
@@ -181,7 +179,6 @@ export default {
           if (response.data.admin) {
             this.isAdmin = true
           }
-          console.log(response);
         })
         .catch((error) => {
           console.log(error)
@@ -191,7 +188,6 @@ export default {
         axios
         .get('http://localhost:3000/users/'+this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-            console.log(response);
             this.username = response.data.username
         })
         .catch((error) => {

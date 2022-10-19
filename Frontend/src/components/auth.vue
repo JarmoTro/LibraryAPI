@@ -125,10 +125,8 @@ export default {
         })
         .then((response) => {
               this.$router.push('/user/'+response.data._id) 
-          console.log(response);
         })
         .catch((error) => {
-          this.$router.push('/login') 
           console.log(error)
         })
     },

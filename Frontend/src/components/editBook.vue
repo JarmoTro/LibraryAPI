@@ -200,7 +200,6 @@ export default {
           if (!response.data.admin) {
               this.$router.push('/login') 
           }
-          console.log(response);
         })
         .catch((error) => {
           this.$router.push('/login') 
@@ -211,7 +210,6 @@ export default {
       axios
         .get('http://localhost:3000/books/'+ this.$route.params.id+'?key='+import.meta.env.VITE_API_KEY)
         .then((response) => {
-            console.log(response.data.publicationDate);
           this.title = response.data.title
           this.author = response.data.author
           this.genre = response.data.genre
@@ -258,7 +256,7 @@ export default {
             axios
             .put('http://localhost:3000/books/',data)
             .then((response) => {
-            console.log(response);
+            
             this.$router.push('/')
             })
             .catch((error) => {
