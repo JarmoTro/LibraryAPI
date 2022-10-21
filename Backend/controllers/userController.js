@@ -142,7 +142,7 @@ exports.updateUser = (req, res) => {
         function (error, user) {
           if (user == null)
             return res.status(404).send({
-              error: "Looks like we couldn't the user you were looking for.",
+              error: "Looks like we couldn't find the user you were looking for.",
             });
           if (error)
             return res

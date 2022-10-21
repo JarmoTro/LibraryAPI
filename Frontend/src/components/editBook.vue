@@ -172,7 +172,7 @@
           }}</strong>
         </p>
 
-        <button type="submit" class="btn btn-primary">CREATE</button>
+        <button type="submit" class="btn btn-primary">UPDATE</button>
       </form>
     </div>
 
@@ -331,7 +331,7 @@ export default {
         axios
           .put("http://localhost:3000/books/", data)
           .then((response) => {
-            this.$router.push("/");
+            this.$router.push("/book/"+this.$route.params.id);
           })
           .catch((error) => {
             this.errorMsg = "Something went wrong";

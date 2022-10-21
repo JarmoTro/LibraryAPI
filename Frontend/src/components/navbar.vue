@@ -53,10 +53,6 @@
             </li>
           </ul>
         </div>
-
-        <!--<router-link v-if="isLoggedIn == true && isAdmin == true" :to="{name: 'createBook'}">
-            <button  class="btn btn-outline-dark" style="margin-right: 1rem;" type="submit"><i class="fa-solid fa-plus fa-2x"></i></button>
-            </router-link>-->
         <router-link
           v-if="isLoggedIn == true"
           :to="{ name: 'user', params: { id: userId } }"

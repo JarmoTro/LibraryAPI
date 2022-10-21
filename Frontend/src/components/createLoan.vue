@@ -149,7 +149,7 @@ export default {
         axios
           .post("http://localhost:3000/loans/", data)
           .then((response) => {
-            this.$router.push("/");
+            this.$router.push("/book/"+this.$route.query.id);
           })
           .catch((error) => {
             this.errorMsg = error.response.data.error;
