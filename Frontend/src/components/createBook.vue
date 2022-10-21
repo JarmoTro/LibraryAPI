@@ -202,7 +202,6 @@ export default {
         })
         .catch((error) => {
           this.$router.push('/login') 
-          console.log(error)
         })
     },
     async createBook(submitEvent){

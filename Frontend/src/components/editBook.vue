@@ -203,7 +203,7 @@ export default {
         })
         .catch((error) => {
           this.$router.push('/login') 
-          console.log(error)
+
         })
     },
     getBook() {
@@ -261,7 +261,6 @@ export default {
             })
             .catch((error) => {
             this.errorMsg = 'Something went wrong'
-            console.log(error);
             this.errorClass = 'alert alert-danger'
             }) 
         }

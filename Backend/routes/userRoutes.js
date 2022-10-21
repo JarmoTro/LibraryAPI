@@ -68,7 +68,6 @@ router.post('/login' , async (req, res)  => {
             process.env.SECRET,
             { expiresIn: "1h" }
           );
-          console.log(token);
         } catch (err) {
             return res.status(500).send({ error: 'Looks like something went wrong :(' })
         }

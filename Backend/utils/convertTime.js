@@ -1,6 +1,5 @@
 module.exports={
       convertTime: function(unixTime){
-        console.log("unix: "+unixTime);
           var date = new Date(unixTime)
           var month = date.getMonth()+1
 
@@ -18,8 +17,6 @@ module.exports={
           else{
             formattedDate += "0"+date.getDate()
           }
-          console.log("date: "+date)
-          console.log("res: "+formattedDate);
           return formattedDate
       }
 }

@@ -260,7 +260,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
         })
     },
     deleteBook(){
@@ -270,7 +269,6 @@ export default {
         this.$router.push('/') 
       })
       .catch((error) => {
-        console.log(error);
         this.error = true
       })
     },
@@ -281,7 +279,7 @@ export default {
         this.$router.go() 
       })
       .catch((error) => {
-        console.log(error);
+  
         this.error = true
       })
     },
@@ -302,7 +300,6 @@ export default {
             this.$router.go()
         })
         .catch((error) => {
-          console.log(error)
         })
       }
     },
@@ -322,7 +319,7 @@ export default {
           this.$router.go()
         })
         .catch((error) => {
-          console.log(error)
+
         })
       }
     }

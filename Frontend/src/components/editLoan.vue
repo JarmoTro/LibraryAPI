@@ -94,7 +94,6 @@ export default {
         })
         .catch((error) => {
           this.$router.push('/login') 
-          console.log(error)
         })
     },
     getLoan(){
@@ -107,7 +106,6 @@ export default {
             this.title = "Editing the loan belonging to "+response.data[0].aggregatedUser.username+' who is loaning the book "'+response.data[0].aggregatedBook.title+'" ';
         })
         .catch((error) => { 
-            console.log(error);
           this.errorMsg = error.response.data.error
           this.errorClass = 'alert alert-danger'
         })

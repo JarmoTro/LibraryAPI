@@ -117,7 +117,6 @@ router.post('/books', (req, res) => {
 
     let uploadCover = upload.single('coverImg');
             uploadCover(req, res, function (err) {
-                console.log(req.body);
                 if(checkAPIKey(req.body.key, res)){
                     if (err) {
                         utils.deleteBookCover(req.file.path);
@@ -167,11 +166,8 @@ router.put('/books', (req, res) => {
         if (utils.checkAPIKey(req.body.key,res)) {
             
             if(!req.body.id) return res.status(400).send({ error: 'Missing id parameter.' })
-            console.log(typeof(req.body.id));
-            console.log(req.body.id);
                         bookSchema.findOneAndUpdate({ _id: req.body.id}, req.body, function (error, book) {
                             if (error){
-                                console.log(error);
                                 return res.status(500).send({ error: 'Looks like something went wrong :(' })
                             } 
                             if (book == null) return res.status(404).send({ error: "Looks like we couldn't find what you were looking for." })

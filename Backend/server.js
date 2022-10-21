@@ -50,15 +50,6 @@ const upload = multer({
 });
 
 
-app.post('/stats',  function (req, res) {
-  console.log(req.file)
-  console.log(req.body)
-  let uploadCover = upload.single('coverImg')
-  uploadCover(req, res, function(err){
-  })
-
-});
-
 
 app.use(bookRoutes);
 app.use(loanRoutes);

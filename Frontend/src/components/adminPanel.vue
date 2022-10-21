@@ -160,7 +160,6 @@ export default {
         })
         .catch((error) => {
           this.$router.push("/login");
-          console.log(error);
         });
     },
     async makeUserAdmin(submitEvent) {
@@ -190,7 +189,6 @@ export default {
           this.loans = response.data;
         })
         .catch((error) => {
-          console.log(error);
         });
     },
     deleteLoan(id){
@@ -201,7 +199,6 @@ export default {
         
       })
       .catch((error) => {
-        console.log(error);
         this.error = true
       })
     }

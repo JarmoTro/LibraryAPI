@@ -181,7 +181,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
         })
     },
     getUser(){
@@ -191,7 +190,6 @@ export default {
             this.username = response.data.username
         })
         .catch((error) => {
-            console.log(error);
         })
     },
     deleteReview(id){
@@ -202,7 +200,6 @@ export default {
         
       })
       .catch((error) => {
-        console.log(error);
         this.error = true
       })
     },
@@ -222,7 +219,6 @@ export default {
           this.$router.go()
         })
         .catch((error) => {
-          console.log(error)
         })
       }
     }

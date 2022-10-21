@@ -127,7 +127,6 @@ export default {
               this.$router.push('/user/'+response.data._id) 
         })
         .catch((error) => {
-          console.log(error)
         })
     },
     async register(submitEvent){
@@ -146,7 +145,6 @@ export default {
           this.$router.push('/welcome') 
         })
         .catch((error) => {
-          console.log(error);
           this.errorMsg='Username is already taken'
           this.errorClass='alert alert-danger'
         })
