@@ -56,7 +56,9 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  Are you sure you want to delete the loan belonging to {{loan.aggregatedUser.username}} who is loaning the book {{loan.aggregatedBook.title}}
+                  Are you sure you want to delete the loan belonging to
+                  {{ loan.aggregatedUser.username }} who is loaning the book
+                  {{ loan.aggregatedBook.title }}
                 </div>
                 <div class="modal-footer">
                   <button
@@ -79,7 +81,9 @@
             </div>
           </div>
 
-          <router-link class="text-dark text-decoration-none d-inline" :to="{name: 'editLoan', params: {id: loan._id}}"
+          <router-link
+            class="text-dark text-decoration-none d-inline"
+            :to="{ name: 'editLoan', params: { id: loan._id } }"
             ><i
               class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"
             ></i>
@@ -89,7 +93,7 @@
             style="margin-left: 1rem"
             :to="{}"
             data-bs-toggle="modal"
-            v-bind:data-bs-target="'#_'+loan._id"
+            v-bind:data-bs-target="'#_' + loan._id"
             ><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i>
           </router-link>
         </div>
@@ -163,8 +167,8 @@ export default {
         });
     },
     async makeUserAdmin(submitEvent) {
-      const result = await this.v$.$validate();
-      if (result) {
+      const isFormValid = await this.v$.$validate();
+      if (isFormValid) {
         let data = new FormData();
         data.append("username", submitEvent.target.elements.username.value);
         data.append("key", import.meta.env.VITE_API_KEY);
@@ -188,20 +192,23 @@ export default {
         .then((response) => {
           this.loans = response.data;
         })
+        .catch((error) => {});
+    },
+    deleteLoan(id) {
+      axios
+        .delete(
+          "http://localhost:3000/loans/?key=" +
+            import.meta.env.VITE_API_KEY +
+            "&id=" +
+            id
+        )
+        .then((response) => {
+          this.$router.go("/adminpanel");
+        })
         .catch((error) => {
+          this.error = true;
         });
     },
-    deleteLoan(id){
-      axios
-      .delete('http://localhost:3000/loans/?key='+import.meta.env.VITE_API_KEY+'&id='+id)
-      .then((response) => {
-        this.$router.go('/adminpanel') 
-        
-      })
-      .catch((error) => {
-        this.error = true
-      })
-    }
   },
   computed: {
     formattedLoans() {
