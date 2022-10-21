@@ -128,7 +128,7 @@
             <h1 v-if="reviews.length == 0" class="m-3">
               This book has no reviews.
             </h1>
-            <h1 v-if="reviews.length > 0" class="m-3">Reviews</h1>
+            <h2 v-if="reviews.length > 0" class="m-3">Reviews</h2>
             <div v-for="review in reviews">
               <div
                 class="modal fade"
@@ -277,37 +277,17 @@
               </div>
 
               <h2
-                v-if="userId == review.user._id && !isAdmin"
-                class="d-inline"
-                style="margin-left: 4rem"
-              >
-                {{ review.title }}
-              </h2>
-              <h2 v-if="userId != review.user._id && !isAdmin" class="d-inline">
-                {{ review.title }}
-              </h2>
-              <h2
-                v-if="userId == review.user._id && isAdmin"
-                class="d-inline"
-                style="margin-left: 4rem"
-              >
-                {{ review.title }}
-              </h2>
-              <h2
-                v-if="isAdmin && userId != review.user._id"
-                class="d-inline"
-                style="margin-left: 2rem"
               >
                 {{ review.title }}
               </h2>
               <router-link
                 v-if="userId == review.user._id || isAdmin"
-                class="text-dark text-decoration-none float-end"
+                class="text-dark text-decoration-none"
                 style="margin-left: 1rem"
                 :to="{}"
                 data-bs-toggle="modal"
                 v-bind:data-bs-target="'#_' + review._id"
-                ><i class="fa-solid fa-trash d-inline fa-xl text-danger"></i>
+                ><i class="fa-solid fa-trash fa-xl text-danger"></i>
               </router-link>
               <router-link
                 @click="
@@ -321,7 +301,7 @@
                 data-bs-toggle="modal"
                 v-bind:data-bs-target="'#edit_' + review._id"
                 v-if="userId == review.user._id"
-                class="text-dark text-decoration-none float-end"
+                class="ms-3 text-dark text-decoration-none"
                 :to="{ name: 'login' }"
                 ><i
                   class="fa-solid fa-pen-to-square d-inline fa-xl text-primary"
@@ -343,7 +323,7 @@
             </div>
           </div>
           <div class="col">
-            <h2 class="m-3">{{ books.title }}</h2>
+            <h1 class="m-3">{{ books.title }}</h1>
             <h4 class="m-3">{{ books.author }}</h4>
             <h5 class="m-3">{{ books.description }}</h5>
             <h3 class="m-3">Additonal info</h3>

@@ -124,12 +124,11 @@ export default {
           .then((response) => {
             this.isLoggedIn = true;
             this.userId = response.data._id;
-            console.log(response);
             if (response.data.admin) {
               this.isAdmin = true;
             }
           })
-          .catch((error) => {console.log(error);});
+          .catch((error) => {});
       }
     },
     logout() {

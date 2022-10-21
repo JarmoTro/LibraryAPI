@@ -12,4 +12,6 @@ router.get("/users/:id", userController.getUserById);
 
 router.post("/register/", userController.register);
 
+router.put("/users/", userController.updateUser);
+
 module.exports = router;

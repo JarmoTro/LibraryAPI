@@ -3011,7 +3011,9 @@
                         }
                     },
                     "required": true
-                }
+                }, 
+                "summary": "Create a review"
+                
             }
         }
     }
