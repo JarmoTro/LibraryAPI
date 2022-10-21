@@ -279,18 +279,28 @@
                                     "Loan": {
                                         "value": [
                                             {
-                                                "_id": "63284a920e4f9ec5457bd08c",
-                                                "loanStart": 1669627070,
-                                                "loanEnd": 1670231870,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "user": "632849e813c575a0084104fa"
-                                            },
-                                            {
-                                                "_id": "63284ac00e4f9ec5457bd091",
-                                                "loanStart": 1670923070,
-                                                "loanEnd": 1673947070,
-                                                "book": "6328365f13c575a0084104ee",
-                                                "user": "632849e813c575a0084104fa"
+                                                "_id": "6352602a12e146a1d9c129f5",
+                                                "loanStart": "2022-10-11",
+                                                "loanEnd": "2022-10-03",
+                                                "book": "63525fb912e146a1d9c129a2",
+                                                "user": "63525f1e12e146a1d9c12982",
+                                                "aggregatedBook": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
+                                                "aggregatedUser": {
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin",
+                                                    "admin": true
+                                                }
                                             }
                                         ]
                                     }
@@ -359,8 +369,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "type": "array",
-                                "items": {}
+                                "type": "string"
                             },
                             "examples": {
                                 "Request body": {
@@ -469,6 +478,111 @@
             }
         },
         "/books/": {
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": "{\n    \"key\": \"api_key\",\n    \"stock\": 1,\n    \"ISBN\": \"123\",\n    \"length\": 1,\n    \"author\": \"John Doe\",\n    \"genre\": \"Horror\",\n    \"description\": \"Description\",\n    \"publicationDate\": \"unixTime\",\n    \"coverImg\": cover image file\n}"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "books"
+                ],
+                "responses": {
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    },
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Book updated": {
+                                        "value": "Book updated!"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Book not found": {
+                                        "value":{"error":"Looks like we couldn't find what you were looking for"} 
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                    
+                },
+                "summary": "Update a specific book"
+            },
             "get": {
                 "tags": [
                     "books"
@@ -575,150 +689,23 @@
                 "description": ""
             },
             "post": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": "{\n    \"key\": \"api_key\",\n    \"stock\": 1,\n    \"ISBN\": \"123\",\n    \"length\": 1,\n    \"author\": \"John Doe\",\n    \"genre\": \"Horror\",\n    \"description\": \"Description\",\n    \"publicationDate\": \"123314312\",\n    \"coverImg\": cover image file\n}"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "tags": [
                     "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "title": {
-                                "value": "The Lord of the Rings"
-                            }
-                        },
-                        "name": "title",
-                        "description": "Title for book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "length": {
-                                "value": "479"
-                            }
-                        },
-                        "name": "length",
-                        "description": "How many pages the book has",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "author": {
-                                "value": "John Ronald Reuel Tolkien"
-                            }
-                        },
-                        "name": "author",
-                        "description": "Name of the books author",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "stock": {
-                                "value": "6"
-                            }
-                        },
-                        "name": "stock",
-                        "description": "How many copies of the book are available",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "genre": {
-                                "value": "fantasy"
-                            }
-                        },
-                        "name": "Genre",
-                        "description": "The books genre",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "ISBN": {
-                                "value": "241231"
-                            }
-                        },
-                        "name": "ISBN",
-                        "description": "International Standard Book Number",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "publicationDate": {
-                                "value": "1954"
-                            }
-                        },
-                        "name": "publicationDate",
-                        "description": "Date when the book was published",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "coverImg": {
-                                "value": "data\\\\bookCovers\\\\coverImg-1663582767327coverImg-1663346892804bookcover.jpg\t"
-                            }
-                        },
-                        "name": "coverImg",
-                        "description": "Iamge of the books cover",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "description": {
-                                "value": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore."
-                            }
-                        },
-                        "name": "description",
-                        "description": "A short description about the book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "201": {
@@ -820,18 +807,14 @@
         },
         "/books/{id}": {
             "get": {
+                "requestBody": {},
                 "tags": [
                     "books"
                 ],
                 "parameters": [
                     {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
                         "name": "key",
-                        "description": "API key is needed to access the API",
+                        "description": "API key",
                         "schema": {
                             "type": "string"
                         },
@@ -938,271 +921,6 @@
                 },
                 "summary": "Get a specific book by its id",
                 "description": ""
-            },
-            "put": {
-                "tags": [
-                    "books"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "coverImg": {
-                                "value": "Image sent from a form"
-                            }
-                        },
-                        "name": "coverImg",
-                        "description": "Image of the books cover",
-                        "schema": {},
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "title": {
-                                "value": "The Lord of the Rings"
-                            }
-                        },
-                        "name": "title",
-                        "description": "Title for the book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "length": {
-                                "value": "479"
-                            }
-                        },
-                        "name": "length",
-                        "description": "How many pages the book has",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "publicationDate": {
-                                "value": "1663754795"
-                            }
-                        },
-                        "name": "publicationDate",
-                        "description": "Date when the book was published",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "stock": {
-                                "value": "6"
-                            }
-                        },
-                        "name": "stock",
-                        "description": "How many copies of the book are available",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "description": {
-                                "value": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore."
-                            }
-                        },
-                        "name": "description",
-                        "description": "A short description about the book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "ISBN": {
-                                "value": "241231"
-                            }
-                        },
-                        "name": "ISBN",
-                        "description": "International Standard Book Number",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "genre": {
-                                "value": "fantasy"
-                            }
-                        },
-                        "name": "genre",
-                        "description": "The books genre",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "author": {
-                                "value": "John Ronald Reuel Tolkien"
-                            }
-                        },
-                        "name": "author",
-                        "description": "Name of the books author",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "text/xml": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book": {
-                                        "value": "Book updated!"
-                                    }
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book updated!": {
-                                        "value": "Book updated!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing id parameter error": {
-                                        "value": {
-                                            "error": "Missing id parameter."
-                                        }
-                                    },
-                                    "Invalid parameter name for file upload error": {
-                                        "value": {
-                                            "error": "Invalid parameter name for file upload. Valid parameters for files: coverImg"
-                                        }
-                                    },
-                                    "No given params error": {
-                                        "value": {
-                                            "error": "No given params. Valid params: stock, ISBN, length, author, title, genre, description, publicationDate, coverImg (must be .jpeg, .png, .webp or .jpg)."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something was missing or invalid from query"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book was not found error": {
-                                        "value": {
-                                            "error": "Looks like we couldn't find what you were looking for."
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Book was not found"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Update a book"
             },
             "delete": {
                 "tags": [
@@ -1677,7 +1395,7 @@
                         "description": "API key is invalid"
                     }
                 },
-                "summary": "Get books where the given keyword partially matches the title, author or where it completely matches the ISBN"
+                "summary": "Get books where the given keyword partially matches the title, genre, author or where it completely matches the ISBN"
             },
             "parameters": [
                 {
@@ -1727,13 +1445,32 @@
                                 },
                                 "examples": {
                                     "Book": {
-                                        "value": {
-                                            "_id": "63284a920e4f9ec5457bd08c",
-                                            "loanStart": 1669627070,
-                                            "loanEnd": 1670231870,
-                                            "book": "63283f9913c575a0084104ee",
-                                            "user": "632849e813c575a0084104fa"
-                                        }
+                                        "value": [
+                                            {
+                                                "_id": "6352602a12e146a1d9c129f5",
+                                                "loanStart": "2022-10-11",
+                                                "loanEnd": "2022-10-03",
+                                                "book": "63525fb912e146a1d9c129a2",
+                                                "user": "63525f1e12e146a1d9c12982",
+                                                "aggregatedBook": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
+                                                "aggregatedUser": {
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin",
+                                                    "admin": true
+                                                }
+                                            }
+                                        ]
                                     }
                                 }
                             }
@@ -1813,79 +1550,27 @@
                 "description": ""
             },
             "put": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "key": "API_KEY",
+                                        "loanStart": "unixTime",
+                                        "loanEnd": "unixTime"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "tags": [
                     "loans"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "book": {
-                                "value": "63283f9913c575a0084104ee"
-                            }
-                        },
-                        "name": "book",
-                        "description": "Id of a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "user": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "user",
-                        "description": "Id of an user",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "loanStart": {
-                                "value": "1669627070"
-                            }
-                        },
-                        "name": "loanStart",
-                        "description": "Start of a loan in Unix time",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "loanEnd": {
-                                "value": "1670231870"
-                            }
-                        },
-                        "name": "loanEnd",
-                        "description": "End of a loan in Unix time",
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -1989,7 +1674,7 @@
                         "description": "Something went wrong with query"
                     }
                 },
-                "summary": "Update a specific lone"
+                "summary": "Update a specific loan"
             },
             "delete": {
                 "tags": [
@@ -2136,11 +1821,28 @@
                                     "loans": {
                                         "value": [
                                             {
-                                                "_id": "632852660faec33f2cf36f63",
-                                                "loanStart": 1669627070,
-                                                "loanEnd": 1670231870,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "user": "632849e813c575a0084104fa"
+                                                "_id": "6352602a12e146a1d9c129f5",
+                                                "loanStart": "2022-10-11",
+                                                "loanEnd": "2022-10-03",
+                                                "book": "63525fb912e146a1d9c129a2",
+                                                "user": "63525f1e12e146a1d9c12982",
+                                                "aggregatedBook": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
+                                                "aggregatedUser": {
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin",
+                                                    "admin": true
+                                                }
                                             }
                                         ]
                                     }
@@ -2270,16 +1972,27 @@
                                     "Review": {
                                         "value": [
                                             {
-                                                "_id": "6328614b761359e66be3f007",
-                                                "title": "test",
-                                                "body": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows: Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called \"air\"",
+                                                "_id": "63526768aea692719ecab0bc",
+                                                "title": "adf",
+                                                "author": "63525f1e12e146a1d9c12982",
+                                                "body": "dfaa",
+                                                "book": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
                                                 "rating": 1,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454,
+                                                "createdAt": "2022-10-21",
                                                 "user": {
-                                                    "_id": "6336be43ecf7712144bd55fa",
-                                                    "username": "Deven"
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin"
                                                 }
                                             }
                                         ]
@@ -2379,91 +2092,28 @@
                 "description": ""
             },
             "put": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "title": "review title",
+                                        "body": "review body",
+                                        "rating": "review rating",
+                                        "key": "API key"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "tags": [
                     "reviews"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "examples": {
-                            "book": {
-                                "value": "63283f9913c575a0084104ee"
-                            }
-                        },
-                        "name": "book",
-                        "description": "A id of a book",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "author": {
-                                "value": "632849e813c575a0084104fa"
-                            }
-                        },
-                        "name": "author",
-                        "description": "A id of a user",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "rating": {
-                                "value": "1"
-                            }
-                        },
-                        "name": "rating",
-                        "description": "The reviews rating",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    },
-                    {
-                        "examples": {
-                            "title": {
-                                "value": "this book is terrible!"
-                            }
-                        },
-                        "name": "title",
-                        "description": "The reviews title",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": false
-                    },
-                    {
-                        "examples": {
-                            "body": {
-                                "value": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called air"
-                            }
-                        },
-                        "name": "body",
-                        "description": "The reviews body",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query"
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -2697,22 +2347,28 @@
                                     "Reviews": {
                                         "value": [
                                             {
-                                                "_id": "6328614b761359e66be3f007",
-                                                "title": "test",
-                                                "body": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows: Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called \"air\"",
+                                                "_id": "63526768aea692719ecab0bc",
+                                                "title": "adf",
+                                                "author": "63525f1e12e146a1d9c12982",
+                                                "body": "dfaa",
+                                                "book": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
                                                 "rating": 1,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454
-                                            },
-                                            {
-                                                "_id": "632869769d0f2098cf6bd58b",
-                                                "title": "this book is the second coming of christ",
-                                                "body": "There was no ring on his finger. That was a good sign although far from proof that he was available. Still, it was much better than if he had been wearing a wedding ring on his hand. She glanced at his hand a bit more intently to see if there were any tan lines where a ring may have been, and he's simply taken it off. She couldn't detect any which was also a good sign and a relief. The next step would be to get access to his wallet to see if there were any family photos in it.",
-                                                "rating": 10,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663591492087
+                                                "createdAt": "2022-10-21",
+                                                "user": {
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin"
+                                                }
                                             }
                                         ]
                                     }
@@ -2856,29 +2512,27 @@
                                     "Reviews": {
                                         "value": [
                                             {
-                                                "_id": "6328614b761359e66be3f007",
-                                                "title": "test",
-                                                "body": "The missile knows where it is at all times. It knows this because it knows where it isn't, by subtracting where it is, from where it isn't, or where it isn't, from where it is, whichever is greater, it obtains a difference, or deviation. The guidance sub-system uses deviations to generate corrective commands to drive the missile from a position where it is, to a position where it isn't, and arriving at a position where it wasn't, it now is. Consequently, the position where it is, is now the position that it wasn't, and it follows that the position where it was, is now the position that it isn't. In the event of the position that it is in is not the position that it wasn't, the system has required a variation. The variation being the difference between where the missile is, and where it wasn't. If variation is considered to be a significant factor, it too, may be corrected by the GEA. However, the missile must also know where it was. The missile guidance computance scenario works as follows: Because a variation has modified some of the information the missile has obtained, it is not sure just where it is, however it is sure where it isn't, within reason, and it knows where it was. It now subracts where it should be, from where it wasn't, or vice versa. By differentiating this from the algebraic sum og where it shouldn't be, and where it was. It is able to obtain a deviation, and a variation, which is called \"air\"",
+                                                "_id": "63526768aea692719ecab0bc",
+                                                "title": "adf",
+                                                "author": "63525f1e12e146a1d9c12982",
+                                                "body": "dfaa",
+                                                "book": {
+                                                    "_id": "63525fb912e146a1d9c129a2",
+                                                    "title": "Title",
+                                                    "author": "Author",
+                                                    "imgSource": "http://localhost:3000/bookCovers/coverImg-1666342841693coverImg-1665742979810index.jpeg",
+                                                    "stock": 0,
+                                                    "description": "Description",
+                                                    "publicationDate": "2022-10-12",
+                                                    "genre": "Description",
+                                                    "ISBN": "ISBN",
+                                                    "length": 1
+                                                },
                                                 "rating": 1,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663589144454,
+                                                "createdAt": "2022-10-21",
                                                 "user": {
-                                                    "_id": "6336be43ecf7712144bd55fa",
-                                                    "username": "Deven"
-                                                }
-                                            },
-                                            {
-                                                "_id": "632869769d0f2098cf6bd58b",
-                                                "title": "this book is the second coming of christ",
-                                                "body": "There was no ring on his finger. That was a good sign although far from proof that he was available. Still, it was much better than if he had been wearing a wedding ring on his hand. She glanced at his hand a bit more intently to see if there were any tan lines where a ring may have been, and he's simply taken it off. She couldn't detect any which was also a good sign and a relief. The next step would be to get access to his wallet to see if there were any family photos in it.",
-                                                "rating": 10,
-                                                "book": "63283f9913c575a0084104ee",
-                                                "author": "63285d6a761359e66be3efe7",
-                                                "createdAt": 1663591492087,
-                                                "user": {
-                                                    "_id": "6336be43ecf7712144bd55fa",
-                                                    "username": "Deven"
+                                                    "_id": "63525f1e12e146a1d9c12982",
+                                                    "username": "admin"
                                                 }
                                             }
                                         ]
@@ -3094,7 +2748,7 @@
                         "description": "Something went wrong during the query"
                     }
                 },
-                "summary": "Get a list of all users",
+                "summary": "Get a single user",
                 "description": ""
             },
             "parameters": [
@@ -3332,6 +2986,32 @@
                     }
                 },
                 "summary": "Register a user"
+            }
+        },
+        "/reviews/": {
+            "post": { "tags": ["reviews"],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": {
+                                        "title": "review title",
+                                        "body": "review body",
+                                        "rating": "review rating",
+                                        "book": "bookId",
+                                        "author": "authorId",
+                                        "key": "API key"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                }
             }
         }
     }

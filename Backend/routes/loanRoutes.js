@@ -5,7 +5,7 @@ const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
-const { default: mongoose, mongo } = require('mongoose');
+const { default: mongoose} = require('mongoose');
 const multer = require("multer");
 const upload = multer();
 

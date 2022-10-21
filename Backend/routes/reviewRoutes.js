@@ -87,7 +87,23 @@ router.get('/reviews/:id', (req, res) => {
         else {
             reviewSchema.aggregate([
                 {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
-                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}}
+                {$lookup: {from: "users", localField: "author", foreignField:"_id", as:"user"}
+                
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "book",
+                    foreignField: "_id",
+                    as: "book"
+                }
+            },
+            {
+                $unwind: "$book"
+            }
             ]).exec(function(error, reviews){
                 if(reviews == null || reviews.length == 0) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                 if(error) return res.status(500).send({error:'Looks like something went wrong :('})
