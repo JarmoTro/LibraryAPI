@@ -5,7 +5,7 @@ const bookSchema = require('../models/book');
 const userSchema = require('../models/user');
 const utils = require('../utils/utils');
 const loanDTO = require('../models/DTOs/loanDTO')
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, mongo } = require('mongoose');
 const multer = require("multer");
 const upload = multer();
 
@@ -137,8 +137,12 @@ router.put('/loans/', (req, res) => {
                 return res.status(400).send({ error: 'No params given. Valid params: loanStart, loanEnd' })
             }
             else{
-
-                // TODO: check id parseability
+                    try{
+                        mongoose.Types.ObjectId(req.body.id)
+                    }
+                    catch{
+                        return res.status(400).send({error: 'Id must be parseable to a Mongo objectId.'})
+                    }
                     loanSchema.findOneAndUpdate({_id: req.body.id}, req.body, function(error, loan){
                         if(loan == null) return res.status(404).send({error:"Looks like we couldn't find what you were looking for."})
                         if(error) return res.status(500).send({error:'Looks like something went wrong :('})
