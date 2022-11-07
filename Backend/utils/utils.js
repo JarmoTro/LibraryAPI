@@ -57,7 +57,7 @@ module.exports = {
         stock: faker.random.numeric(),
         ISBN: faker.random.numeric(7),
         genre: faker.music.genre(),
-        imgSource: faker.image.imageUrl(),
+        imgSource: "http://localhost:3000/bookCovers/coverImg-1667829063953coverImg-1665742979810index.jpeg",
         description: faker.lorem.sentences(20),
         publicationDate: faker.date.future(),
       });

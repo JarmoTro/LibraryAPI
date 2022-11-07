@@ -116,8 +116,8 @@
             <img
               class="d-inline-block"
               style="
-                max-width: 50rem;
-                max-height: 40rem;
+                min-width: 30rem;
+                min-height: 30rem;
                 margin-bottom: 5;
                 margin-left: 5;
                 margin-right: 5;
@@ -324,11 +324,6 @@
           <div class="col">
             <h1 class="m-3">{{ books.title }}</h1>
             <div class="m-3">
-            <router-link
-              :to="{ name: 'author', params: { name: books.author } }"
-              class="text-decoration-none text-dark"
-              ><h4 class="card-text hoverBlue">{{ books.author }}</h4>
-            </router-link>
             </div>
             <div class="m-3">
               <h4 v-for="index in averageRating" class="d-inline">
