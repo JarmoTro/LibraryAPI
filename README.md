@@ -85,10 +85,11 @@ API_KEY="1ef0d86f-abe7-4350-b3a9-bf95a04ca0ea"
 SECRET="WALLMART"
 ```
 
-5. Change the API key in .env of the frontend folder. **Don't commit .env!**
+5. Change the API key and the backend url in .env of the frontend folder. **Don't commit .env!**
 
 ```
 VITE_API_KEY="1ef0d86f-abe7-4350-b3a9-bf95a04ca0ea"
+VITE_BACKEND_URL="http://localhost:3000/"
 ```
 
 6. Navigate to the Backend folder and run "npm start" in your CLI to launch the API

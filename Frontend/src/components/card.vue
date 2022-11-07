@@ -65,7 +65,7 @@ export default {
   methods: {
     getBooks() {
       axios
-        .get("http://localhost:3000/books/?key=" + import.meta.env.VITE_API_KEY)
+        .get(import.meta.env.VITE_BACKEND_URL +"books/?key=" + import.meta.env.VITE_API_KEY)
         .then((response) => {
           this.books = response.data;
         })
@@ -76,7 +76,7 @@ export default {
     getBooksByKeyword(keyword) {
       axios
         .get(
-          "http://localhost:3000/books/search/" +
+          import.meta.env.VITE_BACKEND_URL +"books/search/" +
             keyword +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -94,7 +94,7 @@ export default {
     getAuthorBooks(author) {
       axios
         .get(
-          "http://localhost:3000/books/author/" +
+          import.meta.env.VITE_BACKEND_URL +"books/author/" +
             author +
             "?key=" +
             import.meta.env.VITE_API_KEY

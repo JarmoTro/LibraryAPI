@@ -276,8 +276,7 @@
                 </div>
               </div>
 
-              <h2
-              >
+              <h2>
                 {{ review.title }}
               </h2>
               <router-link
@@ -324,7 +323,18 @@
           </div>
           <div class="col">
             <h1 class="m-3">{{ books.title }}</h1>
-            <h4 class="m-3">{{ books.author }}</h4>
+            <div class="m-3">
+            <router-link
+              :to="{ name: 'author', params: { name: books.author } }"
+              class="text-decoration-none text-dark"
+              ><h4 class="card-text hoverBlue">{{ books.author }}</h4>
+            </router-link>
+            </div>
+            <div class="m-3">
+              <h4 v-for="index in averageRating" class="d-inline">
+                <i class="fa-solid fa-star fa-xl" style="color: #d4af37"></i>
+              </h4>
+            </div>
             <h5 class="m-3">{{ books.description }}</h5>
             <h3 class="m-3">Additonal info</h3>
             <div class="m-3">ISBN: {{ books.ISBN }}</div>
@@ -400,6 +410,7 @@ export default {
       editBody: "",
       editRating: "",
       editId: "",
+      averageRating: "",
     };
   },
   validations: {
@@ -426,7 +437,8 @@ export default {
     getBook() {
       axios
         .get(
-          "http://localhost:3000/books/" +
+          import.meta.env.VITE_BACKEND_URL +
+            "books/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -441,13 +453,20 @@ export default {
     getReviews() {
       axios
         .get(
-          "http://localhost:3000/reviews/book/" +
+          import.meta.env.VITE_BACKEND_URL +
+            "reviews/book/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
         )
         .then((response) => {
           this.reviews = response.data.reverse();
+          let ratings = [];
+          this.reviews.forEach((review) => {
+            ratings.push(review.rating);
+          });
+          this.averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
+          this.averageRating = Math.round(this.averageRating);
         })
         .catch((error) => {
           this.errorMsg = "Error retrieving data";
@@ -457,7 +476,8 @@ export default {
       let token = localStorage.getItem("token");
       await axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +
+            "users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -478,7 +498,8 @@ export default {
     deleteBook() {
       axios
         .delete(
-          "http://localhost:3000/books/" +
+          import.meta.env.VITE_BACKEND_URL +
+            "books/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -493,7 +514,8 @@ export default {
     deleteReview(id) {
       axios
         .delete(
-          "http://localhost:3000/reviews/" +
+          import.meta.env.VITE_BACKEND_URL +
+            "reviews/" +
             id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -517,7 +539,7 @@ export default {
         data.append("author", this.userId);
         data.append("book", this.$route.params.id);
         axios
-          .post("http://localhost:3000/reviews/", data)
+          .post(import.meta.env.VITE_BACKEND_URL + "reviews/", data)
           .then((response) => {
             this.$router.go();
           })
@@ -535,7 +557,7 @@ export default {
         data.append("key", import.meta.env.VITE_API_KEY);
         data.append("id", submitEvent.target.elements.editId.value);
         axios
-          .put("http://localhost:3000/reviews/", data)
+          .put(import.meta.env.VITE_BACKEND_URL + "reviews/", data)
           .then((response) => {
             this.$router.go();
           })

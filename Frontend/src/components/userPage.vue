@@ -295,7 +295,7 @@ export default {
     getReviews() {
       axios
         .get(
-          "http://localhost:3000/reviews/author/" +
+          import.meta.env.VITE_BACKEND_URL +"reviews/author/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -310,7 +310,7 @@ export default {
     getLoans() {
       axios
         .get(
-          "http://localhost:3000/loans/user/" +
+          import.meta.env.VITE_BACKEND_URL +"loans/user/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -326,7 +326,7 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -347,7 +347,7 @@ export default {
     getUser() {
       axios
         .get(
-          "http://localhost:3000/users/" +
+          import.meta.env.VITE_BACKEND_URL +"users/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -360,7 +360,7 @@ export default {
     deleteReview(id) {
       axios
         .delete(
-          "http://localhost:3000/reviews/" +
+          import.meta.env.VITE_BACKEND_URL +"reviews/" +
             id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -383,7 +383,7 @@ export default {
         data.append("key", import.meta.env.VITE_API_KEY);
         data.append("id", submitEvent.target.elements.editId.value);
         axios
-          .put("http://localhost:3000/reviews/", data)
+          .put(import.meta.env.VITE_BACKEND_URL +"reviews/", data)
           .then((response) => {
             this.$router.go();
           })

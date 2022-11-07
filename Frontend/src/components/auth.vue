@@ -175,7 +175,7 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -197,7 +197,7 @@ export default {
           submitEvent.target.elements.confirmPassword.value;
         if (passwordConfirm == password) {
           axios
-            .post("http://localhost:3000/register", {
+            .post(import.meta.env.VITE_BACKEND_URL +"register", {
               key: import.meta.env.VITE_API_KEY,
               username: submitEvent.target.elements.username.value,
               password: password,
@@ -219,7 +219,7 @@ export default {
       const isFormValid = await this.v$.$validate();
       if (isFormValid) {
         axios
-          .post("http://localhost:3000/login", {
+          .post(import.meta.env.VITE_BACKEND_URL +"login", {
             key: import.meta.env.VITE_API_KEY,
             username: submitEvent.target.elements.username.value,
             password: submitEvent.target.elements.password.value,

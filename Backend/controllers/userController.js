@@ -148,7 +148,13 @@ exports.updateUser = (req, res) => {
             return res
               .status(500)
               .send({ error: "Looks like something went wrong :(" });
-          if (user != null) return res.status(200).send("User updated!");
+          if (user != null)
+          if (user.admin) {
+            return res.status(400).send({ error: "User already an admin." })
+          }
+          else {
+            return res.status(200).send("User updated!");
+          }
         }
       );
     }

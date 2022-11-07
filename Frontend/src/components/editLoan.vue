@@ -86,7 +86,7 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -107,7 +107,7 @@ export default {
     getLoan() {
       axios
         .get(
-          "http://localhost:3000/loans/" +
+          import.meta.env.VITE_BACKEND_URL +"loans/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY,
@@ -148,7 +148,7 @@ export default {
         );
 
         axios
-          .put("http://localhost:3000/loans/", data)
+          .put(import.meta.env.VITE_BACKEND_URL +"loans/", data)
           .then((response) => {
             this.$router.push("/adminpanel");
           })

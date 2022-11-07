@@ -253,7 +253,7 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -274,7 +274,7 @@ export default {
     getBook() {
       axios
         .get(
-          "http://localhost:3000/books/" +
+          import.meta.env.VITE_BACKEND_URL +"books/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY
@@ -329,7 +329,7 @@ export default {
         data.append("genre", submitEvent.target.elements.description.value);
 
         axios
-          .put("http://localhost:3000/books/", data)
+          .put(import.meta.env.VITE_BACKEND_URL +"books/", data)
           .then((response) => {
             this.$router.push("/book/"+this.$route.params.id);
           })

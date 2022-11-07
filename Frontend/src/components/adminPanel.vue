@@ -148,7 +148,7 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          "http://localhost:3000/users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -175,7 +175,7 @@ export default {
         data.append("admin", true);
 
         axios
-          .put("http://localhost:3000/users/", data)
+          .put(import.meta.env.VITE_BACKEND_URL +"users/", data)
           .then((response) => {
             this.errorMsg = "Privileges granted!";
             this.errorClass = "alert alert-success";
@@ -188,7 +188,7 @@ export default {
     },
     getLoans() {
       axios
-        .get("http://localhost:3000/loans/?key=" + import.meta.env.VITE_API_KEY)
+        .get(import.meta.env.VITE_BACKEND_URL +"loans/?key=" + import.meta.env.VITE_API_KEY)
         .then((response) => {
           this.loans = response.data;
         })
@@ -197,7 +197,7 @@ export default {
     deleteLoan(id) {
       axios
         .delete(
-          "http://localhost:3000/loans/?key=" +
+          import.meta.env.VITE_BACKEND_URL +"loans/?key=" +
             import.meta.env.VITE_API_KEY +
             "&id=" +
             id

@@ -244,6 +244,132 @@
                 },
                 "summary": "Get a list of all users",
                 "description": ""
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "User update": {
+                                        "value": "User updated!"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User update request successful"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "User already admin": {
+                                        "value": {
+                                            "error": "User already an admin"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User already an admin"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "User not found": {
+                                        "value": {
+                                            "error": "Looks like we couldn't find the user you were looking for."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Update a user"
             }
         },
         "/loans/": {
@@ -478,111 +604,6 @@
             }
         },
         "/books/": {
-            "put": {
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "string"
-                            },
-                            "examples": {
-                                "Request body": {
-                                    "value": "{\n    \"key\": \"api_key\",\n    \"stock\": 1,\n    \"ISBN\": \"123\",\n    \"length\": 1,\n    \"author\": \"John Doe\",\n    \"genre\": \"Horror\",\n    \"description\": \"Description\",\n    \"publicationDate\": \"unixTime\",\n    \"coverImg\": cover image file\n}"
-                                }
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "tags": [
-                    "books"
-                ],
-                "responses": {
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    },
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book updated": {
-                                        "value": "Book updated!"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    },
-                    "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Book not found": {
-                                        "value":{"error":"Looks like we couldn't find what you were looking for"} 
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                    
-                },
-                "summary": "Update a specific book"
-            },
             "get": {
                 "tags": [
                     "books"
@@ -687,6 +708,24 @@
                 },
                 "summary": "Get a list of all books to lend",
                 "description": ""
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "Request body": {
+                                    "value": "{\n    \"key\": \"api_key\",\n    \"stock\": 1,\n    \"ISBN\": \"123\",\n    \"length\": 1,\n    \"author\": \"John Doe\",\n    \"genre\": \"Horror\",\n    \"description\": \"Description\",\n    \"publicationDate\": \"123314312\",\n    \"coverImg\": cover image file\n}"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "summary": "Delete a book"
             },
             "post": {
                 "requestBody": {
@@ -1395,7 +1434,7 @@
                         "description": "API key is invalid"
                     }
                 },
-                "summary": "Get books where the given keyword partially matches the title, genre, author or where it completely matches the ISBN"
+                "summary": "Get books where the given keyword partially matches the title, author or where it completely matches the ISBN"
             },
             "parameters": [
                 {
@@ -1560,8 +1599,8 @@
                                 "Request body": {
                                     "value": {
                                         "key": "API_KEY",
-                                        "loanStart": "unixTime",
-                                        "loanEnd": "unixTime"
+                                        "loanStart": 12342121,
+                                        "loanEnd": 213213321
                                     }
                                 }
                             }
@@ -1674,7 +1713,7 @@
                         "description": "Something went wrong with query"
                     }
                 },
-                "summary": "Update a specific loan"
+                "summary": "Update a specific lone"
             },
             "delete": {
                 "tags": [
@@ -2748,7 +2787,7 @@
                         "description": "Something went wrong during the query"
                     }
                 },
-                "summary": "Get a single user",
+                "summary": "Get a list of all users",
                 "description": ""
             },
             "parameters": [
@@ -2989,7 +3028,7 @@
             }
         },
         "/reviews/": {
-            "post": { "tags": ["reviews"],
+            "post": {
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -3011,9 +3050,7 @@
                         }
                     },
                     "required": true
-                }, 
-                "summary": "Create a review"
-                
+                }
             }
         }
     }
