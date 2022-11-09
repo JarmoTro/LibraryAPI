@@ -1,4 +1,6 @@
 <template>
+<h1 v-if="bookExists == false" class="text-center"> Error! Book does not exist </h1>
+<div v-if="bookExists == true">
   <div
     class="modal fade"
     id="exampleModal"
@@ -378,6 +380,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -408,6 +411,7 @@ export default {
       editRating: "",
       editId: "",
       averageRating: "",
+      bookExists: true,
     };
   },
   validations: {
@@ -444,6 +448,7 @@ export default {
           this.books = response.data;
         })
         .catch((error) => {
+          this.bookExists = false
           this.errorMsg = "Error retrieving data";
         });
     },
