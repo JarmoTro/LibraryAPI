@@ -326,7 +326,7 @@ export default {
           "description",
           submitEvent.target.elements.description.value
         );
-        data.append("genre", submitEvent.target.elements.description.value);
+        data.append("genre", submitEvent.target.elements.genre.value);
 
         axios
           .put(import.meta.env.VITE_BACKEND_URL +"books/", data)

@@ -323,8 +323,7 @@
           </div>
           <div class="col">
             <h1 class="m-3">{{ books.title }}</h1>
-            <div class="m-3">
-            </div>
+            <h3 class="m-3">{{ books.author }}</h3>
             <div class="m-3">
               <h4 v-for="index in averageRating" class="d-inline">
                 <i class="fa-solid fa-star fa-xl" style="color: #d4af37"></i>
@@ -354,11 +353,14 @@
                     query: { id: books._id, title: books.title },
                   }"
                 >
-                  <button class="m-3 btn btn-warning">Create a loan</button>
+                  <button class="m-3 btn btn-warning">
+                    Create a loan
+                  </button>
                 </router-link>
                 <router-link
-                  :to="{ name: 'editBook', params: { id: books._id } }"
-                  ><button class="m-3 btn btn-primary">
+                  :to="{ name: 'editBook', params: { test: books._id } }" 
+                  > <!-- Change test param back to id if stuff breaks again -->
+                  <button class="m-3 btn btn-primary">
                     Edit book
                   </button></router-link
                 >
