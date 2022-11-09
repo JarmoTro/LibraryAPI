@@ -92,16 +92,14 @@ VITE_API_KEY="1ef0d86f-abe7-4350-b3a9-bf95a04ca0ea"
 VITE_BACKEND_URL="http://localhost:3000/"
 ```
 
-6. Create data folder inside the Backend folder. Create a bookCovers folder inside the data folder.
-
-7. Navigate to the Backend folder and run "npm start" in your CLI to launch the API
+6. Navigate to the Backend folder and run "npm start" in your CLI to launch the API
 
 ```powershell
 cd Backend
 npm start
 ```
 
-8. Navigate to the Frontend folder and run "npm run dev" in your CLI to start the frontend
+7. Navigate to the Frontend folder and run "npm run dev" in your CLI to start the frontend
 ```powershell
 cd Frontend
 npm run dev
