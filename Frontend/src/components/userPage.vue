@@ -1,5 +1,7 @@
 <template>
   <div class="text-center">
+    <h1 v-if="userExists == false"> Error! user not found. </h1>
+    <div v-if="userExists == true">
     <h1>{{ username }}</h1>
     <h2 v-if="reviews.length == 0 && isAdmin == false">
       Looks like this user doesn't have any reviews :(
@@ -245,6 +247,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -275,6 +278,7 @@ export default {
       editBody: "",
       editRating: "",
       editId: "",
+      userExists: true,
     };
   },
   validations: {
@@ -355,7 +359,9 @@ export default {
         .then((response) => {
           this.username = response.data.username;
         })
-        .catch((error) => {});
+        .catch((error) => {
+          this.userExists = false
+        });
     },
     deleteReview(id) {
       axios

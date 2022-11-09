@@ -1,5 +1,5 @@
 <template>
-<h1 v-if="bookExists == false" class="text-center"> Error! Book does not exist </h1>
+<h1 v-if="bookExists == false" class="text-center"> Error! Book does not exist. </h1>
 <div v-if="bookExists == true">
   <div
     class="modal fade"
