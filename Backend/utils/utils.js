@@ -49,6 +49,12 @@ module.exports = {
       password: faker.word.verb(),
     });
     user.save();
+    const admin = new userSchema({
+      username: "admin",
+      password: "admin",
+      admin: "true"
+    });
+    admin.save();
     for (let i = 0; i < 5; i++) {
       const newBook = new bookSchema({
         title: faker.word.verb(),
@@ -77,7 +83,7 @@ module.exports = {
         const newReview = new reviewSchema({
           title: faker.word.verb(),
           body: faker.lorem.paragraph(),
-          rating: faker.random.numeric(1),
+          rating: faker.datatype.number(5),
           author: mongoose.Types.ObjectId(user._id),
           book: newBook._id.toString(),
         });
