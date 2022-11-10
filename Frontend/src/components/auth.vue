@@ -28,6 +28,7 @@
               class="form-control"
               id="exampleInputEmail1"
               placeholder="Username"
+              maxlength="60"
             />
           </div>
           <p v-for="error of v$.$errors" :key="error.$uid">
@@ -45,6 +46,7 @@
               class="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
+              maxlength="50"
             />
           </div>
           <p v-for="error of v$.$errors" :key="error.$uid">
@@ -64,6 +66,7 @@
                 class="form-control"
                 id="exampleInputPassword1"
                 placeholder="Confirm password"
+                maxlength="50"
               />
             </div>
             <p v-for="error of v$.$errors" :key="error.$uid">

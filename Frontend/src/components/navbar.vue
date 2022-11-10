@@ -7,26 +7,20 @@
         class="text-decoration-none text-dark fs-3"
         >Library</a
       >
-      <form class="d-flex w-50">
+      <form v-on:submit.prevent="search" class="d-flex w-50">
         <div style="width: 95%">
           <input
             class="form-control me-2"
             v-model="keywordInput"
             type="search"
+            name="keywordInput"
             placeholder="Search by ISBN, title, genre or author"
             aria-label="Search"
-            onkeydown="return event.key != 'Enter';"
           />
         </div>
-        <router-link
-          v-if="keywordInput"
-          :to="{ name: 'keywordSearch', params: { keyword: keywordInput } }"
-          class="text-decoration-none text-dark"
-        >
-          <button type="button" class="btn btn-secondary">
+          <button type="submit" class="btn btn-secondary">
             <i class="fas fa-search"></i>
           </button>
-        </router-link>
       </form>
       <form class="d-flex">
         <div v-if="isAdmin == true" class="dropdown me-3">
@@ -93,6 +87,7 @@ import axios from "axios";
 export default {
   created() {
     this.checkAuth();
+    this.getKeyword();
   },
   data() {
     return {
@@ -126,6 +121,12 @@ export default {
           })
           .catch((error) => {});
       }
+    },
+    search(submitEvent) {
+      this.$router.push("/book/search/" + submitEvent.target.elements.keywordInput.value)
+    },
+    getKeyword() {
+      this.keywordInput = this.$route.params.keyword
     },
     logout() {
       localStorage.removeItem("token");

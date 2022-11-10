@@ -61,6 +61,7 @@
               class="d-block mb-3 w-100"
               placeholder="Review title"
               type="text"
+              maxlength="60"
             />
             <p v-for="error of v$.$errors" :key="error.$uid">
               <strong class="text-danger" v-if="error.$property == 'title'">{{
@@ -73,6 +74,7 @@
               placeholder="Review body"
               class="w-100"
               type="text"
+              maxlength="200"
             ></textarea>
             <p v-for="error of v$.$errors" :key="error.$uid">
               <strong class="text-danger" v-if="error.$property == 'body'">{{
@@ -202,6 +204,7 @@
                           class="d-block mb-3 w-100"
                           placeholder="Review title"
                           type="text"
+                          maxlength="60"
                         />
                         <p v-for="error of v$.$errors" :key="error.$uid">
                           <strong
@@ -216,6 +219,7 @@
                           placeholder="Review body"
                           class="w-100"
                           type="text"
+                          maxlength="200"
                         ></textarea>
                         <p v-for="error of v$.$errors" :key="error.$uid">
                           <strong
@@ -284,7 +288,6 @@
               <router-link
                 v-if="userId == review.user._id || isAdmin"
                 class="text-dark text-decoration-none"
-                style="margin-left: 1rem"
                 :to="{}"
                 data-bs-toggle="modal"
                 v-bind:data-bs-target="'#_' + review._id"

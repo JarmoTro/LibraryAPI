@@ -40,6 +40,7 @@
                       class="d-block mb-3 w-100"
                       placeholder="Review title"
                       type="text"
+                      maxlength="60"
                     />
                     <p v-for="error of v$.$errors" :key="error.$uid">
                       <strong
@@ -54,6 +55,7 @@
                       placeholder="Review body"
                       class="w-100"
                       type="text"
+                      maxlength="200"
                     ></textarea>
                     <p v-for="error of v$.$errors" :key="error.$uid">
                       <strong

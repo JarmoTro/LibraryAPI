@@ -1,4 +1,5 @@
 <template>
+<h1 v-if="!this.$route.params.name && !this.$route.params.keyword" class="text-center"> Our latest releases: </h1>
   <div class="card-group m-3" v-for="row in formattedBooks" :key="row.id">
     <div
       class="card m-3"
@@ -68,6 +69,8 @@ export default {
         .get(import.meta.env.VITE_BACKEND_URL +"books/?key=" + import.meta.env.VITE_API_KEY)
         .then((response) => {
           this.books = response.data;
+          this.books.reverse()
+          this.books.splice(8,this.books.length)
         })
         .catch((error) => {
           this.errorMsg = "Error retrieving data";
