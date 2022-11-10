@@ -325,7 +325,13 @@
           </div>
           <div class="col">
             <h1 class="m-3">{{ books.title }}</h1>
-            <h3 class="m-3">{{ books.author }}</h3>
+                        <div class="m-3">
+            <router-link
+              :to="{ name: 'author', params: { name: books.author } }"
+              class="text-decoration-none text-dark"
+              ><h4 class="card-text hoverBlue">{{ books.author }}</h4>
+            </router-link>
+            </div>
             <div class="m-3">
               <h4 v-for="index in averageRating" class="d-inline">
                 <i class="fa-solid fa-star fa-xl" style="color: #d4af37"></i>

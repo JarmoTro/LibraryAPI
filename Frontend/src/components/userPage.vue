@@ -351,7 +351,7 @@ export default {
     getUser() {
       axios
         .get(
-          import.meta.env.VITE_BACKEND_URL +"users/" +
+          import.meta.env.VITE_BACKEND_URL +"users/id/" +
             this.$route.params.id +
             "?key=" +
             import.meta.env.VITE_API_KEY

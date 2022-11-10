@@ -3,28 +3,29 @@
 
   <div class="row">
     <div class="col"></div>
+
     <div class="col text-center">
-      <h2>Give users admin privileges</h2>
-      <div :class="errorClass" role="alert">
-        {{ errorMsg }}
+      <h2>Find loans by username</h2>
+      <div :class="errorClassLoans" role="alert">
+        {{ errorMsgLoans }}
       </div>
-      <form v-on:submit.prevent="makeUserAdmin">
+      <form v-on:submit.prevent="findLoans">
         <input
           type="text"
-          v-model="username"
-          name="username"
+          v-model="LoanUsername"
+          name="LoanUsername"
           class="form-control mt-3"
           id="exampleInputEmail1"
           placeholder="Username"
         />
         <p v-for="error of v$.$errors" :key="error.$uid">
-          <strong class="text-danger" v-if="error.$property == 'username'">{{
-            error.$message
-          }}</strong>
+          <strong
+            class="text-danger"
+            v-if="error.$property == 'LoanUsername'"
+            >{{ error.$message }}</strong
+          >
         </p>
-        <button type="submit" class="btn btn-primary m-3">
-          MAKE USER ADMIN
-        </button>
+        <button type="submit" class="btn btn-primary m-3">FIND LOANS</button>
       </form>
     </div>
 
@@ -32,7 +33,7 @@
   </div>
 
   <div class="text-center">
-    <h1>Loans</h1>
+    <h1>{{LoansText}}</h1>
     <div class="card-group m-3" v-for="row in formattedLoans" :key="row.id">
       <div
         class="card card-body m-3"
@@ -116,6 +117,36 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <div class="col text-center">
+        <h2>Give users admin privileges</h2>
+        <div :class="errorClass" role="alert">
+          {{ errorMsg }}
+        </div>
+        <form v-on:submit.prevent="makeUserAdmin">
+          <input
+            type="text"
+            v-model="username"
+            name="username"
+            class="form-control mt-3"
+            id="exampleInputEmail1"
+            placeholder="Username"
+          />
+          <p v-for="error of v$.$errors" :key="error.$uid">
+            <strong class="text-danger" v-if="error.$property == 'username'">{{
+              error.$message
+            }}</strong>
+          </p>
+          <button type="submit" class="btn btn-primary m-3">
+            MAKE USER ADMIN
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
 </template>
 
 <script>
@@ -135,11 +166,19 @@ export default {
       username: "",
       errorMsg: "",
       errorClass: "alert alert-danger d-none",
+      errorMsgLoans: "",
+      errorClassLoans: "alert alert-danger d-none",
       loans: [],
+      LoanUsername: "",
+      userId: "",
+      LoansText: "Upcoming loans:",
     };
   },
   validations: {
     username: {
+      required,
+    },
+    LoanUsername: {
       required,
     },
   },
@@ -148,7 +187,8 @@ export default {
       let token = localStorage.getItem("token");
       axios
         .get(
-          import.meta.env.VITE_BACKEND_URL +"users/currentuser/?key=" +
+          import.meta.env.VITE_BACKEND_URL +
+            "users/currentuser/?key=" +
             import.meta.env.VITE_API_KEY,
           {
             headers: {
@@ -166,16 +206,50 @@ export default {
           this.$router.push("/login");
         });
     },
+
+    findLoans(submitEvent) {
+      const loanNameIsValid = this.v$.LoanUsername.$validate();
+      if (loanNameIsValid) {
+        axios
+          .get(
+            import.meta.env.VITE_BACKEND_URL +
+              "users/username/" +
+              submitEvent.target.elements.LoanUsername.value +
+              "?key=" +
+              import.meta.env.VITE_API_KEY
+          )
+          .then((response) => {
+            this.userId = response.data._id;
+            this.LoansText = response.data.username + " loans:"
+            axios
+              .get(
+                import.meta.env.VITE_BACKEND_URL +
+                  "loans/user/" +
+                  this.userId +
+                  "?key=" +
+                  import.meta.env.VITE_API_KEY
+              )
+              .then((response) => {
+                this.loans = response.data;
+              });
+          })
+          .catch((error) => {
+            this.errorMsgLoans = error.response.data.error;
+            this.errorClassLoans = "alert alert-danger";
+          });
+      }
+    },
+
     async makeUserAdmin(submitEvent) {
-      const isFormValid = await this.v$.$validate();
-      if (isFormValid) {
+      const usernameIsValid = await this.v$.username.$validate();
+      if (usernameIsValid) {
         let data = new FormData();
         data.append("username", submitEvent.target.elements.username.value);
         data.append("key", import.meta.env.VITE_API_KEY);
         data.append("admin", true);
 
         axios
-          .put(import.meta.env.VITE_BACKEND_URL +"users/", data)
+          .put(import.meta.env.VITE_BACKEND_URL + "users/", data)
           .then((response) => {
             this.errorMsg = "Privileges granted!";
             this.errorClass = "alert alert-success";
@@ -188,16 +262,23 @@ export default {
     },
     getLoans() {
       axios
-        .get(import.meta.env.VITE_BACKEND_URL +"loans/?key=" + import.meta.env.VITE_API_KEY)
+        .get(
+          import.meta.env.VITE_BACKEND_URL +
+            "loans/?key=" +
+            import.meta.env.VITE_API_KEY
+        )
         .then((response) => {
-          this.loans = response.data;
+          for (let index = 0; index < 8; index++) {
+            this.loans.push(response.data[index]);
+          }
         })
         .catch((error) => {});
     },
     deleteLoan(id) {
       axios
         .delete(
-          import.meta.env.VITE_BACKEND_URL +"loans/?key=" +
+          import.meta.env.VITE_BACKEND_URL +
+            "loans/?key=" +
             import.meta.env.VITE_API_KEY +
             "&id=" +
             id

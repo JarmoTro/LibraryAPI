@@ -2686,127 +2686,6 @@
                 }
             ]
         },
-        "/users/{id}": {
-            "get": {
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "examples": {
-                            "key": {
-                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
-                            }
-                        },
-                        "name": "key",
-                        "description": "API key is required to access the API",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
-                                },
-                                "examples": {
-                                    "Users": {
-                                        "value": [
-                                            {
-                                                "_id": "632849e813c575a0084104fa",
-                                                "username": "qwerty",
-                                                "admin": false
-                                            },
-                                            {
-                                                "_id": "63284c6c0e4f9ec5457bd09b",
-                                                "username": "aaaaaaa",
-                                                "admin": false
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Request successful"
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Missing API key error": {
-                                        "value": {
-                                            "error": "Missing API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is not provided"
-                    },
-                    "403": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Invalid API key error": {
-                                        "value": {
-                                            "error": "Invalid API key"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "API key is invalid"
-                    },
-                    "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "examples": {
-                                    "Something went wrong error": {
-                                        "value": {
-                                            "error": "Looks like something went wrong :("
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Something went wrong during the query"
-                    }
-                },
-                "summary": "Get a list of all users",
-                "description": ""
-            },
-            "parameters": [
-                {
-                    "examples": {
-                        "id": {
-                            "value": "4c62f4f1-484d-472f-9a19-712ecaeab382"
-                        }
-                    },
-                    "name": "id",
-                    "description": "A id of a user",
-                    "schema": {
-                        "type": "string"
-                    },
-                    "in": "path",
-                    "required": true
-                }
-            ]
-        },
         "/users/currentuser": {
             "get": {
                 "tags": [
@@ -3052,6 +2931,238 @@
                     "required": true
                 }
             }
+        },
+        "/users/id/{id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Users": {
+                                        "value": [
+                                            {
+                                                "_id": "632849e813c575a0084104fa",
+                                                "username": "qwerty",
+                                                "admin": false
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a list of all users by id",
+                "description": ""
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "id": {
+                            "value": "632849e813c575a0084104fa"
+                        }
+                    },
+                    "name": "id",
+                    "description": "A id of a user",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/users/username/{username}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "key": {
+                                "value": "30cf8c1d-3fb9-4149-a2eb-20e3e88b89d6"
+                            }
+                        },
+                        "name": "key",
+                        "description": "API key is required to access the API",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "examples": {
+                                    "Users": {
+                                        "value": [
+                                            {
+                                                "_id": "632849e813c575a0084104fa",
+                                                "username": "admin",
+                                                "admin": false
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Request successful"
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Missing API key error": {
+                                        "value": {
+                                            "error": "Missing API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is not provided"
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Invalid API key error": {
+                                        "value": {
+                                            "error": "Invalid API key"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "API key is invalid"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Something went wrong error": {
+                                        "value": {
+                                            "error": "Looks like something went wrong :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong during the query"
+                    }
+                },
+                "summary": "Get a list of all users by id",
+                "description": ""
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "username": {
+                            "value": "Admin"
+                        }
+                    },
+                    "name": "username",
+                    "description": "A name of a user",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         }
     }
 }

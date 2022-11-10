@@ -8,7 +8,9 @@ router.get("/users/", userController.getAllUsers);
 
 router.get("/users/currentUser", userController.getCurrentUser);
 
-router.get("/users/:id", userController.getUserById);
+router.get("/users/id/:id", userController.getUserById);
+
+router.get("/users/username/:username", userController.getUserByName);
 
 router.post("/register/", userController.register);
 

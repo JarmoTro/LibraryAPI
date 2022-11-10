@@ -132,6 +132,22 @@ exports.getUserById = (req, res) => {
   }
 };
 
+exports.getUserByName = (req, res) => {
+  if (utils.checkAPIKey(req.query.key, res)) {
+    userSchema.findOne({ username: req.params.username }, function (error, user) {
+      if (user == null)
+        return res.status(404).send({
+          error: "Looks like we couldn't find what you were looking for.",
+        });
+      if (error)
+        return res
+          .status(500)
+          .send({ error: "Looks like something went wrong :(" });
+      if (user != null) return res.send(userDTO(user));
+    });
+  }
+};
+
 exports.updateUser = (req, res) => {
   let getBody = upload.any();
   getBody(req, res, function () {
