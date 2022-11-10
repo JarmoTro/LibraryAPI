@@ -3,11 +3,11 @@
     <h1 v-if="userExists == false"> Error! user not found. </h1>
     <div v-if="userExists == true">
     <h1>{{ username }}</h1>
-    <h2 v-if="reviews.length == 0 && isAdmin == false">
-      Looks like this user doesn't have any reviews :(
-    </h2>
     <div class="row" style="margin-top: 3rem">
       <div class="col">
+        <h2 v-if="reviews.length == 0 && isAdmin == false">
+      Looks like this user doesn't have any reviews :(
+    </h2>
         <h1 v-if="reviews.length == 0 && isAdmin == true">
           This user has no reviews
         </h1>
@@ -229,6 +229,9 @@
         v-if="isAdmin == true || userId == this.$route.params.id"
         class="col"
       >
+      <h2 v-if="loans.length == 0 && isAdmin != true">
+          Looks like this user doesn't have any loans :(
+        </h2>
         <h1 style="margin-bottom: 2rem" v-if="loans.length > 0">Loans</h1>
         <h1
           style="margin-bottom: 2rem"
