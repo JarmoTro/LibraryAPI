@@ -10,6 +10,9 @@
 
 [Documentation](#documentation)
 
+[Functionality](#functionality)
+
+[Database seeding](#database-seeding)
 
 ## Description
 
@@ -105,6 +108,59 @@ cd Frontend
 npm run dev
 ```
 
+P.S. The first admin must be created manually!
+
 ## Documentation
 
-After launching the API ([See how to launch the application](#configuring-the-application-to-run-in-your-environment)) you can find the documentation at the /docs route
+After launching the API ([See how to launch the application](#configuring-the-application-to-run-in-your-environment)) you can find the documentation at the /docs route of the backend.
+
+## Functionality
+### Public functionality
+
+Users can view books and their details.
+
+Users can create an account and log in to access the user functionality.
+
+Users can see reviews made by other users.
+
+### User functionality
+
+User must log in with a valid account to get access to user functionality.
+
+Logged in users have access to all of public functionality.
+
+Users can create reviews.
+
+Users can delete and edit their own views.
+
+Users can see their own loans.
+
+### Admin functionality
+
+Administrators have access to all of logged in users functionality.
+
+Administrators can give other users admin privileges.
+
+Administrators can create books.
+
+Administrators can delete all reviews.
+
+Administrators can edit book details.
+
+Administrators can create loans.
+
+Administrators can see all loans, search for loans by username and see 8 most recent upcoming loans.
+
+Administrators can edit loans.
+
+Administrators can delete loans.
+
+## Database seeding
+
+Database seeding is disabled by default. To enable seeding, uncomment line 90 in server.js of the backend API.
+
+```javascript
+//utils.seedDB();
+```
+
+ Each time you start the backend application with seeding enabled, a user will be created alongside with 5 books with 5 reviews each. Additionally, 3 loans will be created for each book for the seeded user.

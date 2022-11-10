@@ -49,12 +49,6 @@ module.exports = {
       password: faker.word.verb(),
     });
     user.save();
-    const admin = new userSchema({
-      username: "admin",
-      password: "admin",
-      admin: "true"
-    });
-    admin.save();
     for (let i = 0; i < 5; i++) {
       const newBook = new bookSchema({
         title: faker.word.verb(),
