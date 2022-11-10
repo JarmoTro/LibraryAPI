@@ -127,6 +127,7 @@ export default {
     },
     getKeyword() {
       this.keywordInput = this.$route.params.keyword
+      this.keywordInput = this.$route.params.name
     },
     logout() {
       localStorage.removeItem("token");
