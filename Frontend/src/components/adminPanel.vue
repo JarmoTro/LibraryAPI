@@ -278,10 +278,9 @@ export default {
       axios
         .delete(
           import.meta.env.VITE_BACKEND_URL +
-            "loans/?key=" +
-            import.meta.env.VITE_API_KEY +
-            "&id=" +
-            id
+            "loans/" + id+ "?key=" +
+            import.meta.env.VITE_API_KEY 
+            
         )
         .then((response) => {
           this.$router.go("/adminpanel");

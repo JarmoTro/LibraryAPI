@@ -217,7 +217,7 @@ exports.updateLoan = (req, res) => {
 exports.deleteLoan = (req, res) => {
   if (utils.checkAPIKey(req.query.key, res)) {
     loanSchema.findOneAndDelete(
-      { _id: req.query.id },
+      { _id: req.params.id },
       function (err, response) {
         if (response == null)
           return res.status(404).send({
