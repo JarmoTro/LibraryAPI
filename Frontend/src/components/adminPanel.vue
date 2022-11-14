@@ -207,8 +207,8 @@ export default {
         });
     },
 
-    findLoans(submitEvent) {
-      const loanNameIsValid = this.v$.LoanUsername.$validate();
+    async findLoans (submitEvent) {
+      const  loanNameIsValid = await this.v$.LoanUsername.$validate();
       if (loanNameIsValid) {
         axios
           .get(
