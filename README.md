@@ -14,6 +14,8 @@
 
 [Database seeding](#database-seeding)
 
+[User manual](https://jarmotro.github.io/LibraryAPI/)
+
 ## Description
 
 An application consisting of an API and a frontend.
@@ -164,3 +166,4 @@ Database seeding is disabled by default. To enable seeding, uncomment line 90 in
 ```
 
  Each time you start the backend application with seeding enabled, a user will be created alongside with 5 books with 5 reviews each. Additionally, 3 loans will be created for each book for the seeded user.
+
