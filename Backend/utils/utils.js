@@ -77,7 +77,7 @@ module.exports = {
         const newReview = new reviewSchema({
           title: faker.word.verb(),
           body: faker.lorem.paragraph(),
-          rating: faker.datatype.number(5),
+          rating: faker.datatype.number({min: 1, max:5}),
           author: mongoose.Types.ObjectId(user._id),
           book: newBook._id.toString(),
         });
