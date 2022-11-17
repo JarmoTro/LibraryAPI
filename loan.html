@@ -17,56 +17,95 @@
 
 
         <div class="row">
-            <div class="col"></div>
-            <div class="col">
+            <div class="col-2"></div>
+            <div class="col-9">
                 <div>Here you can find out how to view, add, edit, and delete loans</div>
                 <div>NB: You have to be logged in and you must have admin privileges. Find out how to login <a
                         href="auth.html">here</a> and how to grant privileges <a href="admin.html">here</a> </div>
                 <a class="link-dark" href="index.html"><i class="fa-solid fa-house fa-2xl m-4"></i></a>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="#view">Viewing loans</a></li>
-                    <li class="list-group-item"><a href="#create">Creating loans</a></li>
-                    <li class="list-group-item"><a href="#edit">Editing loans</a></li>
-                    <li class="list-group-item"><a href="#delete">Deleting loans</a></li>
-
-                </ul>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Viewing loans
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Click on the admin dropdown button and select admin panel </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_1.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Here you can see 8 upcoming loans </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_2.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> You can search for a specific users loans by filling out the form and
+                                    clicking "Find loans"</h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_3.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Creating loans
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Click on a book you want to loan out </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_4.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Click the "Create a loan" button </h3>
+                                <img style="max-width: 60%;" class="mb-3"src="img/loan_5.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Fill out the form and click "Create". After creating the loan, the
+                                    books stock will be reduced by 1 </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_6.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Editing loans
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Click on the admin dropdown button and select admin panel </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_1.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Choose a loan you want to edit and click the edit icon </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_7.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Fill out the form and click "Update"</h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_8.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Deleting loans
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Click on the admin dropdown button and select admin panel </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_1.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> Choose a loan you want to delete and click the delete icon </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_9.png" alt="">
+                                <h3 class=" text-start" style=" margin-bottom: 2rem;"> To delete the loan click the "Delete" button. After deleting the loan,
+                                    the books stock will be increase by 1 </h3>
+                                <img style="max-width: 60%;" class="mb-3" src="img/loan_10.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col"></div>
-        </div>
-
-        <div class="m-3">
-            <h2 class="m-3" id="view">Viewing loans</h2>
-            <h3 class="m-3"> Click on the admin dropdown button and select admin panel </h3>
-            <img style="max-width: 50%;" src="img/loan_1.png" alt="">
-            <h3 class="m-3"> Here you can see 8 upcoming loans </h3>
-            <img style="max-width: 50%;" src="img/loan_2.png" alt="">
-            <h3 class="m-3"> You can search for a specific users loans by filling out the form and clicking "Find loans"</h3>
-            <img style="max-width: 50%;" src="img/loan_3.png" alt="">
-
-            <h2 class="m-3" id="create">Creating loans</h2>
-            <h3 class="m-3"> Click on a book you want to loan out </h3>
-            <img style="max-width: 50%;" src="img/loan_4.png" alt="">
-            <h3 class="m-3"> Click the "Create a loan" button </h3>
-            <img style="max-width: 50%;" src="img/loan_5.png" alt="">
-            <h3 class="m-3"> Fill out the form and click "Create". After creating the loan, the books stock will be reduced by 1 </h3>
-            <img style="max-width: 50%;" src="img/loan_6.png" alt="">
-
-            <h2 class="m-3" id="edit">Editing loans</h2>
-            <h3 class="m-3"> Click on the admin dropdown button and select admin panel </h3>
-            <img style="max-width: 50%;" src="img/loan_1.png" alt="">
-            <h3 class="m-3"> Choose a loan you want to edit and click the edit icon </h3>
-            <img style="max-width: 50%;" src="img/loan_7.png" alt="">
-            <h3 class="m-3"> Fill out the form and click "Update"</h3>
-            <img style="max-width: 50%;" src="img/loan_8.png" alt="">
-
-            <h2 class="m-3" id="delete">Deleting loans</h2>
-            <h3 class="m-3"> Click on the admin dropdown button and select admin panel </h3>
-            <img style="max-width: 50%;" src="img/loan_1.png" alt="">
-            <h3 class="m-3"> Choose a loan you want to delete and click the delete icon </h3>
-            <img style="max-width: 50%;" src="img/loan_9.png" alt="">
-            <h3 class="m-3"> To delete the loan click the "Delete" button. After deleting the loan, the books stock will be increase by 1 </h3>
-            <img style="max-width: 50%;" src="img/loan_10.png" alt="">
-
+            <div class="col-2"></div>
         </div>
 
     </div>
